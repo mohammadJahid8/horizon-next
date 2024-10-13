@@ -19,6 +19,15 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Checkbox } from '../ui/checkbox';
 import GoogleLogin from './google-login';
+import { countries } from '@/lib/countries';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { cn } from '@/lib/utils';
 
 export default function AuthForm({
   inputFields,
@@ -103,30 +112,86 @@ export default function AuthForm({
                     </FormLabel>
                     <FormControl>
                       <div className='relative'>
-                        <Input
-                          type={
-                            input.type === 'password' &&
-                            showPassword[input.name]
-                              ? 'text'
-                              : input.type
-                          }
-                          placeholder={input.placeholder}
-                          // disabled={loading}
-                          {...field}
-                          className='mt-1 block w-full rounded-[12px] h-14 bg-[#f9f9f9] border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 pr-10'
-                        />
-                        {input.type === 'password' && (
-                          <button
-                            type='button'
-                            onClick={() => togglePasswordVisibility(input.name)}
-                            className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5'
-                          >
-                            {showPassword[input.name] ? (
-                              <EyeOff className='h-4 w-4 text-gray-400' />
-                            ) : (
-                              <Eye className='h-4 w-4 text-gray-400' />
-                            )}
-                          </button>
+                        {input.type === 'tel' ? (
+                          <div className='flex items-center'>
+                            <Select
+                              onValueChange={(value) =>
+                                field.onChange(
+                                  `+${value}${field.value.split(' ')[1] || ''}`
+                                )
+                              }
+                              defaultValue={
+                                field.value.split(' ')[0]?.replace('+', '') ||
+                                ''
+                              }
+                            >
+                              <SelectTrigger className='w-[100px] text-base h-14 mt-1 rounded-r-none border-gray-300 shadow-sm bg-[#f9f9f9] rounded-l-[12px] focus:ring-0'>
+                                <SelectValue placeholder='+99' />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {countries.map((country) => (
+                                  <SelectItem
+                                    key={country.id}
+                                    value={country.phone_code}
+                                  >
+                                    +{country.phone_code}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Input
+                              type='tel'
+                              placeholder={input.placeholder}
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(
+                                  `${field.value.split(' ')[0]} ${
+                                    e.target.value
+                                  }`
+                                )
+                              }
+                              value={field.value.split(' ')[1] || ''}
+                              className={cn(
+                                'flex-grow mt-1 block h-14 bg-[#f9f9f9] border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500',
+                                {
+                                  'rounded-[12px]': input.type !== 'tel',
+                                  'rounded-r-[12px] rounded-l-none border-l-0':
+                                    input.type === 'tel',
+                                }
+                              )}
+                            />
+                          </div>
+                        ) : input.type === 'password' ? (
+                          <>
+                            <Input
+                              type={
+                                showPassword[input.name] ? 'text' : 'password'
+                              }
+                              placeholder={input.placeholder}
+                              {...field}
+                              className='mt-1 block w-full rounded-[12px] h-14 bg-[#f9f9f9] border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 pr-10'
+                            />
+                            <button
+                              type='button'
+                              onClick={() =>
+                                togglePasswordVisibility(input.name)
+                              }
+                              className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5'
+                            >
+                              {showPassword[input.name] ? (
+                                <EyeOff className='h-4 w-4 text-gray-400' />
+                              ) : (
+                                <Eye className='h-4 w-4 text-gray-400' />
+                              )}
+                            </button>
+                          </>
+                        ) : (
+                          <Input
+                            type={input.type}
+                            placeholder={input.placeholder}
+                            {...field}
+                            className='mt-1 block w-full rounded-[12px] h-14 bg-[#f9f9f9] border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'
+                          />
                         )}
                       </div>
                     </FormControl>

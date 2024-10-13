@@ -71,6 +71,9 @@ export default function Signup() {
       subtitle={'Create Your Account'}
       source='pro'
       type='signup'
+      image='/pro_signin.svg'
+      descriptionTitle='Get Free Profile Link For Applying job'
+      description="Unlock your next opportunity in healthcare. Sign in and apply job. It's fast, free, and puts you in control of your career journey."
     >
       <AuthForm
         inputFields={signupFields}
