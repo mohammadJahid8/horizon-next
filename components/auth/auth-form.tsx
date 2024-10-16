@@ -100,8 +100,8 @@ export default function AuthForm({
         className='space-y-6 w-full'
       >
         <div className={`grid grid-cols-1 gap-5`}>
-          {inputFields.map((input: any) => (
-            <div key={input.name}>
+          {inputFields.map((input: any, i: number) => (
+            <div key={i}>
               <FormField
                 control={form.control}
                 name={input.name}
@@ -129,9 +129,9 @@ export default function AuthForm({
                                 <SelectValue placeholder='+99' />
                               </SelectTrigger>
                               <SelectContent>
-                                {countries.map((country) => (
+                                {countries.map((country, index) => (
                                   <SelectItem
-                                    key={country.id}
+                                    key={index}
                                     value={country.phone_code}
                                   >
                                     +{country.phone_code}

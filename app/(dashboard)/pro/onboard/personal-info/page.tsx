@@ -30,7 +30,7 @@ const PersonalInfo = () => {
           />
         </div>
 
-        <div className='grid grid-cols-2 gap-5'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
               First name
@@ -91,7 +91,7 @@ const PersonalInfo = () => {
               placeholder='Input Text'
             />
           </div>
-          <div className='grid grid-cols-2 gap-5'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
                 City
