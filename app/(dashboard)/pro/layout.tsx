@@ -1,15 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { ReactNode } from 'react';
 import { Baskervville } from 'next/font/google';
-import { cn } from '@/lib/utils';
-import Logo from '@/components/global/logo';
-import { Edit, FileText, IdCard, PencilLine, User } from 'lucide-react';
-import Steps from '@/components/global/steps';
 
-const baskervville = Baskervville({
-  subsets: ['latin'],
-  weight: ['400'],
-});
+import Logo from '@/components/global/logo';
+
+import Steps from '@/components/global/steps';
+import Back from '@/components/global/back';
+import Onboard from '@/components/global/onboard';
+import OnboardSheet from '@/components/global/onboard-sheet';
 
 interface OnboardLayoutProps {
   children: ReactNode;
@@ -18,21 +16,19 @@ interface OnboardLayoutProps {
 const OnboardLayout: React.FC<OnboardLayoutProps> = ({ children }) => {
   return (
     <main>
-      <div className='grid grid-rows-1 md:grid-cols-[26%_auto] h-screen'>
-        <aside className='px-10 py-20 bg-white flex flex-col gap-[52px] overflow-y-auto scrollbar-hide'>
-          <Logo />
-          <div className='flex flex-col gap-8'>
-            <div className='flex flex-col gap-4'>
-              <h2 className='text-2xl font-semibold'>Onboarding Page</h2>
-              <p className='text-base'>
-                Welcome To Healthcare! Let&apos;s Get Started With Setting Up
-                Your Profile To Make Managing Your Employment Documents Easier.
-              </p>
+      <div className='grid grid-rows-1 lg:grid-cols-[26%_auto] h-screen'>
+        <div className='hidden lg:block'>
+          <Onboard />
+        </div>
+        <div className=' bg-[#f9f9f9] overflow-y-auto px-4 py-6 lg:p-10'>
+          <div className='flex items-center gap-3  mb-8'>
+            <div className='lg:hidden'>
+              <OnboardSheet />
             </div>
-            <Steps />
+            <Back />
           </div>
-        </aside>
-        <div className=' bg-[#f9f9f9] overflow-y-auto'>{children}</div>
+          {children}
+        </div>
       </div>
       <div className='fixed bottom-4 right-8 p-2.5 cursor-pointer hover:underline'>
         <span className='flex items-center'>

@@ -22,12 +22,6 @@ const steps = [
     icon: <FileText className='h-[18px] w-[18px]' />,
     link: '/pro/onboard/document-upload',
   },
-  {
-    id: 4,
-    name: 'Sign documents',
-    icon: <PencilLine className='h-[18px] w-[18px]' />,
-    link: '/pro/onboard/sign-documents',
-  },
 ];
 
 const Steps = () => {
