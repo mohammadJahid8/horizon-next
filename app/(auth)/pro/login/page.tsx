@@ -38,6 +38,7 @@ export default function Signup() {
       toast.success(`Signup successful`, {
         position: 'top-center',
       });
+      router.push('/pro/onboard/personal-info');
     } catch (error: any) {
       console.log(error);
 
