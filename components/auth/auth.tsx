@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link';
-import { Baskervville } from 'next/font/google';
+import { Averia_Serif_Libre } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
-const baskervville = Baskervville({
+const averia = Averia_Serif_Libre({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['300', '400', '700'],
 });
 
 export default function Auth({
@@ -27,7 +27,7 @@ export default function Auth({
         <div className='flex flex-col items-center justify-between h-[90vh]'>
           <Link
             href='/'
-            className={cn(`${baskervville.className} text-5xl font-bold`, {
+            className={cn(`${averia.className} text-5xl !font-light`, {
               'text-primary': source === 'partner',
             })}
           >

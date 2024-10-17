@@ -1,21 +1,16 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React from 'react';
-import { Baskervville } from 'next/font/google';
+import { Averia_Serif_Libre } from 'next/font/google';
 
-const baskervville = Baskervville({
+const averia = Averia_Serif_Libre({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['300', '400', '700'],
 });
 
 const Logo = () => {
   return (
-    <Link
-      href='/'
-      className={cn(
-        `${baskervville.className} text-4xl font-bold text-primary`
-      )}
-    >
+    <Link href='/' className={cn(`${averia.className} text-4xl text-primary`)}>
       Horizzon
     </Link>
   );

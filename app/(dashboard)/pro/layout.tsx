@@ -1,10 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { ReactNode } from 'react';
-import { Baskervville } from 'next/font/google';
-
-import Logo from '@/components/global/logo';
-
-import Steps from '@/components/global/steps';
 import Back from '@/components/global/back';
 import Onboard from '@/components/global/onboard';
 import OnboardSheet from '@/components/global/onboard-sheet';

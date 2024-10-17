@@ -130,7 +130,11 @@ const PersonalInfo = () => {
             </div>
           </div>
         </div>
-        <OnboardButton text='Next' disabled />
+        <OnboardButton
+          text='Next'
+          // disabled
+          href='/pro/onboard/professional-info'
+        />
       </div>
     </div>
   );

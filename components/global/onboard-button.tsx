@@ -6,12 +6,14 @@ interface OnboardButtonProps {
   disabled?: boolean;
   text: string;
   className?: string;
+  href?: string;
 }
 
 const OnboardButton: React.FC<OnboardButtonProps> = ({
   disabled,
   text,
   className,
+  href,
 }) => {
   return (
     <Button
@@ -20,6 +22,7 @@ const OnboardButton: React.FC<OnboardButtonProps> = ({
         className
       )}
       disabled={disabled}
+      href={href}
     >
       {text}
     </Button>

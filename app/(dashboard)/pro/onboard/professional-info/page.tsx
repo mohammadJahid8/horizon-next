@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import Title from '@/components/global/title';
 import { Input } from '@/components/ui/input';
 import OnboardButton from '@/components/global/onboard-button';
-import { Plus, Trash, Trash2Icon, TrashIcon } from 'lucide-react';
+import { CloudUploadIcon } from 'lucide-react';
+import Skills from '@/components/global/professional-info/skills';
+import AddMore from '@/components/global/professional-info/add-more';
+import Remove from '@/components/global/professional-info/remove';
 
 const ProfessionalInfo = () => {
   const [educationFields, setEducationFields] = useState([
@@ -209,30 +212,12 @@ const ProfessionalInfo = () => {
                 </div>
               </div>
               {index > 0 && (
-                <button
-                  className='flex items-center gap-2 cursor-pointer hover:underline text-red-500 text-lg font-medium'
-                  onClick={() => removeEducationField(index)}
-                >
-                  <div className='bg-[#FCE7E5] rounded-full w-8 h-8 flex items-center justify-center '>
-                    <Trash2Icon className='w-4 h-4 ' />
-                  </div>
-                  Remove
-                </button>
+                <Remove handleRemove={() => removeEducationField(index)} />
               )}
             </div>
           ))}
 
-          <div
-            className='flex items-center gap-2 cursor-pointer hover:underline'
-            onClick={addEducationField}
-          >
-            <div className='bg-[#1C1C1C] rounded-full w-8 h-8 text-white flex items-center justify-center'>
-              <Plus className='w-4 h-4 text-white' />
-            </div>
-            <span className='text-lg leading-[25.2px] text-[#1C1C1C]'>
-              Add more
-            </span>
-          </div>
+          <AddMore handleAdd={addEducationField} />
         </div>
 
         {/* Experience Section */}
@@ -310,30 +295,12 @@ const ProfessionalInfo = () => {
               </div>
 
               {index > 0 && (
-                <button
-                  className='flex items-center gap-2 cursor-pointer hover:underline text-red-500 text-lg font-medium'
-                  onClick={() => removeExperienceField(index)}
-                >
-                  <div className='bg-[#FCE7E5] rounded-full w-8 h-8 flex items-center justify-center '>
-                    <Trash2Icon className='w-4 h-4 ' />
-                  </div>
-                  Remove
-                </button>
+                <Remove handleRemove={() => removeExperienceField(index)} />
               )}
             </div>
           ))}
 
-          <div
-            className='flex items-center gap-2 cursor-pointer hover:underline'
-            onClick={addExperienceField}
-          >
-            <div className='bg-[#1C1C1C] rounded-full w-8 h-8 text-white flex items-center justify-center'>
-              <Plus className='w-4 h-4 text-white' />
-            </div>
-            <span className='text-lg leading-[25.2px] text-[#1C1C1C]'>
-              Add more
-            </span>
-          </div>
+          <AddMore handleAdd={addExperienceField} />
         </div>
 
         {/* Licenses & Certifications Section */}
@@ -434,49 +401,55 @@ const ProfessionalInfo = () => {
                   />
                 </div>
               </div>
-              <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium text-[#1C1C1C]'>
-                  Upload File
-                </label>
-                <Input
-                  type='file'
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  onChange={(e) =>
-                    handleLicenseChange(
-                      index,
-                      'file',
-                      e.target.files ? e.target.files[0] : null
-                    )
-                  }
-                />
-              </div>
-              {index > 0 && (
-                <button
-                  className='flex items-center gap-2 cursor-pointer hover:underline text-red-500 text-lg font-medium'
-                  onClick={() => removeLicenseField(index)}
-                >
-                  <div className='bg-[#FCE7E5] rounded-full w-8 h-8 flex items-center justify-center '>
-                    <Trash2Icon className='w-4 h-4 ' />
+              <label htmlFor='licenseFile' className='relative cursor-pointer'>
+                <div className='flex flex-col items-center justify-center border border-gray-300 rounded-[12px] p-4 bg-white h-22'>
+                  <div className='flex flex-col items-center gap-2.5'>
+                    <CloudUploadIcon className='w-6 h-6' />
+                    <span className='text-sm text-gray-500'>
+                      Upload physical licenses or certificate
+                    </span>
                   </div>
-                  Remove
-                </button>
+                  <Input
+                    type='file'
+                    className='hidden'
+                    id='licenseFile'
+                    onChange={(e) =>
+                      handleLicenseChange(
+                        index,
+                        'file',
+                        e.target.files ? e.target.files[0] : null
+                      )
+                    }
+                  />
+                </div>
+              </label>
+              {index > 0 && (
+                <Remove handleRemove={() => removeLicenseField(index)} />
               )}
             </div>
           ))}
-          <div
-            className='flex items-center gap-2 cursor-pointer hover:underline'
-            onClick={addLicenseField}
-          >
-            <div className='bg-[#1C1C1C] rounded-full w-8 h-8 text-white flex items-center justify-center'>
-              <Plus className='w-4 h-4 text-white' />
-            </div>
-            <span className='text-lg leading-[25.2px] text-[#1C1C1C]'>
-              Add more
-            </span>
-          </div>
+          <AddMore handleAdd={addLicenseField} />
+        </div>
+        <div className='flex flex-col gap-5'>
+          <h2 className='text-2xl font-medium leading-[33.6px] text-gray-800'>
+            Skills
+          </h2>
+
+          <Skills />
         </div>
 
-        <OnboardButton text='Next' disabled />
+        <div className='flex gap-5'>
+          <OnboardButton
+            text='Previous'
+            className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+            href='/pro/onboard/personal-info'
+          />
+          <OnboardButton
+            text='Next'
+            className='w-full'
+            href='/pro/onboard/document-upload'
+          />
+        </div>
       </div>
     </div>
   );
