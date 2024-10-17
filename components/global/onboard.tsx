@@ -4,7 +4,7 @@ import Steps from './steps';
 
 const Onboard = () => {
   return (
-    <aside className='px-6 xl:px-10 py-10 lg:py-20 bg-white flex flex-col gap-[52px] overflow-y-auto scrollbar-hide'>
+    <aside className='px-6 2xl:px-10 py-10 2xl:py-20 bg-white flex flex-col gap-[52px] overflow-y-auto scrollbar-hide'>
       <Logo />
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-4'>

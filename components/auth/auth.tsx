@@ -21,20 +21,23 @@ export default function Auth({
   return (
     <div className='relative min-h-screen flex flex-col lg:flex-row'>
       <div
-        className='hidden lg:flex lg:w-1/3 bg-cover bg-no-repeat bg-center text-center flex-col justify-between items-center text-white px-8 xl:px-14 pt-14'
+        className='hidden lg:flex lg:w-1/3 bg-cover bg-no-repeat bg-center text-center flex-col justify-between items-center text-white px-4 xl:px-14 pt-10'
         style={{ backgroundImage: `url(${image})` }}
       >
         <div className='flex flex-col items-center justify-between h-[90vh]'>
           <Link
             href='/'
-            className={cn(`${averia.className} text-5xl !font-light`, {
-              'text-primary': source === 'partner',
-            })}
+            className={cn(
+              `${averia.className} text-[40px] 3xl:text-5xl !font-light`,
+              {
+                'text-primary': source === 'partner',
+              }
+            )}
           >
             Horizon
           </Link>
           <div className='xl:max-w-md mx-auto'>
-            <p className='text-[32px] mb-4 leading-[46px] font-bold'>
+            <p className='text-[28px] 2xl:text-[32px] mb-4 leading-[40px] xl:leading-[46px] font-bold'>
               {descriptionTitle}
             </p>
 
