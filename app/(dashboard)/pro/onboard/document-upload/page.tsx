@@ -7,14 +7,26 @@ import { Check, CloudUpload, File, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Loading from '@/components/global/loading';
 
+interface FileState {
+  certificates: File | null;
+  resume: File | null;
+  id: File | null;
+}
+
+interface UploadProgressState {
+  certificates: number;
+  resume: number;
+  id: number;
+}
+
 const DocumentUpload = () => {
-  const [files, setFiles] = useState({
+  const [files, setFiles] = useState<FileState>({
     certificates: null,
     resume: null,
     id: null,
   });
 
-  const [uploadProgress, setUploadProgress] = useState({
+  const [uploadProgress, setUploadProgress] = useState<UploadProgressState>({
     certificates: 0,
     resume: 0,
     id: 0,
@@ -22,7 +34,7 @@ const DocumentUpload = () => {
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    type: string
+    type: keyof FileState
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -31,7 +43,7 @@ const DocumentUpload = () => {
     }
   };
 
-  const simulateDynamicUpload = (type: string, file: File) => {
+  const simulateDynamicUpload = (type: keyof FileState, file: File) => {
     const fileSize = file.size;
     const totalChunks = 100;
     const chunkSize = fileSize / totalChunks;
@@ -55,7 +67,7 @@ const DocumentUpload = () => {
     }, 10);
   };
 
-  const handleCancel = (type: string) => {
+  const handleCancel = (type: keyof FileState) => {
     setFiles({ ...files, [type]: null });
     setUploadProgress({ ...uploadProgress, [type]: 0 });
   };
@@ -66,13 +78,12 @@ const DocumentUpload = () => {
 
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-4'>
-          {['certificates', 'resume', 'id'].map((type, index) => (
+          {(['certificates', 'resume', 'id'] as const).map((type, index) => (
             <div key={index} className='flex flex-col'>
               <div
                 className={cn(
                   'flex sm:flex-row flex-col gap-4 sm:items-center justify-between p-5 bg-white rounded-[12px]',
-                  uploadProgress[type as keyof typeof uploadProgress] > 0 &&
-                    uploadProgress[type as keyof typeof uploadProgress] < 100
+                  uploadProgress[type] > 0 && uploadProgress[type] < 100
                     ? 'rounded-b-none'
                     : ''
                 )}
@@ -81,8 +92,7 @@ const DocumentUpload = () => {
                   <div
                     className={cn(
                       'w-10 h-10 rounded-full flex items-center justify-center',
-                      uploadProgress[type as keyof typeof uploadProgress] ===
-                        100
+                      uploadProgress[type] === 100
                         ? 'bg-[#0066FF]'
                         : 'bg-[#F5F5F5]'
                     )}
@@ -90,8 +100,7 @@ const DocumentUpload = () => {
                     <Check
                       className={cn(
                         'w-6 h-6',
-                        uploadProgress[type as keyof typeof uploadProgress] ===
-                          100
+                        uploadProgress[type] === 100
                           ? 'text-white'
                           : 'text-[#D2D2D2]'
                       )}
@@ -123,58 +132,48 @@ const DocumentUpload = () => {
                 </label>
               </div>
 
-              {uploadProgress[type as keyof typeof uploadProgress] > 0 &&
-                uploadProgress[type as keyof typeof uploadProgress] < 100 && (
-                  <div className='p-5 bg-white rounded-b-[12px] border-t-[1px] border-[#EBEBEB] flex flex-col gap-2'>
-                    <div className='flex gap-2'>
-                      <img src='/file.svg' alt='file' className='w-10 h-10' />
-                      <div className='flex flex-col w-full gap-2'>
-                        <div className='flex justify-between'>
-                          <div className='flex flex-col gap-2'>
-                            <span className='font-medium text-sm text-[#1C1C1C]'>
-                              {files[type as keyof typeof files]?.name}
-                            </span>
-                            <span className='text-[#5E6864] text-xs inline-flex items-center gap-2'>
-                              {files[type as keyof typeof files]?.size} •{' '}
-                              <Loading size='sm' />
-                              Uploading
-                            </span>
-                          </div>
-                          <button
-                            className='text-[#3A4742]'
-                            onClick={() => handleCancel(type)}
-                          >
-                            <X className='w-6 h-6' />
-                          </button>
-                        </div>
-                        <div className='flex items-center gap-1 w-full'>
-                          <div className='bg-gray-200 rounded-full h-2.5 w-full'>
-                            <div
-                              className='h-2.5 rounded-full'
-                              style={{
-                                width: `${
-                                  uploadProgress[
-                                    type as keyof typeof uploadProgress
-                                  ]
-                                }%`,
-                                background:
-                                  'linear-gradient(285.44deg, #45D8FF 0%, #005BEA 82.52%)',
-                              }}
-                            />
-                          </div>
-                          <span className='text-sm text-[#3A4742] font-medium'>
-                            {
-                              uploadProgress[
-                                type as keyof typeof uploadProgress
-                              ]
-                            }
-                            %
+              {uploadProgress[type] > 0 && uploadProgress[type] < 100 && (
+                <div className='p-5 bg-white rounded-b-[12px] border-t-[1px] border-[#EBEBEB] flex flex-col gap-2'>
+                  <div className='flex gap-2'>
+                    <img src='/file.svg' alt='file' className='w-10 h-10' />
+                    <div className='flex flex-col w-full gap-2'>
+                      <div className='flex justify-between'>
+                        <div className='flex flex-col gap-2'>
+                          <span className='font-medium text-sm text-[#1C1C1C]'>
+                            {files[type]?.name}
+                          </span>
+                          <span className='text-[#5E6864] text-xs inline-flex items-center gap-2'>
+                            {(files[type]?.size! / (1024 * 1024)).toFixed(2)} MB
+                            • <Loading size='sm' />
+                            Uploading
                           </span>
                         </div>
+                        <button
+                          className='text-[#3A4742]'
+                          onClick={() => handleCancel(type)}
+                        >
+                          <X className='w-6 h-6' />
+                        </button>
+                      </div>
+                      <div className='flex items-center gap-1 w-full'>
+                        <div className='bg-gray-200 rounded-full h-2.5 w-full'>
+                          <div
+                            className='h-2.5 rounded-full'
+                            style={{
+                              width: `${uploadProgress[type]}%`,
+                              background:
+                                'linear-gradient(285.44deg, #45D8FF 0%, #005BEA 82.52%)',
+                            }}
+                          />
+                        </div>
+                        <span className='text-sm text-[#3A4742] font-medium'>
+                          {uploadProgress[type]}%
+                        </span>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
             </div>
           ))}
         </div>

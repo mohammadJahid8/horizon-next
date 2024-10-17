@@ -8,8 +8,33 @@ import Skills from '@/components/global/professional-info/skills';
 import AddMore from '@/components/global/professional-info/add-more';
 import Remove from '@/components/global/professional-info/remove';
 
+interface EducationField {
+  degree: string;
+  institution: string;
+  yearOfGraduation: string;
+  fieldOfStudy: string;
+  grade: string;
+}
+
+interface ExperienceField {
+  jobTitle: string;
+  companyName: string;
+  duration: string;
+  responsibilities: string;
+}
+
+interface LicenseField {
+  title: string;
+  nameOfInstitute: string;
+  issueDate: string;
+  expireDate: string;
+  credentialID: string;
+  url: string;
+  file: File | null;
+}
+
 const ProfessionalInfo = () => {
-  const [educationFields, setEducationFields] = useState([
+  const [educationFields, setEducationFields] = useState<EducationField[]>([
     {
       degree: '',
       institution: '',
@@ -19,11 +44,11 @@ const ProfessionalInfo = () => {
     },
   ]);
 
-  const [experienceFields, setExperienceFields] = useState([
+  const [experienceFields, setExperienceFields] = useState<ExperienceField[]>([
     { jobTitle: '', companyName: '', duration: '', responsibilities: '' },
   ]);
 
-  const [licenseFields, setLicenseFields] = useState([
+  const [licenseFields, setLicenseFields] = useState<LicenseField[]>([
     {
       title: '',
       nameOfInstitute: '',
@@ -37,31 +62,35 @@ const ProfessionalInfo = () => {
 
   const handleEducationChange = (
     index: number,
-    field: string,
+    field: keyof EducationField,
     value: string
   ) => {
     const updatedFields = [...educationFields];
-    updatedFields[index][field as keyof (typeof updatedFields)[0]] = value;
+    updatedFields[index][field] = value;
     setEducationFields(updatedFields);
   };
 
   const handleExperienceChange = (
     index: number,
-    field: string,
+    field: keyof ExperienceField,
     value: string
   ) => {
     const updatedFields = [...experienceFields];
-    updatedFields[index][field as keyof (typeof updatedFields)[0]] = value;
+    updatedFields[index][field] = value;
     setExperienceFields(updatedFields);
   };
 
   const handleLicenseChange = (
     index: number,
-    field: string,
+    field: keyof LicenseField,
     value: string | File | null
   ) => {
     const updatedFields = [...licenseFields];
-    updatedFields[index][field as keyof (typeof updatedFields)[0]] = value;
+    if (field === 'file') {
+      updatedFields[index][field] = value as File | null;
+    } else {
+      updatedFields[index][field] = value as string;
+    }
     setLicenseFields(updatedFields);
   };
 
