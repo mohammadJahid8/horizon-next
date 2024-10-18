@@ -182,7 +182,7 @@ const DocumentUpload = () => {
           <OnboardButton
             text='Submit'
             className='w-full'
-            href='/pro/onboard/document-upload'
+            href='/pro/onboard/completed'
           />
           <OnboardButton
             text='Skip for now'
