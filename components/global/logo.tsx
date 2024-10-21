@@ -8,9 +8,12 @@ const averia = Averia_Serif_Libre({
   weight: ['300', '400', '700'],
 });
 
-const Logo = () => {
+const Logo = ({ className }: { className?: string }) => {
   return (
-    <Link href='/' className={cn(`${averia.className} text-4xl text-primary`)}>
+    <Link
+      href='/'
+      className={cn(`${averia.className} text-4xl text-primary`, className)}
+    >
       Horizzon
     </Link>
   );

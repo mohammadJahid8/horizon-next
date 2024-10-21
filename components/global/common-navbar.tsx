@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 
 const CommonNavbar = () => {
   const pathname = usePathname();
-  const isAuthPage = pathname.includes('login') || pathname.includes('signup');
-  const isOnboardPage = pathname.includes('onboard');
+  const showNavbar =
+    pathname === '/' || pathname === '/partner' || pathname === '/pro';
 
-  return isAuthPage || isOnboardPage ? null : <Navbar />;
+  return showNavbar ? <Navbar /> : null;
 };
 
 export default CommonNavbar;

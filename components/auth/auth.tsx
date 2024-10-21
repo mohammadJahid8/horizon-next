@@ -22,7 +22,10 @@ export default function Auth({
     <div className='relative min-h-screen flex flex-col lg:flex-row'>
       <div
         className='hidden lg:flex lg:w-1/3 bg-cover bg-no-repeat bg-center text-center flex-col justify-between items-center text-white px-4 xl:px-14 pt-10'
-        style={{ backgroundImage: `url(${image})` }}
+        style={{
+          backgroundImage: `url(${image})`,
+          backgroundPosition: source === 'partner' ? 'center 20%' : 'center',
+        }}
       >
         <div className='flex flex-col items-center justify-between h-[90vh]'>
           <Link
@@ -34,7 +37,7 @@ export default function Auth({
               }
             )}
           >
-            Horizon
+            Horizzon
           </Link>
           <div className='xl:max-w-md mx-auto'>
             <p className='text-[28px] 2xl:text-[32px] mb-4 leading-[40px] xl:leading-[46px] font-bold'>
@@ -66,7 +69,7 @@ export default function Auth({
             <div className='text-start'>
               {type === 'login' ? (
                 <p className='text-base'>
-                  New to Horizon?{' '}
+                  New to Horizzon?{' '}
                   <Link
                     href={`/${source}/signup`}
                     className='text-primary font-semibold underline underline-offset-4'
