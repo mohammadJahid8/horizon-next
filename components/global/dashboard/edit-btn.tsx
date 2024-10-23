@@ -7,7 +7,9 @@ const EditBtn = () => {
       <div className='p-2 rounded-full bg-primary text-white'>
         <Pencil className='size-3 md:size-4' />
       </div>
-      <span className='md:text-lg text-primary font-medium'>Edit</span>
+      <span className='hidden md:block text-lg text-primary font-medium'>
+        Edit
+      </span>
     </div>
   );
 };

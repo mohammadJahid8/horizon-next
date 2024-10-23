@@ -20,7 +20,7 @@ const OnboardLayout: React.FC<OnboardLayoutProps> = ({ children }) => {
       <div className='flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] px-0 md:px-8 xl:px-0'>
         <ProfileInfo />
         <Tabs items={tabItems} />
-        <div className='px-0 md:px-8 xl:px-0'>{children}</div>
+        <div>{children}</div>
       </div>
     </main>
   );

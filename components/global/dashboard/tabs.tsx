@@ -21,7 +21,7 @@ const Tabs: React.FC<TabsProps> = ({ items }) => {
         {items.map((item, index) => (
           <Link key={index} href={item.href}>
             <span
-              className={`text-xl md:text-2xl ${
+              className={`text-base md:text-xl ${
                 pathname === item.href
                   ? 'text-[#1C1C1C] font-semibold'
                   : 'text-[#6C6C6C]'
