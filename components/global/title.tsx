@@ -13,7 +13,7 @@ const Title: React.FC<TitleProps> = ({ text, className }) => {
   return (
     <h1
       className={cn(
-        'text-2xl font-bold leading-[33px] mb-8',
+        'text-xl md:text-2xl font-bold leading-[33px] mb-8',
         inter.className,
         className
       )}
