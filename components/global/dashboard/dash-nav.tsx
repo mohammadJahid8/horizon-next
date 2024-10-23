@@ -36,7 +36,7 @@ export default function DashboardNav() {
   ];
 
   return (
-    <nav className='p-6 bg-white fixed top-0 w-full z-50'>
+    <nav className='p-4 md:p-6 bg-white fixed top-0 w-full z-50'>
       <div className='flex items-center justify-between max-w-[1392px] mx-auto'>
         <div className='flex items-center gap-2 lg:gap-8'>
           <Logo className='text-3xl lg:text-4xl' />
@@ -65,8 +65,8 @@ export default function DashboardNav() {
         </div>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant='outline' size='icon' className='md:hidden'>
-              <Menu className='h-6 w-6' />
+            <Button variant='outline' size='icon' className='md:hidden w-8 h-8'>
+              <Menu className='h-5 w-5' />
             </Button>
           </SheetTrigger>
           <SheetContent side='left' className='max-w-[300px]'>
