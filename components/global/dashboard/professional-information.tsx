@@ -102,16 +102,16 @@ export default function ProfessionalInformation() {
               <div className='grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-6'>
                 <SectionDescription
                   text='Issue Date: December 20, 2023'
-                  className='!text-sm md:!text-base text-[#595959]'
+                  className='!text-sm md:!text-base text-[#595959] font-normal'
                 />
                 <SectionDescription
                   text='Expire Date: December 20, 2023'
-                  className='!text-sm md:!text-base text-[#595959]'
+                  className='!text-sm md:!text-base text-[#595959] font-normal'
                 />
               </div>
               <SectionDescription
                 text='Credential ID: 123 456 789'
-                className='!text-sm md:!text-base text-[#595959]'
+                className='!text-sm md:!text-base text-[#595959] font-normal'
               />
               <Button
                 variant='outline'
@@ -155,7 +155,11 @@ const SectionDescription = ({
   className?: string;
 }) => {
   return (
-    <p className={cn('text-sm md:text-xl text-[#1C1C1C]', className)}>{text}</p>
+    <p
+      className={cn('text-sm md:text-xl text-[#1C1C1C] font-medium', className)}
+    >
+      {text}
+    </p>
   );
 };
 const ExperienceItem = ({
@@ -187,11 +191,11 @@ const ExperienceItem = ({
         />
         <SectionDescription
           text={duration}
-          className='!text-sm md:!text-base text-[#595959]'
+          className='!text-sm md:!text-base text-[#595959] font-normal'
         />
         <SectionDescription
           text={location}
-          className='!text-sm md:!text-base text-[#595959]'
+          className='!text-sm md:!text-base text-[#595959] font-normal'
         />
         <SectionDescription text={description} className='mt-4' />
       </div>

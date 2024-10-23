@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { PlusIcon, XIcon } from 'lucide-react';
 import React, { useState } from 'react';
 
-const Skills = () => {
+const SkillsSelector = () => {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const availableSkills = [
     'PPE',
@@ -72,7 +71,7 @@ const Skills = () => {
   );
 };
 
-export default Skills;
+export default SkillsSelector;
 
 const EachSkill = ({
   skill,

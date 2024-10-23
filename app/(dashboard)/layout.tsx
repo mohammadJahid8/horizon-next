@@ -17,7 +17,7 @@ const OnboardLayout: React.FC<OnboardLayoutProps> = ({ children }) => {
   return (
     <main className='bg-[#F9F9FA]'>
       <DashboardNav />
-      <div className='flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] px-0 md:px-8 xl:px-0'>
+      <div className='flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] pb-8 md:pb-16 px-0 md:px-8 xl:px-0'>
         <ProfileInfo />
         <Tabs items={tabItems} />
         <div>{children}</div>

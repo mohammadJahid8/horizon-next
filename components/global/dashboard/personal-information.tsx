@@ -106,6 +106,10 @@ const SectionDescription = ({
   className?: string;
 }) => {
   return (
-    <p className={cn('text-sm md:text-xl text-[#1C1C1C]', className)}>{text}</p>
+    <p
+      className={cn('text-sm md:text-xl text-[#1C1C1C] font-medium', className)}
+    >
+      {text}
+    </p>
   );
 };

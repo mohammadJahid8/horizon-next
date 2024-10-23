@@ -4,9 +4,9 @@ import Title from '@/components/global/title';
 import { Input } from '@/components/ui/input';
 import OnboardButton from '@/components/global/onboard-button';
 import { CloudUploadIcon } from 'lucide-react';
-import Skills from '@/components/global/professional-info/skills';
 import AddMore from '@/components/global/professional-info/add-more';
 import Remove from '@/components/global/professional-info/remove';
+import SkillsSelector from '@/components/global/professional-info/skills-selector';
 
 interface EducationField {
   degree: string;
@@ -464,7 +464,7 @@ const ProfessionalInfo = () => {
             Skills
           </h2>
 
-          <Skills />
+          <SkillsSelector />
         </div>
 
         <div className='flex gap-5'>
