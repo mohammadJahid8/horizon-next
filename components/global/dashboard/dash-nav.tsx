@@ -13,31 +13,34 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import Logo from '../logo';
+import { usePathname } from 'next/navigation';
 
-export default function DashboardNav() {
+export default function DashboardNav({ isPro }: { isPro: boolean }) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const path = isPro ? '/pro' : '/partner';
+  const pathName = usePathname();
 
   const items = [
     {
-      href: '/notifications',
+      href: `${path}/notifications`,
       icon: <Bell className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
       label: 'Notifications',
     },
     {
-      href: '/documents',
+      href: `${path}/documents`,
       icon: <FileText className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
       label: 'Documents',
     },
     {
-      href: '/settings',
+      href: `${path}/settings`,
       icon: <Settings className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
       label: 'Settings',
     },
   ];
 
   return (
-    <nav className='p-4 md:p-6 bg-white fixed top-0 w-full z-50'>
-      <div className='flex items-center justify-between max-w-[1392px] mx-auto'>
+    <nav className='p-4 md:p-6 lg:px-10 bg-white fixed top-0 w-full z-50'>
+      <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2 lg:gap-8'>
           <Logo className='text-3xl lg:text-4xl' />
           <div className='hidden md:block'>
@@ -46,12 +49,18 @@ export default function DashboardNav() {
         </div>
         <div className='hidden md:flex items-center gap-2 lg:gap-8'>
           {items.map((item) => (
-            <NavItem key={item.href} href={item.href} icon={item.icon}>
+            <NavItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              pathName={pathName}
+            >
               {item.label}
             </NavItem>
           ))}
 
           <Button
+            href={`${path}/profile`}
             variant='ghost'
             size='icon'
             className='rounded-full w-10 h-10 lg:w-16 lg:h-16'
@@ -73,6 +82,7 @@ export default function DashboardNav() {
             <SheetTitle />
             <nav className='flex flex-col space-y-4 mt-10'>
               <Button
+                href={`${path}/profile`}
                 variant='ghost'
                 size='icon'
                 className='rounded-full w-20 h-20 mx-auto'
@@ -87,7 +97,12 @@ export default function DashboardNav() {
               <UpgradeButton />
 
               {items.map((item) => (
-                <NavItem key={item.href} href={item.href} icon={item.icon}>
+                <NavItem
+                  key={item.href}
+                  href={item.href}
+                  icon={item.icon}
+                  pathName={pathName}
+                >
                   {item.label}
                 </NavItem>
               ))}
@@ -103,16 +118,19 @@ function NavItem({
   href,
   icon,
   children,
+  pathName,
 }: {
   href: string;
   icon: React.ReactNode;
   children: React.ReactNode;
+  pathName: string;
 }) {
   return (
     <Button
       href={href}
       className={cn(
-        'h-[45px] md:h-[50px] lg:h-[55px] 2xl:h-[65px] rounded-[12px] p-5 flex justify-start md:justify-center items-center gap-2 bg-accent text-[#6C6C6C] hover:text-white transition-colors duration-200 px-3 lg:px-4 text-base md:text-sm lg:text-lg font-medium'
+        'h-[45px] md:h-[50px] lg:h-[55px] 2xl:h-[65px] rounded-[12px] p-5 flex justify-start md:justify-center items-center gap-2 bg-accent text-[#6C6C6C] hover:text-white transition-colors duration-200 px-3 lg:px-4 text-base md:text-sm lg:text-lg font-medium',
+        pathName === href && 'text-primary'
       )}
     >
       {icon}

@@ -1,29 +1,31 @@
+'use client';
+import Account from '@/components/global/dashboard/account/account';
 import DashboardNav from '@/components/global/dashboard/dash-nav';
-import ProfileInfo from '@/components/global/dashboard/profile-info';
-import Tabs from '@/components/global/dashboard/tabs';
+import DashboardLayout from '@/components/global/dashboard/dashboard-layout';
+import { usePathname } from 'next/navigation';
 import React, { ReactNode } from 'react';
 
-interface OnboardLayoutProps {
+interface DashboardProps {
   children: ReactNode;
 }
 
-const tabItems = [
-  { label: 'Profile', href: '/pro/profile' },
-  { label: 'Offers (3)', href: '/pro/offers' },
-  { label: 'Jobs (1)', href: '/pro/jobs' },
-];
+const Dashboard: React.FC<DashboardProps> = ({ children }) => {
+  const pathname = usePathname();
+  const isPro = true;
 
-const OnboardLayout: React.FC<OnboardLayoutProps> = ({ children }) => {
+  const isAccountPage =
+    pathname.includes('notifications') || pathname.includes('settings');
+
   return (
     <main className='bg-[#F9F9FA]'>
-      <DashboardNav />
-      <div className='flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] pb-8 md:pb-16 px-0 md:px-8 xl:px-0'>
-        <ProfileInfo />
-        <Tabs items={tabItems} />
-        <div>{children}</div>
-      </div>
+      <DashboardNav isPro={isPro} />
+      {isAccountPage ? (
+        <Account>{children}</Account>
+      ) : (
+        <DashboardLayout>{children}</DashboardLayout>
+      )}
     </main>
   );
 };
 
-export default OnboardLayout;
+export default Dashboard;

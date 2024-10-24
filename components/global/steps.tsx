@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { IdCard, User, FileText, PencilLine } from 'lucide-react';
+import { IdCard, User, FileText } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const steps = [
