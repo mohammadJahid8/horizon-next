@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { FileCheck, FileClock, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
+import { RequestModal } from './request-modal';
 
 const offers = [
   {
@@ -113,16 +114,7 @@ const OfferLists = () => {
                   <FileClock className='w-6 h-6 text-[#6C6C6C]' />
                   The client is requesting:
                 </p>
-                <ul className='flex flex-wrap justify-between text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] py-2 sm:px-4 sm:p-3 rounded-[12px] w-auto sm:w-max'>
-                  {offer.requests.map((request, idx) => (
-                    <li
-                      key={idx}
-                      className='text-start sm:text-center px-6 list-disc list-inside w-max'
-                    >
-                      {request}
-                    </li>
-                  ))}
-                </ul>
+                <RequestModal offer={offer} />
               </div>
             )}
           </div>
