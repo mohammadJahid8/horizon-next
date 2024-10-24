@@ -1,13 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import {
-  Check,
-  CheckCircle2,
-  FileCheck,
-  FileClock,
-  MoreHorizontal,
-  X,
-} from 'lucide-react';
+import { FileCheck, FileClock, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -20,10 +13,10 @@ const offers = [
     size: '100 Employees',
     location: '60 Pleasant St, Lincoln, MA, 02464',
     status: 'New',
+    actions: ['Reject', 'Accept'],
     requests: ['Proof letter of a certain experience', 'Signed NDA'],
     image: '/offer.svg',
     isAllGood: true,
-    isAccepted: true,
   },
   {
     date: '05 Aug 2024 - 11:59 AM',
@@ -33,36 +26,21 @@ const offers = [
     size: '100 Employees',
     location: '60 Pleasant St, Lincoln, MA, 02464',
     status: 'New',
+    actions: ['Reject', 'Respond'],
     requests: ['Proof letter of a certain experience', 'Signed NDA'],
     image: '/offer.svg',
     isAllGood: false,
-    isAccepted: false,
   },
 ];
 
-const Jobs = () => {
+const OfferLists = () => {
   return (
     <div className='flex flex-col gap-8'>
       {offers.map((offer, index) => (
         <div key={index} className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
           <div className='flex flex-col gap-2 w-full'>
             <div className='flex justify-between items-center'>
-              <div className='flex flex-col gap-4'>
-                <span
-                  className={cn(
-                    'text-[#6C6C6C80] text-sm flex items-center gap-2',
-                    offer.isAccepted ? 'text-[#33B55B]' : 'text-[#FF5652]'
-                  )}
-                >
-                  {offer.isAccepted ? (
-                    <Check className='size-4' />
-                  ) : (
-                    <X className='size-4' />
-                  )}
-                  {offer.isAccepted ? 'ACCEPTED' : 'REJECTED'}
-                </span>
-                <span className='text-[#6C6C6C80] text-sm'>{offer.date}</span>
-              </div>
+              <span className='text-[#6C6C6C80] text-sm'>{offer.date}</span>
               <MoreHorizontal className='w-6 h-6' />
             </div>
 
@@ -107,6 +85,20 @@ const Jobs = () => {
                 </p>
               </div>
             </div>
+            <div className='flex justify-between mt-4 gap-3'>
+              {offer.actions.map((action, idx) => (
+                <Button
+                  key={idx}
+                  className={cn(
+                    'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold',
+                    action === 'Reject' &&
+                      'bg-accent text-[#1C1C1C] hover:bg-accent/80'
+                  )}
+                >
+                  {action}
+                </Button>
+              ))}
+            </div>
 
             {offer.isAllGood ? (
               <div className='mt-3 flex items-center gap-2 text-[#6C6C6C80]'>
@@ -140,4 +132,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default OfferLists;
