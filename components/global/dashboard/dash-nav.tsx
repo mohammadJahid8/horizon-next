@@ -14,10 +14,12 @@ import {
 } from '@/components/ui/sheet';
 import Logo from '../logo';
 import { usePathname } from 'next/navigation';
+import { useAppContext } from '@/lib/context';
 
-export default function DashboardNav({ isPro }: { isPro: boolean }) {
+export default function DashboardNav() {
+  const { user } = useAppContext();
   const [isOpen, setIsOpen] = React.useState(false);
-  const path = isPro ? '/pro' : '/partner';
+  const path = user?.role === 'pro' ? '/pro' : '/partner';
   const pathName = usePathname();
 
   const items = [

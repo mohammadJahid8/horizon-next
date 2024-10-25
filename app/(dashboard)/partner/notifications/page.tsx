@@ -1,7 +1,7 @@
 import Notifications from '@/components/global/dashboard/account/notifications';
 
-const ProNotifications = () => {
+const PartnerNotifications = () => {
   return <Notifications />;
 };
 
-export default ProNotifications;
+export default PartnerNotifications;

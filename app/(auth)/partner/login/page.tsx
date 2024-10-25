@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import Auth from '@/components/auth/auth';
 import AuthForm from '@/components/auth/auth-form';
 import { useRouter } from 'next/navigation';
+import { useAppContext } from '@/lib/context';
 const loginFields = [
   {
     name: 'email',
@@ -29,15 +30,21 @@ const loginFields = [
   },
 ];
 
-export default function Signup() {
+export default function Login() {
   const router = useRouter();
+  const { setUser } = useAppContext();
 
   const handleSubmit = async (data: any) => {
     try {
       console.log(data);
-      toast.success(`Signup successful`, {
+      toast.success(`Login successful`, {
         position: 'top-center',
       });
+      setUser({
+        name: 'Partner name',
+        role: 'partner',
+      });
+      router.push('/partner/profile');
     } catch (error: any) {
       console.log(error);
 

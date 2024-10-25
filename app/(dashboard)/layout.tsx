@@ -11,14 +11,13 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   const pathname = usePathname();
-  const isPro = true;
 
   const isAccountPage =
     pathname.includes('notifications') || pathname.includes('settings');
 
   return (
     <main className='bg-[#F9F9FA]'>
-      <DashboardNav isPro={isPro} />
+      <DashboardNav />
       {isAccountPage ? (
         <Account>{children}</Account>
       ) : (

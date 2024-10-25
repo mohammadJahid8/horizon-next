@@ -1,6 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { IdCard, User, FileText } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const steps = [
@@ -33,7 +34,7 @@ const Steps = () => {
         const isActive = pathname === step.link;
         return (
           <li key={step.id} className='flex items-center'>
-            <a
+            <Link
               href={step.link}
               className={cn(
                 'flex items-center',
@@ -66,7 +67,7 @@ const Steps = () => {
                   </span>
                 )}
               </div>
-            </a>
+            </Link>
           </li>
         );
       })}

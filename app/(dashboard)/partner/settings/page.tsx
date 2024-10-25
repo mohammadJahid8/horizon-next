@@ -1,8 +1,8 @@
 import Settings from '@/components/global/dashboard/account/settings';
 import React from 'react';
 
-const ProSettings = () => {
+const PartnerSettings = () => {
   return <Settings />;
 };
 
-export default ProSettings;
+export default PartnerSettings;

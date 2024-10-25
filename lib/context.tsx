@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 export const UserContext = createContext<any>({});
 
@@ -9,7 +9,15 @@ export function useAppContext() {
 }
 
 const ContextProvider = ({ children }: any) => {
-  return <UserContext.Provider value={{}}>{children}</UserContext.Provider>;
+  const [user, setUser] = useState<any>(null);
+
+  console.log({ user });
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default ContextProvider;

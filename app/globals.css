@@ -92,3 +92,9 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none !important; /* Chrome, Safari and Opera */
 }
+
+@supports (-webkit-touch-callout: none) and (max-width: 768px) {
+  .input-style {
+    font-size: 16px;
+  }
+}

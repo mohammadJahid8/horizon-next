@@ -2,23 +2,32 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAppContext } from '@/lib/context';
 
 interface TabItem {
   label: string;
   href: string;
 }
 
-interface TabsProps {
-  items: TabItem[];
-}
+const tabItemsPro = [
+  { label: 'Profile', href: '/pro/profile' },
+  { label: 'Offers (3)', href: '/pro/offers' },
+  { label: 'Jobs (1)', href: '/pro/jobs' },
+];
+const tabItemsPartner = [
+  { label: 'Profile', href: '/partner/profile' },
+  { label: 'Pros', href: '/partner/pros' },
+  { label: 'Offers (3)', href: '/partner/offers' },
+];
 
-const Tabs: React.FC<TabsProps> = ({ items }) => {
+const Tabs: React.FC = () => {
   const pathname = usePathname();
-
+  const { user } = useAppContext();
+  const tabItems = user?.role === 'pro' ? tabItemsPro : tabItemsPartner;
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
       <div className='flex items-center gap-8'>
-        {items.map((item, index) => (
+        {tabItems.map((item, index) => (
           <Link key={index} href={item.href}>
             <span
               className={`text-base md:text-xl ${
