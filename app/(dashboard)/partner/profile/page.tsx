@@ -1,9 +1,10 @@
+import PersonalInformation from '@/components/global/dashboard/personal-information';
 import React from 'react';
 
 const PartnerProfile = () => {
   return (
     <div>
-      <h1>Partner Profile</h1>
+      <PersonalInformation />
     </div>
   );
 };

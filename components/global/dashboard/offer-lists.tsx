@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { FileCheck, FileClock, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
-import { RequestModal } from './request-modal';
+import { ProRequestModal } from './pro-request-modal';
 
 const offers = [
   {
@@ -114,7 +114,7 @@ const OfferLists = () => {
                   <FileClock className='w-6 h-6 text-[#6C6C6C]' />
                   The client is requesting:
                 </p>
-                <RequestModal offer={offer} />
+                <ProRequestModal offer={offer} />
               </div>
             )}
           </div>

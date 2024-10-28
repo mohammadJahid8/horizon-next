@@ -9,11 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Check, CloudUploadIcon, FileClock } from 'lucide-react';
 
-export function RequestModal({ offer }: { offer: any }) {
+export function ProRequestModal({ offer }: { offer: any }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
