@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 export const UserContext = createContext<any>({});
 
@@ -12,8 +12,6 @@ const ContextProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
   const [isOpenNeedMore, setIsOpenNeedMore] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
-
-  console.log({ isPartnerOpen });
 
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
@@ -31,7 +29,14 @@ const ContextProvider = ({ children }: any) => {
     setIsPartnerOpen(false);
   };
 
-  console.log({ user });
+  useEffect(() => {
+    const userData = JSON.parse(window.localStorage.getItem('user') || '{}');
+    if (userData?.name) {
+      setUser(userData);
+    }
+  }, [user?.name]);
+
+  // console.log({ user });
 
   return (
     <UserContext.Provider

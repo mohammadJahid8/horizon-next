@@ -18,7 +18,7 @@ const ProfileInfo = ({
       <Cover isProProfileFromPartner={isProProfileFromPartner} />
       <div className='bg-white md:rounded-b-[16px] p-4 md:p-8 pt-6 flex gap-3 md:gap-6 sm:flex-row flex-col'>
         <div className='-mt-16 sm:-mt-[90px]'>
-          <ProfileImage isProProfileFromPartner={isProProfileFromPartner} />
+          <ProfileImage />
         </div>
 
         {(user?.role === 'pro' || isProProfileFromPartner) && (

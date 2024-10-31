@@ -28,11 +28,15 @@ export default function DashboardNav() {
       icon: <Bell className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
       label: 'Notifications',
     },
-    {
-      href: `${path}/documents`,
-      icon: <FileText className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
-      label: 'Documents',
-    },
+    ...(user?.role === 'pro'
+      ? [
+          {
+            href: `/pro/onboard/document-upload`,
+            icon: <FileText className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
+            label: 'Documents',
+          },
+        ]
+      : []),
     {
       href: `${path}/settings`,
       icon: <Settings className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
@@ -45,9 +49,7 @@ export default function DashboardNav() {
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2 lg:gap-8'>
           <Logo className='text-3xl lg:text-4xl' />
-          <div className='hidden md:block'>
-            <UpgradeButton />
-          </div>
+          <div className='hidden md:block'>{/* <UpgradeButton /> */}</div>
         </div>
         <div className='hidden md:flex items-center gap-2 lg:gap-8'>
           {items.map((item) => (
@@ -96,7 +98,7 @@ export default function DashboardNav() {
                 />
               </Button>
 
-              <UpgradeButton />
+              {/* <UpgradeButton /> */}
 
               {items.map((item) => (
                 <NavItem
@@ -141,11 +143,11 @@ function NavItem({
   );
 }
 
-const UpgradeButton = () => {
-  return (
-    <Button className='flex items-center bg-secondary h-[50px] lg:h-[55px] 2xl:h-[65px] text-sm lg:text-lg font-medium rounded-[12px] px-3 lg:px-4'>
-      <Rocket className='mr-2 h-5 w-5 md:w-4 lg:w-6 lg:h-6 md:h-4  fill-current' />
-      Upgrade to Pro
-    </Button>
-  );
-};
+// const UpgradeButton = () => {
+//   return (
+//     <Button className='flex items-center bg-secondary h-[50px] lg:h-[55px] 2xl:h-[65px] text-sm lg:text-lg font-medium rounded-[12px] px-3 lg:px-4'>
+//       <Rocket className='mr-2 h-5 w-5 md:w-4 lg:w-6 lg:h-6 md:h-4  fill-current' />
+//       Upgrade to Pro
+//     </Button>
+//   );
+// };

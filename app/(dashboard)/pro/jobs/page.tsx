@@ -1,13 +1,6 @@
-import { Button } from '@/components/ui/button';
+import { MoreDropdown } from '@/components/global/dashboard/more-dropdown';
 import { cn } from '@/lib/utils';
-import {
-  Check,
-  CheckCircle2,
-  FileCheck,
-  FileClock,
-  MoreHorizontal,
-  X,
-} from 'lucide-react';
+import { Check, FileCheck, FileClock, MoreHorizontal, X } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -63,7 +56,7 @@ const Jobs = () => {
                 </span>
                 <span className='text-[#6C6C6C80] text-sm'>{offer.date}</span>
               </div>
-              <MoreHorizontal className='w-6 h-6' />
+              <MoreDropdown />
             </div>
 
             <div className='flex items-center gap-3'>

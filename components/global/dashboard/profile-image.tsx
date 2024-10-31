@@ -1,11 +1,14 @@
 import { Camera } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-const ProfileImage = ({
-  isProProfileFromPartner,
-}: {
-  isProProfileFromPartner: boolean;
-}) => {
+const ProfileImage = () => {
+  const params = useParams();
+  const pathname = usePathname();
+
+  const isProProfileFromPartner =
+    pathname.includes('partner/pros/') && params.id ? true : false;
   const [profileImage, setProfileImage] = useState('/user.png');
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

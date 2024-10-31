@@ -40,6 +40,13 @@ export default function Login() {
       toast.success(`Login successful`, {
         position: 'top-center',
       });
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          name: 'Partner name',
+          role: 'partner',
+        })
+      );
       setUser({
         name: 'Partner name',
         role: 'partner',

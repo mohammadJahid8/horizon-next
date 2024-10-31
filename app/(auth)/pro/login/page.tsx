@@ -40,6 +40,14 @@ export default function Signup() {
       toast.success(`Signup successful`, {
         position: 'top-center',
       });
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          name: 'Pro name',
+          profession: 'Senior Nurse',
+          role: 'pro',
+        })
+      );
       setUser({
         name: 'Pro name',
         profession: 'Senior Nurse',

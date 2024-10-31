@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import {
   Download,
@@ -14,6 +15,8 @@ import React from 'react';
 
 import { Check, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAppContext } from '@/lib/context';
+import { OfferDropdown } from '@/components/global/dashboard/offer-dropdown';
 
 // Start of Selection
 const offers = [
@@ -89,6 +92,7 @@ const actionColors = {
 };
 
 const PartnerOffers = () => {
+  const { openPartner } = useAppContext();
   return (
     <div className='flex flex-col gap-8'>
       {offers.map((offer, index) => (
@@ -107,7 +111,7 @@ const PartnerOffers = () => {
                 </span>
                 <span className='text-[#6C6C6C80] text-sm'>{offer.date}</span>
               </div>
-              <MoreHorizontal className='w-6 h-6' />
+              <OfferDropdown />
             </div>
             <div className='flex xs:flex-row flex-col justify-between gap-4 xs:items-center'>
               <div className='flex items-center gap-2'>
@@ -129,7 +133,7 @@ const PartnerOffers = () => {
               </div>
               <div className='flex items-start gap-3'>
                 <Button
-                  href={`/partner/offers/${offer.id}`}
+                  href={`/partner/pros/${offer.id}`}
                   variant='outline'
                   className='h-10 md:h-12 rounded-[12px] w-fit text-xs md:text-base'
                 >
@@ -202,6 +206,9 @@ const PartnerOffers = () => {
                     </li>
                   ))}
                   <Button
+                    onClick={() =>
+                      offer.action === 'Update Requirements' && openPartner()
+                    }
                     variant='outline'
                     className='border border-secondary py-2 px-4 rounded-[12px] w-full h-9'
                   >
