@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 const CommonNavbar = () => {
   const pathname = usePathname();
   const showNavbar =
-    pathname === '/' || pathname === '/partner' || pathname === '/pro';
+    pathname === '/' || pathname === '/partners' || pathname === '/pros';
 
   return showNavbar ? <Navbar /> : null;
 };
