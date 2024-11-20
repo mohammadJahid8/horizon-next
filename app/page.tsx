@@ -1,10 +1,11 @@
 import Banner from '@/components/global/landing/banner';
-import Link from 'next/link';
+import GetStarted from '@/components/global/landing/get-started';
 
 export default function PartnerPage() {
   return (
     <div className='mt-16'>
       <Banner />
+      <GetStarted />
     </div>
   );
 }

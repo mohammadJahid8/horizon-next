@@ -8,30 +8,30 @@ const Banner = () => {
   return (
     <div className='bg-[url("/banner-bg.svg")] bg-cover bg-center bg-no-repeat h-full w-full py-32'>
       <Container>
-        <div className='max-w-md flex flex-col gap-9'>
-          <h1 className='text-[50px] font-light text-green-900 leading-[55px]'>
+        <div className='max-w-md flex flex-col gap-9 text-center md:text-left mx-auto md:mx-0'>
+          <h1 className='md:text-[50px] text-[31px] font-light text-green-900 md:leading-[55px] leading-[34.1px]'>
             Build Your Profile,{' '}
             <span className='font-medium'>Find Your Next Job</span>
           </h1>
-          <p className='text-lg text-[#15221F]'>
+          <p className='md:text-lg text-sm text-[#6C6C6C]'>
             Create your CNA profile and start exploring job opportunities. Share
             your profile link with potential employers to accelerate your job.
           </p>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-lg font-semibold'>
+          <Button className='px-9 h-14 rounded-[12px] w-fit text-lg font-semibold mx-auto md:mx-0'>
             Register Now
           </Button>
           <div className='mt-4'>
-            <p className='text-[#6C6C6C] text-base'>Download Now</p>
-            <div className='flex space-x-6 pt-2'>
+            <p className='text-[#6C6C6C] md:text-base text-sm'>Download Now</p>
+            <div className='flex md:space-x-6 pt-2 md:flex-row flex-col justify-center items-center'>
               <img
                 src='/app-store.svg'
                 alt='Download on the App Store'
-                className='h-full'
+                className='w-[174px] h-[72px] md:w-full md:h-full'
               />
               <img
                 src='/playstore.svg'
                 alt='Get it on Google Play'
-                className='h-full'
+                className='w-[174px] h-[72px] md:w-full md:h-full'
               />
             </div>
           </div>
