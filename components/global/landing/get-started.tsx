@@ -1,68 +1,140 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft, ArrowRight, MoveLeft, MoveRight } from 'lucide-react';
 import Container from '../container';
+import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function GetStarted() {
-  const data = [
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+
+  const steps = [
     {
-      img: '/secure.svg',
-      title: 'Secured Information',
-      description: 'All your uploaded documents are secured and saved!',
+      step: 'Step 1',
+      icon: <IdCardIcon className='size-[18px]' />,
+      text: 'Personal information',
     },
     {
-      img: '/peace.svg',
-      title: 'All in one place',
-      description: 'You will be able to access to your information any time',
+      step: 'Step 2',
+      icon: <FileIcon className='size-[18px]' />,
+      text: 'Professional information',
     },
     {
-      img: '/status.svg',
-      title: 'Easy to share',
-      description:
-        'Different ways to share your profile. By a generated link or QR code',
+      step: 'Step 3',
+      icon: <UserIcon className='size-[18px]' />,
+      text: 'Complete Profile',
+    },
+    {
+      step: 'Step 4',
+      icon: <BriefcaseIcon className='size-[18px]' />,
+      text: 'Share your profile and Get Hired',
     },
   ];
 
-  return (
-    <Container className='md:my-20 my-16'>
-      <div className='grid gap-9 md:grid-cols-3'>
-        {data.map((item, index) => (
-          <div key={index} className='flex flex-col items-center text-center'>
-            <div className=''>
-              <Image
-                src={item.img}
-                alt={item.title}
-                width={376}
-                height={376}
-                className='h-full w-full'
-              />
-            </div>
-            <h3 className='md:mb-9 mb-6 md:text-[28px] text-lg font-semibold md:leading-[39.2px] leading-[25.2px] text-secondary max-w-[180px]'>
-              {item.title}
-            </h3>
-            <p className='text-muted-foreground md:text-base text-sm max-w-[332px]'>
-              {item.description}
-            </p>
-          </div>
-        ))}
-      </div>
+  const stepsBgColor = {
+    0: 'bg-[#87e4a5]',
+    1: 'bg-[#c9f9e3]',
+    2: 'bg-[#87e4a5]',
+    3: 'bg-[#c9f9e3]',
+  };
 
-      <div className='md:mt-20 mt-16 flex flex-col items-center justify-center md:gap-16 gap-14 sm:flex-row'>
-        <Link
-          href='/cna'
-          className='inline-flex items-center font-medium underline text-primary hover:text-primary/80'
-        >
-          <MoveLeft className='mr-3 size-6' />
-          Get Started as CNA
-        </Link>
-        <Link
-          href='/partner'
-          className='inline-flex items-center font-medium underline text-secondary hover:text-secondary/80'
-        >
-          Get Started as a Partner
-          <MoveRight className='ml-3 size-6' />
-        </Link>
-      </div>
-    </Container>
+  const images = {
+    null: '/doctor.svg',
+    0: '/professional.svg',
+    1: '/document-info.svg',
+    2: '/profile.svg',
+    3: '/jobs.svg',
+  };
+
+  return (
+    <div
+      className={cn(
+        'relative bg-[#bcf8dc] md:pt-28 pb-20 pt-16 overflow-hidden transition-colors duration-300',
+        stepsBgColor[activeStep as keyof typeof stepsBgColor]
+      )}
+    >
+      <Container>
+        <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300'>
+          Get started in just a few{' '}
+          <span className='font-medium'>simple steps</span>
+        </h2>
+        <Image
+          src='/vector-top.svg'
+          alt=''
+          width={689}
+          height={512}
+          className='absolute -right-28 md:-right-16 md:top-52 top-28 z-0 md:h-[512px] h-[316px] transition-transform duration-300'
+        />
+
+        <div className='relative grid md:gap-24 gap-12 lg:grid-cols-2 mt-16'>
+          <div className='relative mx-auto max-w-xl w-full order-2 lg:order-none'>
+            <Image
+              src={images[activeStep as keyof typeof images]}
+              alt='Healthcare professional with tablet'
+              width={660}
+              height={500}
+              className={cn(
+                'relative z-20 w-full transition-all duration-300',
+                activeStep !== null && 'max-w-[300px] mx-auto'
+              )}
+              priority
+            />
+            <Image
+              src='/vector-bottom.svg'
+              alt='Healthcare professional with tablet'
+              width={400}
+              height={500}
+              className='absolute bottom-0 right-6 top-24 z-0 w-full transition-transform duration-300'
+              priority
+            />
+          </div>
+          {/* Steps section */}
+          <div className='flex flex-col justify-center md:gap-2'>
+            {steps.map((item, index) => (
+              <div
+                key={index}
+                className={`flex flex-col gap-3 cursor-pointer transition-all duration-300 ${
+                  activeStep === index
+                    ? `${
+                        stepsBgColor[index as keyof typeof stepsBgColor]
+                      } md:p-6 p-4 border-2 border-white`
+                    : `md:p-6 p-4 border-2 border-transparent`
+                }`}
+                onClick={() => setActiveStep(index)}
+                onMouseEnter={() => setActiveStep(index)}
+              >
+                <span
+                  className={`md:text-xl text-sm transition-colors duration-300 ${
+                    activeStep === index
+                      ? 'text-green-800 font-bold'
+                      : 'text-[#1C1C1C]'
+                  }`}
+                >
+                  {item.step}
+                </span>
+
+                <div className='flex items-center gap-3'>
+                  <span
+                    className={`flex size-10 items-center justify-center rounded-full text-sm border border-secondary transition-colors duration-300`}
+                  >
+                    {item.icon}
+                  </span>
+                  <span
+                    className={`md:text-2xl text-lg font-normal transition-colors duration-300 ${
+                      activeStep === index
+                        ? 'text-green-800'
+                        : 'text-secondary hover:text-green-800'
+                    }`}
+                  >
+                    {item.text}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 }

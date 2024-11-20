@@ -17,7 +17,7 @@ const Banner = () => {
             Create your CNA profile and start exploring job opportunities. Share
             your profile link with potential employers to accelerate your job.
           </p>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-lg font-semibold mx-auto md:mx-0'>
+          <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'>
             Register Now
           </Button>
           <div className='mt-4'>
