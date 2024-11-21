@@ -1,5 +1,7 @@
 import Banner from '@/components/global/landing/banner';
 import Career from '@/components/global/landing/career';
+import Comparison from '@/components/global/landing/comparison';
+import Faqs from '@/components/global/landing/faqs';
 import Features from '@/components/global/landing/features';
 import Footer from '@/components/global/landing/footer';
 import GetStarted from '@/components/global/landing/get-started';
@@ -14,7 +16,9 @@ export default function PartnerPage() {
       <GetStarted />
       <Career />
       <Partners />
+      <Comparison />
       <Grow />
+      <Faqs />
       <Footer />
     </div>
   );
