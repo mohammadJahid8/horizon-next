@@ -6,7 +6,11 @@ import Container from '../container';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function GetStarted() {
+export default function GetStarted({
+  images,
+}: {
+  images: Record<string, string>;
+}) {
   const [activeStep, setActiveStep] = useState<number | null>(null);
 
   const steps = [
@@ -14,21 +18,29 @@ export default function GetStarted() {
       step: 'Step 1',
       icon: <IdCardIcon className='size-[18px]' />,
       text: 'Personal information',
+      description:
+        'Register with your email and create a secure profile. Provide your personal and professional details to get started.',
     },
     {
       step: 'Step 2',
       icon: <FileIcon className='size-[18px]' />,
-      text: 'Professional information',
+      text: 'Upload Documents',
+      description:
+        'Showcase your educational degree, add experiences with licences and certifications',
     },
     {
       step: 'Step 3',
       icon: <UserIcon className='size-[18px]' />,
       text: 'Complete Profile',
+      description:
+        'Easily upload your CV, certifications, licenses, and other important documents. Keep everything organized and easily accessible.',
     },
     {
       step: 'Step 4',
       icon: <BriefcaseIcon className='size-[18px]' />,
       text: 'Share your profile and Get Hired',
+      description:
+        'Create secure, shareable links to your documents. Share these links with potential employers or during job applications.',
     },
   ];
 
@@ -39,18 +51,10 @@ export default function GetStarted() {
     3: 'bg-[#c9f9e3]',
   };
 
-  const images = {
-    null: '/doctor.svg',
-    0: '/professional.svg',
-    1: '/document-info.svg',
-    2: '/profile.svg',
-    3: '/jobs.svg',
-  };
-
   return (
     <div
       className={cn(
-        'relative bg-[#bcf8dc] md:pt-28 pb-20 pt-16 overflow-hidden transition-colors duration-300',
+        'relative bg-[#bcf8dc] md:pt-28 pb-40 pt-16 overflow-hidden transition-colors duration-300',
         stepsBgColor[activeStep as keyof typeof stepsBgColor]
       )}
     >
@@ -70,7 +74,7 @@ export default function GetStarted() {
         <div className='relative grid md:gap-24 gap-12 lg:grid-cols-2 mt-16'>
           <div className='relative mx-auto max-w-xl w-full order-2 lg:order-none'>
             <Image
-              src={images[activeStep as keyof typeof images]}
+              src={images[activeStep as unknown as keyof typeof images]}
               alt='Healthcare professional with tablet'
               width={660}
               height={500}
@@ -130,6 +134,11 @@ export default function GetStarted() {
                     {item.text}
                   </span>
                 </div>
+                {activeStep === index && (
+                  <p className='text-sm md:text-base text-[#1C1C1C] transition-all duration-300'>
+                    {item.description}
+                  </p>
+                )}
               </div>
             ))}
           </div>

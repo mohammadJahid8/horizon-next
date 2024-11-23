@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 const Partners = () => {
   return (
     <div className='bg-[#BBF8DC] relative md:my-28 my-16 min-h-[500px]'>
-      <Container className='pt-20 flex gap-12 lg:flex-row flex-col items-center relative md:bottom-36 bottom-24'>
+      <Container className='pt-20 flex gap-12 lg:flex-row flex-col items-center relative lg:bottom-24 xl:bottom-36 bottom-24'>
         <div className='flex flex-col md:gap-10 gap-6'>
           <div className='flex flex-col gap-2 justify-center items-center md:items-start'>
             <Button className='bg-[#BBF8DC] text-secondary text-sm rounded-[32px] w-fit'>
@@ -26,7 +26,13 @@ const Partners = () => {
             Get Started
           </Button>
         </div>
-        <Image src='/partners.svg' alt='' width={643} height={515} />
+        <Image
+          src='/partners.svg'
+          alt=''
+          width={643}
+          height={515}
+          className='w-[500px] xl:w-[643px] lg:-mt-16 xl:-mt-0'
+        />
       </Container>
     </div>
   );

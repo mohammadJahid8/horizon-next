@@ -56,6 +56,8 @@ export default function Footer() {
     },
   ];
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className='w-full bg-primary text-white'>
       <Container className='py-16 md:py-24'>
@@ -119,7 +121,7 @@ export default function Footer() {
 
         <div className='mt-8 pt-8 text-sm text-center md:text-left grid grid-cols-1 md:grid-cols-4'>
           <div></div>
-          <p>Horizzon © 2024 all rights reserved.</p>
+          <p>Horizzon © {currentYear} all rights reserved.</p>
         </div>
       </Container>
     </footer>

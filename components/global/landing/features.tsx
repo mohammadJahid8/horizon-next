@@ -1,68 +1,91 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { MoveLeft, MoveRight } from 'lucide-react';
+import React from 'react';
 import Container from '../container';
+import {
+  PencilLine,
+  IdCard,
+  Upload,
+  CloudUpload,
+  FileText,
+  Video,
+  ScanQrCode,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export default function Features() {
+const Features = () => {
   const data = [
     {
-      img: '/secure.svg',
-      title: 'Secured Information',
-      description: 'All your uploaded documents are secured and saved!',
-    },
-    {
-      img: '/peace.svg',
-      title: 'All in one place',
-      description: 'You will be able to access to your information any time',
-    },
-    {
-      img: '/status.svg',
-      title: 'Easy to share',
+      title: 'Form Signatures',
       description:
-        'Different ways to share your profile. By a generated link or QR code',
+        'Develop a verification system that is both reliable and simple to navigate. CNAs should be able to verify their certifications efficiently, with clear feedback on the status and any additional steps needed.',
+      icon: <PencilLine className='size-9 text-primary' />,
+      bgColor: 'bg-[#BBF8DC]',
+    },
+    {
+      title: 'Background Checks',
+      description:
+        'Create a seamless flow for CNAs to initiate and track their background checks. The design should make the process transparent and stress-free, providing clear instructions and real-time updates.',
+      icon: <IdCard className='size-9 text-primary' />,
+      bgColor: 'bg-[#6ADD8D]',
+    },
+    {
+      title: 'Uploading Forms',
+      description:
+        'Design an easy-to-use document upload system. CNAs should be able to quickly upload their necessary forms, with visual indicators for successfully uploaded documents and any required actions.',
+      icon: <CloudUpload className='size-9 text-primary' />,
+      bgColor: 'bg-[#BBF8DC]',
+    },
+    {
+      title: 'Certification Verification',
+      description:
+        'Develop a verification system that is both reliable and simple to navigate. CNAs should be able to verify their certifications efficiently, with clear feedback on the status and any additional steps needed.',
+      icon: <FileText className='size-9 text-primary' />,
+      bgColor: 'bg-[#6ADD8D]',
+    },
+    {
+      title: 'Video Interviews',
+      description:
+        'Create a user-friendly interface for scheduling and conducting video interviews. The system should be integrated into the platform, providing CNAs with the flexibility to choose interview times and access interview resources easily.',
+      icon: <Video className='size-9 text-primary' />,
+      bgColor: 'bg-[#BBF8DC]',
+    },
+    {
+      title: 'Profile Link',
+      description:
+        'Develop a verification system that is both reliable and simple to navigate. CNAs should be able to verify their certifications efficiently, with clear feedback on the status and any additional steps needed.',
+      icon: <ScanQrCode className='size-9 text-primary' />,
+      bgColor: 'bg-[#6ADD8D]',
     },
   ];
 
   return (
-    <Container className='md:my-20 my-16'>
-      <div className='grid gap-9 md:grid-cols-3'>
+    <Container className='md:my-24 my-16 flex flex-col gap-12'>
+      <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300'>
+        What are the <span className='font-medium'>features of Horizzon</span>
+      </h2>
+
+      <div className='grid md:grid-cols-3 gap-5'>
         {data.map((item, index) => (
-          <div key={index} className='flex flex-col items-center text-center'>
-            <div className=''>
-              <Image
-                src={item.img}
-                alt={item.title}
-                width={376}
-                height={376}
-                className='h-full w-full'
-              />
+          <div
+            key={index}
+            className={cn(
+              `bg-white p-4 md:px-9 md:py-12 gap-6 flex flex-col items-start justify-start md:min-h-[448px]`,
+              item.bgColor
+            )}
+          >
+            <div className='flex items-center justify-center md:mb-4 bg-white rounded-full size-[92px]'>
+              {item.icon}
             </div>
-            <h3 className='md:mb-9 mb-6 md:text-[28px] text-lg font-semibold md:leading-[39.2px] leading-[25.2px] text-secondary max-w-[180px]'>
+            <h3 className='md:text-[22px] text-lg font-medium text-[#1C1C1C]'>
               {item.title}
             </h3>
-            <p className='text-muted-foreground md:text-base text-sm max-w-[332px]'>
+            <p className='text-sm md:text-base text-[#1C1C1C]'>
               {item.description}
             </p>
           </div>
         ))}
       </div>
-
-      <div className='md:mt-20 mt-16 flex flex-col items-center justify-center md:gap-16 gap-14 sm:flex-row'>
-        <Link
-          href='/cna'
-          className='inline-flex items-center font-medium underline text-primary hover:text-primary/80'
-        >
-          <MoveLeft className='mr-3 size-6' />
-          Get Started as CNA
-        </Link>
-        <Link
-          href='/partner'
-          className='inline-flex items-center font-medium underline text-secondary hover:text-secondary/80'
-        >
-          Get Started as a Partner
-          <MoveRight className='ml-3 size-6' />
-        </Link>
-      </div>
     </Container>
   );
-}
+};
+
+export default Features;

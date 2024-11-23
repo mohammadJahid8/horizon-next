@@ -98,3 +98,46 @@
     font-size: 16px;
   }
 }
+
+.testimonial-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 128, 0, 0) 0%,
+    rgba(0, 128, 0, 0.475) 16.67%,
+    rgba(0, 128, 0, 0.76) 33.33%,
+    rgba(0, 128, 0, 0.95) 50%,
+    rgba(0, 128, 0, 0.76) 66.67%,
+    rgba(0, 128, 0, 0.475) 83.33%,
+    rgba(0, 128, 0, 0) 100%
+  );
+  @media (max-width: 768px) {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 128, 0, 0.099) 0%,
+      rgba(0, 128, 0, 0.891) 33.33%,
+      rgba(0, 128, 0, 0.99) 50%,
+      rgba(0, 128, 0, 0.891) 66.67%,
+      rgba(0, 128, 0, 0.099) 100%
+    ) !important;
+  }
+}
+
+.pro-banner-bg {
+  background-image: url('/pro-bg.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 850px;
+  background-position: 100% 5rem;
+  @media (min-width: 2200px) {
+    background-size: 100% 1000px;
+    background-position: 100% -5rem;
+  }
+
+  @media (max-width: 900px) {
+    background-size: 900px 100%;
+    background-position: center;
+  }
+  @media (min-width: 900px) and (max-width: 1200px) {
+    background-size: 100% 100%;
+    background-position: center;
+  }
+}
