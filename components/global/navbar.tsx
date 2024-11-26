@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Logo from './logo';
 import Container from './container';
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -19,8 +19,29 @@ export default function Navbar() {
     { name: 'Partners', href: '/partners' },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  console.log(pathname);
+
+  const loginPath = pathname === '/partners' ? '/partner/login' : '/pro/login';
+  const registerPath =
+    pathname === '/partners' ? '/partner/signup' : '/pro/signup';
+
   return (
-    <nav className='fixed top-0 left-0 right-0 z-50 bg-white border-b py-4 opacity-90'>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 bg-white border-b py-4 ${
+        isScrolled ? 'opacity-90' : 'opacity-100'
+      } transition-opacity duration-300`}
+    >
       <Container>
         <div className='flex h-16'>
           <div className='flex items-center md:hidden'>
@@ -77,13 +98,14 @@ export default function Navbar() {
                   </div>
                   <div className='flex flex-col gap-12 w-full'>
                     <Button
+                      href={loginPath}
                       className='text-white w-full'
                       onClick={() => setIsOpen(false)}
                     >
                       Login
                     </Button>
                     <Link
-                      href='/register'
+                      href={registerPath}
                       className='text-[#6C6C6C] hover:text-primary text-base font-medium'
                       onClick={() => setIsOpen(false)}
                     >
@@ -118,12 +140,15 @@ export default function Navbar() {
 
           <div className='hidden md:flex items-center space-x-6'>
             <Link
-              href='/register'
+              href={registerPath}
               className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
             >
               Register
             </Link>
-            <Button className='text-white h-10 px-5 rounded-lg font-medium'>
+            <Button
+              href={loginPath}
+              className='text-white h-10 px-5 rounded-lg font-medium'
+            >
               Login
             </Button>
           </div>

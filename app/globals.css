@@ -123,7 +123,7 @@
 }
 
 .pro-banner-bg {
-  background-image: url('/pro-bg.svg');
+  background-image: url('/pro-bg-new.svg');
   background-repeat: no-repeat;
   background-size: 100% 850px;
   background-position: 100% 5rem;
@@ -139,5 +139,47 @@
   @media (min-width: 900px) and (max-width: 1200px) {
     background-size: 100% 100%;
     background-position: center;
+  }
+}
+.partner-banner-bg {
+  background-image: url('/partner-bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 80% -10rem;
+
+  @media (min-width: 1950px) {
+    background-position: 20% -15rem;
+  }
+  @media (min-width: 2300px) {
+    background-position: 20% -25rem;
+  }
+  @media (min-width: 2600px) {
+    background-position: 100% -40rem;
+  }
+  @media (max-width: 1200px) {
+    background-position: center -20rem;
+  }
+  @media (max-width: 1100px) {
+    background-image: url('/partner-bg-mobile.svg');
+    background-size: contain;
+    background-position: center -20rem;
+  }
+  @media (max-width: 1000px) {
+    background-position: center -12rem;
+  }
+  @media (max-width: 900px) {
+    background-position: center 2rem;
+  }
+  @media (max-width: 800px) {
+    background-position: center -4rem;
+  }
+  @media (max-width: 700px) {
+    background-position: center 0rem;
+  }
+  @media (max-width: 500px) {
+    background-position: center 10rem;
+  }
+  @media (max-width: 400px) {
+    background-position: center 16rem;
   }
 }

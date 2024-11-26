@@ -12,9 +12,14 @@ export default function WhyHorizzon({
 }) {
   return (
     <Container className='md:my-24 my-16'>
-      {source && (
+      {source === 'pro' && (
         <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300 mb-12'>
           Why CNA’s join <span className='font-medium'>Horizzon</span>
+        </h2>
+      )}
+      {source === 'partner' && (
+        <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300 mb-12'>
+          Why Partners join <span className='font-medium'>Horizzon</span>
         </h2>
       )}
       <div className='grid gap-9 md:grid-cols-3'>

@@ -3,59 +3,29 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Container from '../container';
-import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function GetStarted({
   images,
+  stepsBgColor,
+  steps,
 }: {
   images: Record<string, string>;
+  stepsBgColor: Record<string, string>;
+  steps: {
+    step: string;
+    icon: React.ReactNode;
+    text: string;
+    description: string;
+  }[];
 }) {
   const [activeStep, setActiveStep] = useState<number | null>(null);
-
-  const steps = [
-    {
-      step: 'Step 1',
-      icon: <IdCardIcon className='size-[18px]' />,
-      text: 'Personal information',
-      description:
-        'Register with your email and create a secure profile. Provide your personal and professional details to get started.',
-    },
-    {
-      step: 'Step 2',
-      icon: <FileIcon className='size-[18px]' />,
-      text: 'Upload Documents',
-      description:
-        'Showcase your educational degree, add experiences with licences and certifications',
-    },
-    {
-      step: 'Step 3',
-      icon: <UserIcon className='size-[18px]' />,
-      text: 'Complete Profile',
-      description:
-        'Easily upload your CV, certifications, licenses, and other important documents. Keep everything organized and easily accessible.',
-    },
-    {
-      step: 'Step 4',
-      icon: <BriefcaseIcon className='size-[18px]' />,
-      text: 'Share your profile and Get Hired',
-      description:
-        'Create secure, shareable links to your documents. Share these links with potential employers or during job applications.',
-    },
-  ];
-
-  const stepsBgColor = {
-    0: 'bg-[#87e4a5]',
-    1: 'bg-[#c9f9e3]',
-    2: 'bg-[#87e4a5]',
-    3: 'bg-[#c9f9e3]',
-  };
 
   return (
     <div
       className={cn(
-        'relative bg-[#bcf8dc] md:pt-28 pb-40 pt-16 overflow-hidden transition-colors duration-300',
-        stepsBgColor[activeStep as keyof typeof stepsBgColor]
+        'relative md:pt-28 pb-40 pt-16 overflow-hidden transition-colors duration-300',
+        stepsBgColor[activeStep as unknown as keyof typeof stepsBgColor]
       )}
     >
       <Container>
@@ -79,7 +49,7 @@ export default function GetStarted({
               width={660}
               height={500}
               className={cn(
-                'relative z-20 w-full transition-all duration-300',
+                'relative z-20 w-full transition-all duration-300 max-h-[582px]',
                 activeStep !== null && 'max-w-[300px] mx-auto'
               )}
               priority
@@ -101,7 +71,9 @@ export default function GetStarted({
                 className={`flex flex-col gap-3 cursor-pointer transition-all duration-300 ${
                   activeStep === index
                     ? `${
-                        stepsBgColor[index as keyof typeof stepsBgColor]
+                        stepsBgColor[
+                          index as unknown as keyof typeof stepsBgColor
+                        ]
                       } md:p-6 p-4 border-2 border-white`
                     : `md:p-6 p-4 border-2 border-transparent`
                 }`}

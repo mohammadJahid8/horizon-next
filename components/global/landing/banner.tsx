@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const Banner = () => {
   return (
-    <div className='bg-[url("/banner-bg.svg")] bg-cover bg-center bg-no-repeat h-full w-full py-32'>
+    <div className='bg-[url("/banner-bg.svg")] bg-cover bg-left md:bg-center bg-no-repeat h-full w-full py-32'>
       <Container>
         <div className='max-w-md flex flex-col gap-9 text-center md:text-left mx-auto md:mx-0'>
           <h1 className='md:text-[50px] text-[31px] font-light text-green-900 md:leading-[55px] leading-[34.1px]'>
@@ -17,7 +17,10 @@ const Banner = () => {
             Create your CNA profile and start exploring job opportunities. Share
             your profile link with potential employers to accelerate your job.
           </p>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'>
+          <Button
+            href='/pro/signup'
+            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
+          >
             Register Now
           </Button>
           <div className='mt-4'>
