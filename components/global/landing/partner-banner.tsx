@@ -18,7 +18,10 @@ const PartnerBanner = () => {
             Create your profile and start exploring CNA profiles. Send your
             offers with potential CNA’s to accelerate your Job recruiting.
           </p>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'>
+          <Button
+            href='/partner/signup'
+            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'
+          >
             Get Started
           </Button>
 

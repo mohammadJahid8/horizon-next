@@ -18,12 +18,20 @@ const ProBanner = () => {
             Create your CNA profile and start exploring job opportunities. Share
             your profile link with potential employers to accelerate your job.
           </p>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'>
+          <Button
+            href='/pro/signup'
+            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'
+          >
             Get Started
           </Button>
 
           <div className='max-w-[982px] mx-auto w-full'>
-            <Image src='/laptop.png' alt='App Store' width={982} height={472} />
+            <Image
+              src='/pro-laptop.png'
+              alt='App Store'
+              width={982}
+              height={472}
+            />
           </div>
 
           <div className='-mt-12 max-w-[471px] mx-auto'>

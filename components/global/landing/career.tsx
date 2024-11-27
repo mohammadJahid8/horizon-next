@@ -22,7 +22,10 @@ const Career = () => {
           Join numerous healthcare CNAs who are already hired by employers. Sign
           up and start applying today.
         </p>
-        <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'>
+        <Button
+          href='/pro/signup'
+          className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
+        >
           Get Started
         </Button>
       </div>

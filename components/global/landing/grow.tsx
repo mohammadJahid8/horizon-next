@@ -20,6 +20,8 @@ const Grow = ({
       ? 'bg-[url("/grow-pro.svg")]'
       : 'bg-[url("/grow.svg")]';
 
+  const buttonHref = source === 'partner' ? '/partner/signup' : '/pro/signup';
+
   return (
     <div
       className={`${bg} bg-cover bg-center bg-no-repeat h-full w-full py-32`}
@@ -32,7 +34,10 @@ const Grow = ({
             </h1>
             <p className='md:text-lg text-sm text-[#FAFAFA]'>{description}</p>
           </div>
-          <Button className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'>
+          <Button
+            href={buttonHref}
+            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
+          >
             Register Now
           </Button>
           <div>

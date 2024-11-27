@@ -47,14 +47,14 @@ export default function WhyHorizzon({
       {!source && (
         <div className='md:mt-20 mt-16 flex flex-col items-center justify-center md:gap-16 gap-14 sm:flex-row'>
           <Link
-            href='/cna'
+            href='/pro/signup'
             className='inline-flex items-center font-medium underline text-primary hover:text-primary/80'
           >
             <MoveLeft className='mr-3 size-6' />
             Get Started as CNA
           </Link>
           <Link
-            href='/partner'
+            href='/partner/signup'
             className='inline-flex items-center font-medium underline text-secondary hover:text-secondary/80'
           >
             Get Started as a Partner
