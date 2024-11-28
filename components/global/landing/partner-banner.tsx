@@ -30,7 +30,8 @@ const PartnerBanner = () => {
               src='/partner-laptop.png'
               alt='App Store'
               width={982}
-              height={472}
+              height={663}
+              className='lg:w-[896px] lg:h-[663px]'
             />
           </div>
 

@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState, useEffect } from 'react';
 import Logo from './logo';
 import Container from './container';
+import { SelectAuthPath } from './landing/select-auth-path';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -29,8 +30,6 @@ export default function Navbar() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  console.log(pathname);
 
   const loginPath = pathname === '/partners' ? '/partner/login' : '/pro/login';
   const registerPath =
@@ -139,18 +138,39 @@ export default function Navbar() {
           </div>
 
           <div className='hidden md:flex items-center space-x-6'>
-            <Link
-              href={registerPath}
-              className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
-            >
-              Register
-            </Link>
-            <Button
-              href={loginPath}
-              className='text-white h-10 px-5 rounded-lg font-medium'
-            >
-              Login
-            </Button>
+            {pathname !== '/' ? (
+              <>
+                <Link
+                  href={registerPath}
+                  className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+                >
+                  Register
+                </Link>
+
+                <Button
+                  href={loginPath}
+                  className='text-white h-10 px-5 rounded-lg font-medium'
+                >
+                  Login
+                </Button>
+              </>
+            ) : (
+              <>
+                <SelectAuthPath type='Register'>
+                  <Button
+                    variant='special'
+                    className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+                  >
+                    Register
+                  </Button>
+                </SelectAuthPath>
+                <SelectAuthPath type='Login'>
+                  <Button className='text-white h-10 px-5 rounded-lg font-medium'>
+                    Login
+                  </Button>
+                </SelectAuthPath>
+              </>
+            )}
           </div>
         </div>
       </Container>

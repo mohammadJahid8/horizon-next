@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import Auth from '@/components/auth/auth';
 import AuthForm from '@/components/auth/auth-form';
 import { useRouter } from 'next/navigation';
+import { signupPro } from '@/utils/auth';
 const signupFields = [
   {
     name: 'email',
@@ -20,7 +21,7 @@ const signupFields = [
   {
     name: 'phone',
     label: 'Phone Number',
-    type: 'tel',
+    type: 'number',
     placeholder: 'Enter your phone number...',
     validation: z
       .string()
@@ -51,15 +52,29 @@ export default function Signup() {
   const router = useRouter();
 
   const handleSubmit = async (data: any) => {
-    try {
-      console.log(data);
-      toast.success(`Signup successful`, {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        role: 'pro',
+      }),
+    });
+
+    const responseData: any = await response.json();
+    console.log('responseData', responseData);
+
+    if (responseData.status === 200) {
+      router.push('/pro/login');
+      return toast.success(responseData.message || `Signup successful`, {
         position: 'top-center',
       });
-    } catch (error: any) {
-      console.log(error);
+    }
 
-      return toast.error(error.response.data.message || `Log in failed`, {
+    if (responseData.status === 500) {
+      return toast.error(responseData.message || `Signup failed`, {
         position: 'top-center',
       });
     }

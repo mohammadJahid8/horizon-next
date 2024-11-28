@@ -30,34 +30,32 @@ const loginFields = [
   },
 ];
 
-export default function Signup() {
+export default function Login() {
   const router = useRouter();
   const { setUser } = useAppContext();
 
   const handleSubmit = async (data: any) => {
-    try {
-      console.log(data);
-      toast.success(`Signup successful`, {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
+    });
+
+    const responseData: any = await response.json();
+    console.log('responseData', responseData);
+
+    if (responseData.status === 200) {
+      window.location.href = '/';
+      return toast.success(responseData.message || `Login successful`, {
         position: 'top-center',
       });
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          name: 'Pro name',
-          profession: 'Senior Nurse',
-          role: 'pro',
-        })
-      );
-      setUser({
-        name: 'Pro name',
-        profession: 'Senior Nurse',
-        role: 'pro',
-      });
-      router.push('/pro/onboard/personal-info');
-    } catch (error: any) {
-      console.log(error);
+    }
 
-      return toast.error(error.response.data.message || `Log in failed`, {
+    if (responseData.status === 500) {
+      return toast.error(responseData.message || `Login failed`, {
         position: 'top-center',
       });
     }

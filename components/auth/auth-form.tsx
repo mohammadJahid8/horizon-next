@@ -36,6 +36,7 @@ export default function AuthForm({
   type,
 }: any) {
   // const { loading, setLoading } = useAppContext();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
     {}
@@ -79,13 +80,13 @@ export default function AuthForm({
   });
 
   const handleSubmit = async (data: any) => {
-    // setLoading(true);
+    setLoading(true);
     try {
       await onSubmit(data);
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -114,7 +115,7 @@ export default function AuthForm({
                       <div className='relative'>
                         {input.type === 'tel' ? (
                           <div className='flex items-center'>
-                            <Select
+                            {/* <Select
                               onValueChange={(value) =>
                                 field.onChange(
                                   `+${value}${field.value.split(' ')[1] || ''}`
@@ -138,9 +139,9 @@ export default function AuthForm({
                                   </SelectItem>
                                 ))}
                               </SelectContent>
-                            </Select>
+                            </Select> */}
                             <Input
-                              type='tel'
+                              type='number'
                               placeholder={input.placeholder}
                               {...field}
                               onChange={(e) =>
@@ -187,6 +188,7 @@ export default function AuthForm({
                           </>
                         ) : (
                           <Input
+                            disabled={loading}
                             type={input.type}
                             placeholder={input.placeholder}
                             {...field}
@@ -224,7 +226,7 @@ export default function AuthForm({
         )}
 
         <Button
-          // disabled={loading}
+          disabled={loading}
           className='w-full relative z-50 h-[75px] rounded-[12px] text-lg font-medium'
           type='submit'
         >

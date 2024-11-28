@@ -9,7 +9,10 @@ import Partners from '@/components/global/landing/partners';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
-export default function Home() {
+import { getUser } from './actions';
+export default async function Home() {
+  const user = await getUser();
+  console.log('user', user);
   const data = [
     {
       img: '/secure.svg',

@@ -51,7 +51,7 @@ export default function WhyHorizzon({
             className='inline-flex items-center font-medium underline text-primary hover:text-primary/80'
           >
             <MoveLeft className='mr-3 size-6' />
-            Get Started as CNA
+            Get Started as Pro
           </Link>
           <Link
             href='/partner/signup'

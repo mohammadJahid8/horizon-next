@@ -4,6 +4,8 @@ import './globals.css';
 import CommonNavbar from '@/components/global/common-navbar';
 import Provider from '@/lib/provider';
 import { Toaster } from 'sonner';
+import Refresh from '@/components/global/refresh';
+import { getTokens } from './actions';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,10 +29,13 @@ export default async function RootLayout({
     locale: string;
   };
 }>) {
+  const tokens = await getTokens();
+  console.log('tokens', tokens);
   return (
     <html lang='en'>
       <body className={`${poppins.className}`}>
         <Provider>
+          <Refresh {...tokens} />
           <CommonNavbar />
           <main>{children}</main>
           <Toaster />
