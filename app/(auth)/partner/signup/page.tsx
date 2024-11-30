@@ -2,13 +2,12 @@
 
 import * as z from 'zod';
 
-import { toast } from 'sonner';
 import Auth from '@/components/auth/auth';
 import AuthForm from '@/components/auth/auth-form';
-import { useRouter } from 'next/navigation';
+import { useAppContext } from '@/lib/context';
 const signupFields = [
   {
-    name: 'fullName',
+    name: 'name',
     label: 'Full Name',
     type: 'text',
     placeholder: 'Enter your full name...',
@@ -16,7 +15,7 @@ const signupFields = [
   },
 
   {
-    name: 'companyEmail',
+    name: 'email',
     label: 'Company Email',
     type: 'email',
     placeholder: 'Enter your company email...',
@@ -46,22 +45,7 @@ const signupFields = [
   },
 ];
 export default function Signup() {
-  const router = useRouter();
-
-  const handleSubmit = async (data: any) => {
-    try {
-      console.log(data);
-      toast.success(`Signup successful`, {
-        position: 'top-center',
-      });
-    } catch (error: any) {
-      console.log(error);
-
-      return toast.error(error.response.data.message || `Log in failed`, {
-        position: 'top-center',
-      });
-    }
-  };
+  const { handleSignup } = useAppContext();
 
   return (
     <Auth
@@ -75,9 +59,10 @@ export default function Signup() {
     >
       <AuthForm
         inputFields={signupFields}
-        onSubmit={handleSubmit}
+        onSubmit={handleSignup}
         submitButtonText='Sign Up'
         type='signup'
+        source='partner'
       />
     </Auth>
   );

@@ -1,19 +1,21 @@
 'use client';
+import { useAppContext } from '@/lib/context';
 import { useEffect, useState } from 'react';
 
-const RefreshToken = ({
-  accessToken,
-  refreshToken,
-  tokenRefreshIn,
-}: {
-  accessToken?: string;
-  refreshToken?: string;
-  tokenRefreshIn?: string;
-}) => {
+const RefreshToken = () => {
+  const { cookies, isRefreshed, setIsRefreshed } = useAppContext();
+  // const { accessToken, refreshToken, tokenRefreshIn } = cookies;
+  const accessToken = cookies?.accessToken;
+  const refreshToken = cookies?.refreshToken;
+  const tokenRefreshIn = cookies?.tokenRefreshIn;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log(new Date(), new Date(tokenRefreshIn!));
-  console.log('currentTime', new Date() >= new Date(tokenRefreshIn!));
+  console.log({ isRefreshed });
+  console.log(
+    'isCurrentTimeGreaterThanTokenRefreshIn',
+    new Date(),
+    new Date(tokenRefreshIn!)
+  );
 
   useEffect(() => {
     if (!accessToken) return;
@@ -35,6 +37,7 @@ const RefreshToken = ({
             }),
           });
           console.log('Success refreshing tokens...');
+          setIsRefreshed(true);
         } catch (error) {
           console.error('Error refreshing token:', error);
         } finally {

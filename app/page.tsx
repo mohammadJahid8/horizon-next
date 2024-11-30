@@ -11,8 +11,6 @@ import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import { getUser } from './actions';
 export default async function Home() {
-  const user = await getUser();
-  console.log('user', user);
   const data = [
     {
       img: '/secure.svg',

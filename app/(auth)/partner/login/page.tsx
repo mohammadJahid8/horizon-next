@@ -31,35 +31,7 @@ const loginFields = [
 ];
 
 export default function Login() {
-  const router = useRouter();
-  const { setUser } = useAppContext();
-
-  const handleSubmit = async (data: any) => {
-    try {
-      console.log(data);
-      toast.success(`Login successful`, {
-        position: 'top-center',
-      });
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          name: 'Partner name',
-          role: 'partner',
-        })
-      );
-      setUser({
-        name: 'Partner name',
-        role: 'partner',
-      });
-      router.push('/partner/profile');
-    } catch (error: any) {
-      console.log(error);
-
-      return toast.error(error.response.data.message || `Log in failed`, {
-        position: 'top-center',
-      });
-    }
-  };
+  const { handleLogin } = useAppContext();
 
   return (
     <Auth
@@ -73,9 +45,10 @@ export default function Login() {
     >
       <AuthForm
         inputFields={loginFields}
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         submitButtonText='Login'
         type='login'
+        source='partner'
       />
     </Auth>
   );

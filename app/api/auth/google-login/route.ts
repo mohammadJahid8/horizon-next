@@ -3,11 +3,13 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { email, password, source } = await req.json();
+    const { email, role, image, name, source } = await req.json();
 
-    const response = await api.post(`/auth/login`, {
+    const response = await api.post(`/auth/google`, {
       email,
-      password,
+      role,
+      image,
+      name,
       source,
     });
 
