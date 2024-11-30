@@ -8,8 +8,10 @@ import { useState, useEffect } from 'react';
 import Logo from './logo';
 import Container from './container';
 import { SelectAuthPath } from './landing/select-auth-path';
+import { useAppContext } from '@/lib/context';
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: any }) {
+  const { logOut } = useAppContext();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,6 +36,9 @@ export default function Navbar() {
   const loginPath = pathname === '/partners' ? '/partner/login' : '/pro/login';
   const registerPath =
     pathname === '/partners' ? '/partner/signup' : '/pro/signup';
+
+  const profilePath =
+    user?.role === 'partner' ? '/partner/profile' : '/pro/profile';
 
   return (
     <nav
@@ -95,22 +100,62 @@ export default function Navbar() {
                       </Link>
                     ))}
                   </div>
-                  <div className='flex flex-col gap-12 w-full'>
-                    <Button
-                      href={loginPath}
-                      className='text-white w-full'
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Login
-                    </Button>
-                    <Link
-                      href={registerPath}
-                      className='text-[#6C6C6C] hover:text-primary text-base font-medium'
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Register
-                    </Link>
-                  </div>
+                  {!user?.email && (
+                    <div className='flex flex-col gap-12 w-full'>
+                      {pathname !== '/' ? (
+                        <>
+                          <Button
+                            href={loginPath}
+                            className='text-white w-full'
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Login
+                          </Button>
+                          <Link
+                            href={registerPath}
+                            className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Register
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <SelectAuthPath type='Login'>
+                            <Button
+                              className='text-white w-full'
+                              // onClick={() => setIsOpen(false)}
+                            >
+                              Login
+                            </Button>
+                          </SelectAuthPath>
+                          <SelectAuthPath type='Register'>
+                            <Button
+                              variant='link'
+                              className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                              // onClick={() => setIsOpen(false)}
+                            >
+                              Register
+                            </Button>
+                          </SelectAuthPath>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {user?.email && (
+                    <div className='flex flex-col gap-12 w-full'>
+                      <Button
+                        href={profilePath}
+                        variant='link'
+                        className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Profile
+                      </Button>
+                      <Button onClick={logOut}>Logout</Button>
+                    </div>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>
@@ -137,41 +182,60 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className='hidden md:flex items-center space-x-6'>
-            {pathname !== '/' ? (
-              <>
-                <Link
-                  href={registerPath}
-                  className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
-                >
-                  Register
-                </Link>
-
-                <Button
-                  href={loginPath}
-                  className='text-white h-10 px-5 rounded-lg font-medium'
-                >
-                  Login
-                </Button>
-              </>
-            ) : (
-              <>
-                <SelectAuthPath type='Register'>
-                  <Button
-                    variant='special'
+          {!user?.email && (
+            <div className='hidden md:flex items-center space-x-6'>
+              {pathname !== '/' ? (
+                <>
+                  <Link
+                    href={registerPath}
                     className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
                   >
                     Register
-                  </Button>
-                </SelectAuthPath>
-                <SelectAuthPath type='Login'>
-                  <Button className='text-white h-10 px-5 rounded-lg font-medium'>
+                  </Link>
+
+                  <Button
+                    href={loginPath}
+                    className='text-white h-10 px-5 rounded-lg font-medium'
+                  >
                     Login
                   </Button>
-                </SelectAuthPath>
-              </>
-            )}
-          </div>
+                </>
+              ) : (
+                <>
+                  <SelectAuthPath type='Register'>
+                    <Button
+                      variant='special'
+                      className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+                    >
+                      Register
+                    </Button>
+                  </SelectAuthPath>
+                  <SelectAuthPath type='Login'>
+                    <Button className='text-white h-10 px-5 rounded-lg font-medium'>
+                      Login
+                    </Button>
+                  </SelectAuthPath>
+                </>
+              )}
+            </div>
+          )}
+          {user?.email && (
+            <div className='hidden md:flex items-center space-x-6'>
+              <Link
+                href={profilePath}
+                className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+              >
+                Profile
+              </Link>
+
+              <Button
+                onClick={logOut}
+                className='text-white h-10 px-5 rounded-lg font-medium'
+              >
+                Logout
+              </Button>
+            </div>
+          )}
         </div>
       </Container>
     </nav>

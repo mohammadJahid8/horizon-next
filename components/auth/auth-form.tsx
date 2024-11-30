@@ -28,15 +28,17 @@ import {
   SelectValue,
 } from '../ui/select';
 import { cn } from '@/lib/utils';
+import { useAppContext } from '@/lib/context';
 
 export default function AuthForm({
   inputFields,
   onSubmit,
   submitButtonText,
   type,
+  source,
 }: any) {
-  // const { loading, setLoading } = useAppContext();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, setIsLoading } = useAppContext();
+
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
     {}
@@ -80,13 +82,13 @@ export default function AuthForm({
   });
 
   const handleSubmit = async (data: any) => {
-    setLoading(true);
+    setIsLoading(true);
     try {
-      await onSubmit(data);
+      await onSubmit(data, source);
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -188,7 +190,7 @@ export default function AuthForm({
                           </>
                         ) : (
                           <Input
-                            disabled={loading}
+                            disabled={isLoading}
                             type={input.type}
                             placeholder={input.placeholder}
                             {...field}
@@ -226,7 +228,7 @@ export default function AuthForm({
         )}
 
         <Button
-          disabled={loading}
+          disabled={isLoading}
           className='w-full relative z-50 h-[75px] rounded-[12px] text-lg font-medium'
           type='submit'
         >
@@ -237,7 +239,7 @@ export default function AuthForm({
           <span className='mx-4 text-gray-500'>OR</span>
           <div className='flex-grow border-t border-gray-400'></div>
         </div>
-        <GoogleLogin />
+        <GoogleLogin source={source} />
       </form>
     </Form>
   );

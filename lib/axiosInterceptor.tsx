@@ -4,7 +4,10 @@ const isServer = typeof window === 'undefined';
 
 // Create an Axios instance with default configuration
 const api: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api/v1', // Your API base URL
+  baseURL:
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_LOCAL_API_URL
+      : process.env.NEXT_PUBLIC_PROD_API_URL,
   withCredentials: true, // Ensure cookies are sent with requests
 });
 

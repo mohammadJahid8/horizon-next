@@ -6,7 +6,8 @@ import { toast } from 'sonner';
 import Auth from '@/components/auth/auth';
 import AuthForm from '@/components/auth/auth-form';
 import { useRouter } from 'next/navigation';
-import { signupPro } from '@/utils/auth';
+import { useAppContext } from '@/lib/context';
+// import { signupPro } from '@/utils/auth';
 const signupFields = [
   {
     name: 'email',
@@ -49,36 +50,7 @@ const signupFields = [
 ];
 
 export default function Signup() {
-  const router = useRouter();
-
-  const handleSubmit = async (data: any) => {
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-        phone: data.phone,
-        role: 'pro',
-      }),
-    });
-
-    const responseData: any = await response.json();
-    console.log('responseData', responseData);
-
-    if (responseData.status === 200) {
-      router.push('/pro/login');
-      return toast.success(responseData.message || `Signup successful`, {
-        position: 'top-center',
-      });
-    }
-
-    if (responseData.status === 500) {
-      return toast.error(responseData.message || `Signup failed`, {
-        position: 'top-center',
-      });
-    }
-  };
+  const { handleSignup } = useAppContext();
 
   return (
     <Auth
@@ -92,9 +64,10 @@ export default function Signup() {
     >
       <AuthForm
         inputFields={signupFields}
-        onSubmit={handleSubmit}
+        onSubmit={handleSignup}
         submitButtonText='Sign up'
         type='signup'
+        source='pro'
       />
     </Auth>
   );

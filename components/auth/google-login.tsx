@@ -1,70 +1,74 @@
 import { Button } from '@/components/ui/button';
 import { useContext } from 'react';
-import { useRouter } from 'next/router';
-import { toast } from 'sonner';
 
-interface GoogleResponse {
-  _tokenResponse: {
-    email: string;
-    fullName: string;
-    photoUrl: string;
-  };
+import { toast } from 'sonner';
+import { useAppContext } from '@/lib/context';
+import { useRouter } from 'next/navigation';
+
+interface GoogleLoginProps {
+  source: string;
 }
 
-export default function GoogleLogin() {
-  // const { userRefetch, setUserRefetch, logInWithGoogle, loading, setLoading } =
-  //   useContext(UserContext);
-  // const router = useRouter();
+export default function GoogleLogin({ source }: GoogleLoginProps) {
+  const { logInWithGoogle, isLoading, setIsLoading } = useAppContext();
+  const router = useRouter();
 
-  // const handleGoogleSignIn = async () => {
-  //   setLoading(true);
-  //   let res: GoogleResponse | undefined;
-  //   try {
-  //     res = await logInWithGoogle();
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     console.log({ error });
-  //     toast.error(error.message);
-  //   }
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    const { result, error } = await logInWithGoogle();
+    if (error?.message) {
+      setIsLoading(false);
+      return toast.error(error.message, {
+        position: 'top-center',
+      });
+    }
 
-  //   if (res && res._tokenResponse.email) {
-  //     const payload = {
-  //       name: res._tokenResponse.fullName,
-  //       email: res._tokenResponse.email,
-  //       image: res._tokenResponse.photoUrl,
-  //       role: "user",
-  //     };
+    console.log(result, error);
 
-  //     try {
-  //       const promise = await axios.post(`/users/create-google-user`, payload);
-  //       if (promise.status === 200) {
-  //         localStorage.setItem("accessToken", promise.data.data);
-  //         setUserRefetch(!userRefetch);
-  //         setTimeout(() => {
-  //           toast.success(`Logged in`, {
-  //             id: "login",
-  //           });
-  //           router.push("/");
-  //           setLoading(false);
-  //         }, 1000);
-  //       }
-  //     } catch (error: any) {
-  //       console.log(error);
-  //       setLoading(false);
-  //       return toast.error(error.response.data.message || `Log in failed`, {
-  //         id: "login",
-  //       });
-  //     }
-  //   }
-  // };
+    if (result?.user?.email) {
+      const payload = {
+        name: result.user.displayName,
+        email: result.user.email,
+        image: result.user.photoURL,
+        role: source,
+        source,
+      };
+
+      const response = await fetch('/api/auth/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const responseData: any = await response.json();
+      console.log('responseData', responseData);
+
+      if (responseData.status === 200) {
+        setIsLoading(false);
+        source === 'pro'
+          ? (window.location.href = '/pro/onboard/personal-info')
+          : (window.location.href = `/partner/pros`);
+        return toast.success(responseData.message || `Login successful`, {
+          position: 'top-center',
+        });
+      }
+
+      if (responseData.status === 500) {
+        setIsLoading(false);
+        return toast.error(responseData.message || `Login failed`, {
+          position: 'top-center',
+        });
+      }
+    }
+  };
 
   return (
     <Button
       className='w-full h-[75px] rounded-[12px] text-lg font-medium text-muted-foreground bg-[#f9f9f9]'
       variant='outline'
       type='button'
-      // disabled={loading}
-      // onClick={handleGoogleSignIn}
+      disabled={isLoading}
+      onClick={handleGoogleSignIn}
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'

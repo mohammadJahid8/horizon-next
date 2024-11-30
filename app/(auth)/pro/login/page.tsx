@@ -5,8 +5,8 @@ import * as z from 'zod';
 import { toast } from 'sonner';
 import Auth from '@/components/auth/auth';
 import AuthForm from '@/components/auth/auth-form';
-import { useRouter } from 'next/navigation';
 import { useAppContext } from '@/lib/context';
+
 const loginFields = [
   {
     name: 'email',
@@ -31,35 +31,7 @@ const loginFields = [
 ];
 
 export default function Login() {
-  const router = useRouter();
-  const { setUser } = useAppContext();
-
-  const handleSubmit = async (data: any) => {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    });
-
-    const responseData: any = await response.json();
-    console.log('responseData', responseData);
-
-    if (responseData.status === 200) {
-      window.location.href = '/';
-      return toast.success(responseData.message || `Login successful`, {
-        position: 'top-center',
-      });
-    }
-
-    if (responseData.status === 500) {
-      return toast.error(responseData.message || `Login failed`, {
-        position: 'top-center',
-      });
-    }
-  };
+  const { handleLogin } = useAppContext();
 
   return (
     <Auth
@@ -73,9 +45,10 @@ export default function Login() {
     >
       <AuthForm
         inputFields={loginFields}
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         submitButtonText='Login'
         type='login'
+        source='pro'
       />
     </Auth>
   );

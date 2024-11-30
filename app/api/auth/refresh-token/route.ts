@@ -8,30 +8,35 @@ export async function POST(req: Request) {
   const response = await api.post(`/auth/refresh-token`, {
     refreshToken,
   });
-  console.log('inside refresh token');
 
-  const { accessToken } = response.data?.data;
+  const { accessToken, refreshToken: newRefreshToken } = response.data?.data;
   const res = NextResponse.json({ message: 'Token refreshed' });
 
   res.cookies.delete('accessToken');
+  res.cookies.delete('refreshToken');
   res.cookies.delete('tokenRefreshIn');
 
   const now = new Date();
-  const tokenRefreshIn = new Date(now.getTime() + 1 * 30000);
-  // const tokenRefreshIn = new Date(now.getTime() + 29 * 60000);
+  const tokenRefreshIn = new Date(now.getTime() + 59 * 60 * 1000);
 
   res.cookies.set('accessToken', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 30 * 60, // 30 minutes
-    // maxAge: 15 * 60, // 15 minutes
+    maxAge: 60 * 60 * 1000, // 1 hour
+    path: '/',
+  });
+
+  res.cookies.set('refreshToken', newRefreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 1000, // 1 hour
     path: '/',
   });
 
   res.cookies.set('tokenRefreshIn', tokenRefreshIn.toISOString(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 29 * 60, // 29 minutes
+    maxAge: 59 * 60 * 1000, // 59 minutes
     path: '/',
   });
 
