@@ -27,7 +27,7 @@ const ProBanner = () => {
 
           <div className='max-w-[982px] mx-auto w-full'>
             <Image
-              src='/pro-laptop.png'
+              src='/pro-laptop.svg'
               alt='App Store'
               width={982}
               height={663}
