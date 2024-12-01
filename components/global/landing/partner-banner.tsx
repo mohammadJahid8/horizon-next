@@ -27,7 +27,7 @@ const PartnerBanner = () => {
 
           <div className='max-w-[982px] mx-auto w-full'>
             <Image
-              src='/partner-laptop.png'
+              src='/partner-laptop.svg'
               alt='App Store'
               width={982}
               height={663}
