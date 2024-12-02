@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const Banner = () => {
   return (
-    <div className='bg-[url("/banner-bg.svg")] bg-cover bg-left md:bg-center bg-no-repeat h-full w-full py-32'>
+    <div className='bg-[url("/banner-bg.png")] bg-cover bg-left md:bg-center bg-no-repeat h-full w-full py-32'>
       <Container>
         <div className='max-w-md flex flex-col gap-9 text-center md:text-left mx-auto md:mx-0'>
           <h1 className='md:text-[50px] text-[31px] font-light text-green-900 md:leading-[55px] leading-[34.1px]'>
