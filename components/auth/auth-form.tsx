@@ -52,7 +52,7 @@ export default function AuthForm({
   const createFormSchema = (type: any) => {
     let formSchema: any = z.object(schemaFields);
 
-    if (type === 'Signup') {
+    if (type === 'signup') {
       formSchema = formSchema.superRefine(
         ({ confirmPassword, password }: any, ctx: any) => {
           if (confirmPassword !== password) {

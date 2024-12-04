@@ -9,7 +9,7 @@ import Partners from '@/components/global/landing/partners';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
-import { getUser } from './actions';
+
 export default async function Home() {
   const data = [
     {
@@ -79,7 +79,9 @@ export default async function Home() {
   return (
     <div className='mt-16'>
       <Banner />
+
       <WhyHorizzon data={data} />
+
       <GetStarted images={images} stepsBgColor={stepsBgColor} steps={steps} />
       <Career />
       <Partners />
