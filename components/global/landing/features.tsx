@@ -1,9 +1,10 @@
+'use client';
+
 import React from 'react';
 import Container from '../container';
 import {
   PencilLine,
   IdCard,
-  Upload,
   CloudUpload,
   FileText,
   Video,

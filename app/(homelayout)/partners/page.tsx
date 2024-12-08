@@ -9,28 +9,30 @@ import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import Image from 'next/image';
 import { getPartnerData } from '@/app/actions';
-
+export const dynamic = 'force-dynamic';
 export default async function PartnerLandingPage() {
   const partnerData = await getPartnerData();
   const {
-    section1,
-    section2,
-    section3,
-    section4,
-    section5,
-    section6,
-    section7,
-    section8,
-  } = partnerData;
+    section1 = {},
+    section2 = {},
+    section3 = {},
+    section4 = {},
+    section5 = {},
+    section6 = {},
+    section7 = {},
+    section8 = {},
+  } = partnerData || {};
 
   const whyUsImages = ['/expedite.svg', '/turnover.svg', '/cost.svg'];
 
-  const features = section2?.features?.map((item: any, index: number) => {
-    return {
-      img: whyUsImages[index],
-      ...item,
-    };
-  });
+  const features =
+    section2?.features &&
+    section2?.features?.map((item: any, index: number) => {
+      return {
+        img: whyUsImages[index],
+        ...item,
+      };
+    });
 
   const images = {
     null: '/get-started-partner.svg',
@@ -54,12 +56,14 @@ export default async function PartnerLandingPage() {
     <BriefcaseIcon className='size-[18px]' key={3} />,
   ];
 
-  const steps = section5?.steps?.map((item: any, index: number) => {
-    return {
-      ...item,
-      icon: stepsIcons[index],
-    };
-  });
+  const steps =
+    section5?.steps &&
+    section5?.steps?.map((item: any, index: number) => {
+      return {
+        ...item,
+        icon: stepsIcons[index],
+      };
+    });
   return (
     <div className='mt-16 relative overflow-hidden'>
       <PartnerBanner {...section1} />
