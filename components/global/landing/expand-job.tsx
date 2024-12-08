@@ -4,30 +4,26 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const ExpandJob = () => {
+const ExpandJob = ({
+  description,
+  partnerCategories,
+  buttonText,
+  titleLight,
+  titleBold,
+  subtitle,
+  subDescription,
+}: any) => {
   return (
     <div className='bg-[#6ADD8D] relative my-16 min-h-[500px]'>
-      {/* <Image
-        src='/vector-bottom.svg'
-        alt=''
-        width={689}
-        height={512}
-        className='absolute left-0 md:top-52 top-28 z-0 md:h-[512px] h-[316px] transition-transform duration-300'
-      /> */}
       <Container className='py-20'>
         <div className='flex gap-12 lg:flex-row flex-col items-center'>
           <div className='flex flex-col md:gap-10 gap-6'>
             <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[49.5px] leading-[34.1px] text-center md:text-left transition-all duration-300'>
-              <span className='font-medium'>
-                Expand your jobs recruiting by
-              </span>{' '}
-              exploring pro CNA profiles in Horizzon
+              <span className='font-medium'>{titleBold}</span> {titleLight}
             </h2>
 
             <p className='md:text-lg text-sm text-[#1C1C1C] md:text-left text-center'>
-              We’re here to help you streamline your hiring process, reduce
-              turnover, and lower costs—allowing you to focus on what you do
-              best
+              {description}
             </p>
           </div>
           <Image
@@ -41,18 +37,11 @@ const ExpandJob = () => {
 
         <div className='mt-16 flex flex-col justify-center items-center md:text-left text-center'>
           <h3 className='text-lg md:text-[28px] text-secondary leading-[19.8px] md:leading-[30.8px] mb-6'>
-            What are some CNA (Certified Nursing Assistant) responsibilities at
-            Horizzon?
+            {subtitle}
           </h3>
-          <p className='md:text-lg text-sm text-[#1C1C1C] '>
-            Join numerous healthcare CNAs who are already hired by employers.
-            Sign up and start applying today if you are one of the below:
-          </p>
+          <p className='md:text-lg text-sm text-[#1C1C1C] '>{subDescription}</p>
           <div className='grid sm:grid-cols-2 grid-cols-1 gap-3 mt-9 w-full'>
-            {[
-              '<p>Home care agencies <br/> <span style="font-weight: 400; font-size: 16px;">focuses on assisting with daily living activities</span></p>',
-              '<p>Home health agencies <br/> <span style="font-weight: 400; font-size: 16px;">provides medical care and therapy</span></p>',
-            ].map((item, index) => (
+            {partnerCategories?.map((item: any, index: number) => (
               <div
                 key={index}
                 className={cn(
@@ -60,10 +49,14 @@ const ExpandJob = () => {
                   index === 0 ? 'bg-[#BBF8DC]' : 'bg-white'
                 )}
               >
-                <div
-                  className='text-secondary text-lg font-medium'
-                  dangerouslySetInnerHTML={{ __html: item }}
-                />
+                <div className='text-secondary text-lg font-medium'>
+                  <p>
+                    {item.title} <br />{' '}
+                    <span style={{ fontWeight: '400', fontSize: '16px' }}>
+                      {item.description}
+                    </span>
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -71,7 +64,7 @@ const ExpandJob = () => {
             href='/partner/signup'
             className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto mt-10'
           >
-            Get Started
+            {buttonText}
           </Button>
         </div>
       </Container>

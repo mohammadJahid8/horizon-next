@@ -15,7 +15,6 @@ export default function GetStarted({
   steps: {
     step: string;
     icon: React.ReactNode;
-    text: string;
     description: string;
   }[];
 }) {
@@ -87,7 +86,7 @@ export default function GetStarted({
                       : 'text-[#1C1C1C]'
                   }`}
                 >
-                  {item.step}
+                  Step {index + 1}
                 </span>
 
                 <div className='flex items-center gap-3'>
@@ -103,7 +102,7 @@ export default function GetStarted({
                         : 'text-secondary hover:text-green-800'
                     }`}
                   >
-                    {item.text}
+                    {item.step}
                   </span>
                 </div>
                 {activeStep === index && (

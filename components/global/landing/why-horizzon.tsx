@@ -8,10 +8,18 @@ import { useState } from 'react';
 
 export default function WhyHorizzon({
   source,
-  data,
+  getStartedPartnerText,
+  getStartedProText,
+  features,
+  titleLight,
+  titleBold,
 }: {
   source?: string;
-  data: any[];
+  getStartedPartnerText?: string;
+  getStartedProText?: string;
+  features: any[];
+  titleLight?: string;
+  titleBold?: string;
 }) {
   const [files, setFiles] = useState<File[]>([]);
   async function postMultipartFormData() {
@@ -108,16 +116,16 @@ export default function WhyHorizzon({
       <button onClick={postMultipartFormData}>Upload</button> */}
       {source === 'pro' && (
         <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300 mb-12'>
-          Why CNA’s join <span className='font-medium'>Horizzon</span>
+          {titleLight} <span className='font-medium'>{titleBold}</span>
         </h2>
       )}
       {source === 'partner' && (
         <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center max-w-[509px] mx-auto transition-all duration-300 mb-12'>
-          Why Partners join <span className='font-medium'>Horizzon</span>
+          {titleLight} <span className='font-medium'>{titleBold}</span>
         </h2>
       )}
       <div className='grid gap-9 md:grid-cols-3'>
-        {data.map((item, index) => (
+        {features?.map((item, index) => (
           <div key={index} className='flex flex-col items-center text-center'>
             <div className=''>
               <Image
@@ -145,13 +153,13 @@ export default function WhyHorizzon({
             className='inline-flex items-center font-medium underline text-primary hover:text-primary/80'
           >
             <MoveLeft className='mr-3 size-6' />
-            Get Started as Pro
+            {getStartedProText}
           </Link>
           <Link
             href='/partner/signup'
             className='inline-flex items-center font-medium underline text-secondary hover:text-secondary/80'
           >
-            Get Started as a Partner
+            {getStartedPartnerText}
             <MoveRight className='ml-3 size-6' />
           </Link>
         </div>

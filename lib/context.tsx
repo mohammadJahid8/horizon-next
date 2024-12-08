@@ -73,6 +73,7 @@ const ContextProvider = ({ children }: any) => {
 
   const logOut = async () => {
     await logout();
+    router.push('/');
     setUser(null);
   };
 

@@ -153,7 +153,7 @@ export default function Navbar({ user }: { user: any }) {
                       >
                         Profile
                       </Button>
-                      <Button onClick={logOut}>Logout</Button>
+                      <Button href='/logout'>Logout</Button>
                     </div>
                   )}
                 </nav>
@@ -229,7 +229,7 @@ export default function Navbar({ user }: { user: any }) {
               </Link>
 
               <Button
-                onClick={logOut}
+                href='/logout'
                 className='text-white h-10 px-5 rounded-lg font-medium'
               >
                 Logout

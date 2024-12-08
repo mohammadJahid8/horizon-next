@@ -7,7 +7,11 @@ import { cn } from '@/lib/utils';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
-export default function Comparison() {
+export default function Comparison({
+  titleLight,
+  titleBold,
+  comparisons,
+}: any) {
   const heightRefs = Array.from({ length: 6 }, () =>
     useRef<HTMLDivElement>(null)
   );
@@ -24,48 +28,26 @@ export default function Comparison() {
   return (
     <Container className='pb-32'>
       <h2 className='md:text-[45px] text-[31px] font-light text-green-900 md:leading-[54px] leading-[37.2px] text-center transition-all duration-300 mb-32 md:max-w-none max-w-[343px] mx-auto'>
-        <span className='font-medium'>Horrizon vs.</span> Competitors
+        <span className='font-medium'>{titleBold}</span> {titleLight}
       </h2>
       <div className='flex'>
         <div className='w-full'>
           <div className='space-y-'>
-            {[
-              {
-                title: 'Video interviews',
-                description:
-                  'Create Google Meet and Zoom meeting invites, see them invites right from the interface!',
-              },
-              {
-                title: 'Certification verification',
-                description:
-                  'We verify your certifications for employers, giving you a competitive edge and showcasing your qualifications with confidence.',
-              },
-              {
-                title: 'Upload documents',
-                description:
-                  'Easily upload your CV, certifications, licenses, and other important documents. Keep everything organized and easily accessible.',
-              },
-              {
-                title: 'Background check',
-                description:
-                  'We carefully review the candidate information like certifications, licenses, and other relevant documents.',
-              },
-              {
-                title: 'Form signature',
-              },
-              {
-                title: 'Profile link',
-              },
-            ].map(({ title, description }, index) => (
-              <Feature
-                key={index}
-                heightRef={heightRefs[index]}
-                className={index >= 4 ? 'h-auto' : ''}
-                isFirst={index === 0}
-                title={title}
-                description={description}
-              />
-            ))}
+            {comparisons?.map(
+              (
+                { title, description }: { title: string; description: string },
+                index: number
+              ) => (
+                <Feature
+                  key={index}
+                  heightRef={heightRefs[index]}
+                  className={index >= 4 ? 'h-auto' : ''}
+                  isFirst={index === 0}
+                  title={title}
+                  description={description}
+                />
+              )
+            )}
           </div>
         </div>
         <div className='bg-primary text-white rounded-[32px] px-4 pt-8 pb-12 w-full md:max-w-[262px] max-w-[100px] mx-auto -mt-20'>

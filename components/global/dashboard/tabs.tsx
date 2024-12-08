@@ -4,11 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppContext } from '@/lib/context';
 
-interface TabItem {
-  label: string;
-  href: string;
-}
-
 const tabItemsPro = [
   { label: 'Profile', href: '/pro/profile' },
   { label: 'Offers (3)', href: '/pro/offers' },
@@ -23,6 +18,7 @@ const tabItemsPartner = [
 const Tabs: React.FC = () => {
   const pathname = usePathname();
   const { user } = useAppContext();
+
   const tabItems = user?.role === 'pro' ? tabItemsPro : tabItemsPartner;
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>

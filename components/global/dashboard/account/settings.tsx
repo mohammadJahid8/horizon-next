@@ -1,4 +1,6 @@
-import { ChevronRight, Info } from 'lucide-react';
+'use client';
+import { useAppContext } from '@/lib/context';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
@@ -42,12 +44,13 @@ const links = [
   {
     icon: <img src='/logout.svg' alt='account' className='size-6' />,
     name: 'Logout',
-    path: '#',
+    path: '/logout',
     className: 'text-red-500',
   },
 ];
 
 const Settings = () => {
+  const { logOut } = useAppContext();
   return (
     <div className='flex flex-col bg-white rounded-lg p-6 gap-5'>
       {links.map((link, index) => (
@@ -57,6 +60,12 @@ const Settings = () => {
           className={`flex items-center justify-between p-4 ${
             link.className || ''
           }`}
+          // onClick={(e) => {
+          //   if (link.name === 'Logout') {
+          //     e.preventDefault();
+          //     logOut();
+          //   }
+          // }}
         >
           <div className='flex items-center gap-6'>
             {link.icon}
