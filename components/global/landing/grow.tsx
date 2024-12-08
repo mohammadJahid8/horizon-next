@@ -8,17 +8,23 @@ const Grow = ({
   source,
   title,
   description,
+  googlePlayLink,
+  appStoreLink,
+  buttonText,
 }: {
   source: string;
   title: string;
   description: string;
+  googlePlayLink: string;
+  appStoreLink: string;
+  buttonText: string;
 }) => {
   const bg =
     source === 'partner'
       ? 'bg-[url("/grow-partner.svg")]'
       : source === 'pro'
-      ? 'bg-[url("/grow-pro.svg")]'
-      : 'bg-[url("/grow.svg")]';
+        ? 'bg-[url("/grow-pro.svg")]'
+        : 'bg-[url("/grow.svg")]';
 
   const buttonHref = source === 'partner' ? '/partner/signup' : '/pro/signup';
 
@@ -38,21 +44,25 @@ const Grow = ({
             href={buttonHref}
             className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
           >
-            Register Now
+            {buttonText}
           </Button>
           <div>
             <p className='text-[#FAFAFA] text-base'>Download Now</p>
             <div className='flex md:space-x-6 pt-2 md:flex-row flex-col items-center'>
-              <img
-                src='/appstore-white.svg'
-                alt='Download on the App Store'
-                className='w-[174px] h-[72px] md:w-[223px] md:h-full'
-              />
-              <img
-                src='/playstore-white.svg'
-                alt='Get it on Google Play'
-                className='w-[174px] h-[72px] md:w-[223px] md:h-full'
-              />
+              <a href={appStoreLink} target='_blank'>
+                <img
+                  src='/appstore-white.svg'
+                  alt='Download on the App Store'
+                  className='w-[174px] h-[72px] md:w-[223px] md:h-full'
+                />
+              </a>
+              <a href={googlePlayLink} target='_blank'>
+                <img
+                  src='/playstore-white.svg'
+                  alt='Get it on Google Play'
+                  className='w-[174px] h-[72px] md:w-[223px] md:h-full'
+                />
+              </a>
             </div>
           </div>
         </div>

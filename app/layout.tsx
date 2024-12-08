@@ -5,7 +5,8 @@ import CommonNavbar from '@/components/global/common-navbar';
 import Provider from '@/lib/provider';
 import { Toaster } from 'sonner';
 import Refresh from '@/components/global/refresh';
-import { getTokens, getUser } from './actions';
+import { getFooterData, getUser } from './actions';
+import CommonFooter from '@/components/global/common-footer';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -30,6 +31,7 @@ export default async function RootLayout({
   };
 }>) {
   const user = await getUser();
+  const footerData = await getFooterData();
   return (
     <html lang='en'>
       <body className={`${poppins.className}`}>
@@ -37,6 +39,7 @@ export default async function RootLayout({
           <Refresh />
           <CommonNavbar user={user} />
           <main>{children}</main>
+          <CommonFooter footerData={footerData} />
           <Toaster />
         </Provider>
       </body>

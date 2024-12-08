@@ -17,6 +17,7 @@ export default function Auth({
   image,
   descriptionTitle,
   description,
+  alreadyHaveAccount,
 }: any) {
   return (
     <div className='relative min-h-screen flex flex-col lg:flex-row'>
@@ -79,7 +80,7 @@ export default function Auth({
                 </p>
               ) : (
                 <p className='text-base'>
-                  Already have an account?{' '}
+                  {alreadyHaveAccount}
                   <Link
                     href={`/${source}/login`}
                     className='text-primary font-semibold underline underline-offset-4'

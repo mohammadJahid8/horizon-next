@@ -3,7 +3,19 @@ import Container from '../container';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
 
-const Testimonial = ({ source }: { source: 'home' | 'partner' | 'pro' }) => {
+const Testimonial = ({
+  source,
+  personName,
+  titleLight,
+  titleBold,
+  description,
+}: {
+  source: 'home' | 'partner' | 'pro';
+  personName: string;
+  titleLight: string;
+  titleBold: string;
+  description: string;
+}) => {
   return (
     // <div className='bg-[url("/testimonial-bg.png")] bg-auto bg-center bg-no-repeat py-32'>
     <Container className='py-28 px-0 sm:px-0 lg:px-8 bg-[url("/testimonial-bg-mobile.svg")] md:bg-[url("/testimonial-bg.svg")] bg-auto bg-center bg-no-repeat'>
@@ -21,14 +33,10 @@ const Testimonial = ({ source }: { source: 'home' | 'partner' | 'pro' }) => {
               alt='quote'
               className='absolute left-10 md:left-[unset] bottom-[90px] md:bottom-[70px] md:size-[unset] w-20 h-12'
             />
-            {source === 'home' || source === 'pro'
-              ? 'Trusted by many'
-              : 'Partners'}
+            {titleBold}
           </span>
           <br />
-          {source === 'home' || source === 'pro'
-            ? 'certified nursing assistants'
-            : 'words about their experience'}
+          {titleLight}
         </h2>
         <div className='relative mt-16'>
           <Image
@@ -57,9 +65,7 @@ const Testimonial = ({ source }: { source: 'home' | 'partner' | 'pro' }) => {
               />
               <div className='max-w-[426px] mx-auto flex items-center justify-center flex-col md:gap-9 gap-4'>
                 <p className='text-white font-normal md:text-base text-sm'>
-                  Horizzon made my job search so much easier. The site is
-                  user-friendly and I found tons of relevant opportunities.
-                  Highly recommend for all CNAs!
+                  {description}
                 </p>
                 <div className='flex items-center gap-3'>
                   <Image
@@ -72,7 +78,7 @@ const Testimonial = ({ source }: { source: 'home' | 'partner' | 'pro' }) => {
 
                   <div className='flex flex-col gap-1'>
                     <h3 className='text-white font-semibold md:text-xl text-sm'>
-                      Leslie Alexander
+                      {personName}
                     </h3>
                     <div className='flex gap-0.5'>
                       {[...Array(5)].map((_, i) => (

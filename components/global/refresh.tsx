@@ -10,13 +10,6 @@ const RefreshToken = () => {
   const tokenRefreshIn = cookies?.tokenRefreshIn;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log({ isRefreshed });
-  console.log(
-    'isCurrentTimeGreaterThanTokenRefreshIn',
-    new Date(),
-    new Date(tokenRefreshIn!)
-  );
-
   useEffect(() => {
     if (!accessToken) return;
 

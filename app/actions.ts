@@ -1,5 +1,6 @@
 'use server';
 import api from '@/lib/axiosInterceptor';
+import { client } from '@/sanity/lib/client';
 import { cookies } from 'next/headers';
 export async function getUser() {
   try {
@@ -23,4 +24,38 @@ export async function logout() {
   cookies().delete('accessToken');
   cookies().delete('refreshToken');
   cookies().delete('tokenRefreshIn');
+}
+
+export async function getHomeData() {
+  const response = await client.fetch(`*[_type == "home"][0]`);
+  return response;
+}
+export async function getProData() {
+  const response = await client.fetch(`*[_type == "pro"][0]`);
+  return response;
+}
+export async function getPartnerData() {
+  const response = await client.fetch(`*[_type == "partner"][0]`);
+  return response;
+}
+export async function getProLoginData() {
+  const response = await client.fetch(`*[_type == "proLogin"][0]`);
+  return response;
+}
+export async function getProSignupData() {
+  const response = await client.fetch(`*[_type == "proRegister"][0]`);
+  return response;
+}
+export async function getPartnerLoginData() {
+  const response = await client.fetch(`*[_type == "partnerLogin"][0]`);
+  return response;
+}
+export async function getPartnerSignupData() {
+  const response = await client.fetch(`*[_type == "partnerRegister"][0]`);
+  return response;
+}
+
+export async function getFooterData() {
+  const response = await client.fetch(`*[_type == "footer"][0]`);
+  return response;
 }
