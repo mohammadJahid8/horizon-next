@@ -10,27 +10,31 @@ import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import { getHomeData } from './actions';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const homeData = await getHomeData();
   const {
-    section1,
-    section2,
-    section3,
-    section4,
-    section5,
-    section6,
-    section7,
-    section8,
-    section9,
-  } = homeData;
-  // console.log('🚀 ~ Home ~ homeData:', homeData);
+    section1 = {},
+    section2 = {},
+    section3 = {},
+    section4 = {},
+    section5 = {},
+    section6 = {},
+    section7 = {},
+    section8 = {},
+    section9 = {},
+  } = homeData || {};
+  console.log('🚀 ~ Home ~ homeData:', section1);
   const whyUsImages = ['/secure.svg', '/peace.svg', '/status.svg'];
-  const features = section2?.features?.map((item: any, index: number) => {
-    return {
-      img: whyUsImages[index],
-      ...item,
-    };
-  });
+  const features =
+    section2?.features &&
+    section2?.features?.map((item: any, index: number) => {
+      return {
+        img: whyUsImages[index],
+        ...item,
+      };
+    });
 
   const images = {
     null: '/doctor.svg',
@@ -55,12 +59,14 @@ export default async function Home() {
     <BriefcaseIcon className='size-[18px]' key={3} />,
   ];
 
-  const steps = section3?.steps?.map((item: any, index: number) => {
-    return {
-      ...item,
-      icon: stepsIcons[index],
-    };
-  });
+  const steps =
+    section3?.steps &&
+    section3?.steps?.map((item: any, index: number) => {
+      return {
+        ...item,
+        icon: stepsIcons[index],
+      };
+    });
 
   return (
     <div className='mt-16'>

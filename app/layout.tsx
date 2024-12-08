@@ -5,9 +5,9 @@ import CommonNavbar from '@/components/global/common-navbar';
 import Provider from '@/lib/provider';
 import { Toaster } from 'sonner';
 import Refresh from '@/components/global/refresh';
-import { getFooterData, getUser } from './actions';
+import { getUser } from './actions';
 import CommonFooter from '@/components/global/common-footer';
-
+import { getFooterData } from './actions';
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 10;
 export default async function RootLayout({
   children,
 }: Readonly<{

@@ -10,27 +10,31 @@ import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import Image from 'next/image';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProLandingPage() {
   const proData = await getProData();
   const {
-    section1,
-    section2,
-    section3,
-    section4,
-    section5,
-    section6,
-    section7,
-    section8,
-  } = proData;
+    section1 = {},
+    section2 = {},
+    section3 = {},
+    section4 = {},
+    section5 = {},
+    section6 = {},
+    section7 = {},
+    section8 = {},
+  } = proData || {};
 
   const whyUsImages = ['/interview.svg', '/peace.svg', '/earn.svg'];
 
-  const features = section2?.features?.map((item: any, index: number) => {
-    return {
-      img: whyUsImages[index],
-      ...item,
-    };
-  });
+  const features =
+    section2?.features &&
+    section2?.features?.map((item: any, index: number) => {
+      return {
+        img: whyUsImages[index],
+        ...item,
+      };
+    });
 
   const images = {
     null: '/get-started-pro.svg',
@@ -55,12 +59,14 @@ export default async function ProLandingPage() {
     <BriefcaseIcon className='size-[18px]' key={3} />,
   ];
 
-  const steps = section5?.steps?.map((item: any, index: number) => {
-    return {
-      ...item,
-      icon: stepsIcons[index],
-    };
-  });
+  const steps =
+    section5?.steps &&
+    section5?.steps?.map((item: any, index: number) => {
+      return {
+        ...item,
+        icon: stepsIcons[index],
+      };
+    });
   return (
     <div className='mt-16 relative overflow-hidden'>
       <ProBanner {...section1} />
