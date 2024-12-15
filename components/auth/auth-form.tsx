@@ -291,7 +291,7 @@ export default function AuthForm({
         >
           {submitButtonText}
         </Button>
-        {type === 'login' && type === 'signup' && (
+        {(type === 'login' || type === 'signup') && (
           <>
             <div className='flex items-center my-4'>
               <div className='flex-grow border-t border-gray-400'></div>
