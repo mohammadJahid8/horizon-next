@@ -6,6 +6,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { QueryCache, useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -17,7 +18,7 @@ export function useAppContext() {
 
 const ContextProvider = ({ children }: any) => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
   const [isOpenNeedMore, setIsOpenNeedMore] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
   const [isRefreshed, setIsRefreshed] = useState(false);
@@ -39,14 +40,26 @@ const ContextProvider = ({ children }: any) => {
     setIsPartnerOpen(false);
   };
 
-  useEffect(() => {
-    const getUserData = async () => {
-      const user = await getUser();
-      setUser(user);
-    };
-    getUserData();
-  }, [user?.name, cookies]);
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     const user = await getUser();
+  //     setUser(user);
+  //   };
+  //   getUserData();
+  // }, [user?.name, cookies]);
 
+  // console.time('user');
+  const {
+    // isLoading,
+    refetch: refetchUser,
+    data: user,
+  } = useQuery({
+    queryKey: [`user`],
+    queryFn: async () => await getUser(),
+  });
+
+  console.log({ user });
+  // console.timeEnd('user');
   useEffect(() => {
     const getCookies = async () => {
       const cookies = await getTokens();
@@ -56,8 +69,6 @@ const ContextProvider = ({ children }: any) => {
 
     getCookies();
   }, [isRefreshed]);
-
-  console.log({ cookies, user });
 
   const logInWithGoogle = async () => {
     let result = null,
@@ -74,7 +85,7 @@ const ContextProvider = ({ children }: any) => {
   const logOut = async () => {
     await logout();
     router.push('/');
-    setUser(null);
+    // setUser(null);
   };
 
   const handleLogin = async (data: any, source: string) => {
@@ -138,11 +149,21 @@ const ContextProvider = ({ children }: any) => {
     }
   };
 
+  const isPersonalInfoCompleted =
+    Object.keys(user?.personalInfo || {}).length > 0;
+  const isProfessionalInfoCompleted =
+    Object.keys(user?.professionalInfo || {}).length > 0;
+  const isDocumentUploadCompleted =
+    Object.keys(user?.documents || {}).length > 0;
+
   return (
     <UserContext.Provider
       value={{
         user,
-        setUser,
+        isPersonalInfoCompleted,
+        isProfessionalInfoCompleted,
+        isDocumentUploadCompleted,
+        refetchUser,
         openNeedMore,
         openPartner,
         closeNeedMore,

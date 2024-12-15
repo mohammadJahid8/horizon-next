@@ -10,7 +10,7 @@ export const isAuthenticated = async (token: string) => {
   if (token) {
     try {
       const decoded = await jose.jwtVerify(token, jwtConfig.secret);
-      console.log('🚀 ~ isAuthenticated ~ decoded:', decoded);
+      // console.log('🚀 ~ isAuthenticated ~ decoded:', decoded);
 
       if (decoded.payload?.email) {
         return true;

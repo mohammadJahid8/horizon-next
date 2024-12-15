@@ -1,10 +1,22 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { PlusIcon, XIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
+import { Control } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 
-const SkillsSelector = () => {
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+const SkillsSelector = ({
+  field,
+  register,
+  control,
+  errors,
+  setValue,
+  watchSkills,
+}: any) => {
+  console.log(watchSkills);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(watchSkills);
   const availableSkills = [
     'PPE',
     'VACCINE',
@@ -20,16 +32,27 @@ const SkillsSelector = () => {
   const handleSkillAdd = (skill: string) => {
     if (!selectedSkills.includes(skill)) {
       setSelectedSkills([...selectedSkills, skill]);
+      // register(`skills`, { value: [...selectedSkills, skill] });
+      setValue('skills', [...selectedSkills, skill]);
+      errors.skills = {};
     }
   };
 
   const handleSkillRemove = (skill: string) => {
     setSelectedSkills(selectedSkills.filter((s) => s !== skill));
+    // register(`skills`, { value: selectedSkills.filter((s) => s !== skill) });
+    setValue(
+      'skills',
+      selectedSkills.filter((s) => s !== skill)
+    );
   };
 
   return (
     <>
-      <div className='border border-[#DFE2E0] rounded-[16px] p-5'>
+      <div
+        className='border border-[#DFE2E0] rounded-[16px] p-5'
+        // {...register('skills')}
+      >
         <div className='flex items-center rounded-[12px] min-h-[70px] h-auto bg-[#f9f9f9] border border-input p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none'>
           <div className='flex flex-row flex-wrap gap-2 w-full'>
             {selectedSkills.map((skill) => (
