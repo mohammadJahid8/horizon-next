@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { QueryCache, useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
@@ -24,6 +24,9 @@ const ContextProvider = ({ children }: any) => {
   const [isRefreshed, setIsRefreshed] = useState(false);
   const [cookies, setCookies] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOtpResend, setIsOtpResend] = useState(false);
+  const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
+
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
   };
@@ -156,6 +159,138 @@ const ContextProvider = ({ children }: any) => {
   const isDocumentUploadCompleted =
     Object.keys(user?.documents || {}).length > 0;
 
+  const handleForgotPassword = async (data: any, source: string) => {
+    // console.log('🚀 ~ handleForgotPassword ~ source:', source);
+    const response = await fetch('/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+      }),
+    });
+
+    const responseData: any = await response.json();
+
+    if (responseData.status === 200) {
+      console.log({ responseData });
+
+      const otpExpiry = responseData.otpExpiry;
+
+      window.localStorage.setItem('otpExpiry', otpExpiry);
+
+      source === 'pro'
+        ? (window.location.href = `/pro/verify-otp?email=${data.email}`)
+        : (window.location.href = `/partner/verify-otp?email=${data.email}`);
+      return toast.success(responseData.message || `OTP sent successfully`, {
+        position: 'top-center',
+      });
+    }
+
+    if (responseData.status === 500) {
+      return toast.error(responseData.message || `OTP sending failed`, {
+        position: 'top-center',
+      });
+    }
+  };
+  const handleResetPassword = async (
+    data: any,
+    email: string,
+    source: string
+  ) => {
+    console.log('🚀 ~ handleResetPassword ~ data:', data);
+    const response = await fetch('/api/auth/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password: data.password,
+      }),
+    });
+
+    const responseData: any = await response.json();
+
+    if (responseData.status === 200) {
+      source === 'pro'
+        ? (window.location.href = `/pro/login`)
+        : (window.location.href = `/partner/login`);
+      return toast.success(
+        responseData.message || `Password reset successfull`,
+        {
+          position: 'top-center',
+        }
+      );
+    }
+
+    if (responseData.status === 500) {
+      return toast.error(responseData.message || `Password reset failed`, {
+        position: 'top-center',
+      });
+    }
+  };
+
+  const handleResendOTP = async (email: string) => {
+    setIsResendOTPLoading(true);
+    const response = await fetch('/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+
+    const responseData: any = await response.json();
+
+    if (responseData.status === 200) {
+      setIsOtpResend(true);
+
+      const otpExpiry = responseData.otpExpiry;
+
+      window.localStorage.setItem('otpExpiry', otpExpiry);
+      setIsResendOTPLoading(false);
+      return toast.success(responseData.message || `OTP resent successfully`, {
+        position: 'top-center',
+      });
+    }
+
+    if (responseData.status === 500) {
+      setIsResendOTPLoading(false);
+      return toast.error(responseData.message || `OTP resending failed`, {
+        position: 'top-center',
+      });
+    }
+  };
+
+  const handleVerifyOTP = async (otp: any, email: string, source: string) => {
+    const response = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        otp,
+      }),
+    });
+
+    const responseData: any = await response.json();
+
+    if (responseData.status === 200) {
+      source === 'pro'
+        ? (window.location.href = `/pro/reset-password?email=${email}`)
+        : (window.location.href = `/partner/reset-password?email=${email}`);
+      return toast.success(
+        responseData.message || `OTP verified successfully`,
+        {
+          position: 'top-center',
+        }
+      );
+    }
+
+    if (responseData.status === 500) {
+      return toast.error(responseData.message || `OTP verification failed`, {
+        position: 'top-center',
+      });
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -179,6 +314,13 @@ const ContextProvider = ({ children }: any) => {
         setIsLoading,
         handleLogin,
         handleSignup,
+        handleForgotPassword,
+        handleVerifyOTP,
+        handleResendOTP,
+        isOtpResend,
+        isResendOTPLoading,
+        setIsResendOTPLoading,
+        handleResetPassword,
       }}
     >
       {children}

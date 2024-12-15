@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Averia_Serif_Libre } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
 
 const averia = Averia_Serif_Libre({
   subsets: ['latin'],
@@ -18,6 +19,8 @@ export default function Auth({
   descriptionTitle,
   description,
   alreadyHaveAccount,
+  resendOTP,
+  isResendOTPLoading,
 }: any) {
   return (
     <div className='relative min-h-screen flex flex-col lg:flex-row'>
@@ -68,26 +71,44 @@ export default function Auth({
             {children}
 
             <div className='text-start'>
-              {type === 'login' ? (
-                <p className='text-base'>
-                  New to Horizzon?{' '}
-                  <Link
-                    href={`/${source}/signup`}
+              {(type === 'login' || type === 'signup') && (
+                <>
+                  {type === 'login' ? (
+                    <p className='text-base'>
+                      New to Horizzon?{' '}
+                      <Link
+                        href={`/${source}/signup`}
+                        className='text-primary font-semibold underline underline-offset-4'
+                      >
+                        Create an account
+                      </Link>
+                    </p>
+                  ) : (
+                    <p className='text-base'>
+                      {alreadyHaveAccount}{' '}
+                      <Link
+                        href={`/${source}/login`}
+                        className='text-primary font-semibold underline underline-offset-4'
+                      >
+                        Login
+                      </Link>
+                    </p>
+                  )}
+                </>
+              )}
+
+              {type === 'verify-otp' && (
+                <div className='text-base flex items-center'>
+                  Didn't receive the code?{' '}
+                  <Button
+                    variant='special'
+                    onClick={resendOTP}
+                    disabled={isResendOTPLoading}
                     className='text-primary font-semibold underline underline-offset-4'
                   >
-                    Create an account
-                  </Link>
-                </p>
-              ) : (
-                <p className='text-base'>
-                  {alreadyHaveAccount}
-                  <Link
-                    href={`/${source}/login`}
-                    className='text-primary font-semibold underline underline-offset-4'
-                  >
-                    Login
-                  </Link>
-                </p>
+                    {isResendOTPLoading ? 'Sending...' : 'Resend code'}
+                  </Button>
+                </div>
               )}
             </div>
           </div>

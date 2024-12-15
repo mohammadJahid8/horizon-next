@@ -12,10 +12,10 @@ import { Input } from '../ui/input';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 // import { useAppContext } from '@/lib/context';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Checkbox } from '../ui/checkbox';
 import GoogleLogin from './google-login';
@@ -29,6 +29,7 @@ import {
 } from '../ui/select';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/lib/context';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 
 export default function AuthForm({
   inputFields,
@@ -37,7 +38,10 @@ export default function AuthForm({
   type,
   source,
 }: any) {
-  const { isLoading, setIsLoading } = useAppContext();
+  const { isLoading, setIsLoading, isOtpResend } = useAppContext();
+  const location = usePathname();
+  const locationSource = location.split('/')[1];
+  console.log({ source });
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
@@ -52,7 +56,7 @@ export default function AuthForm({
   const createFormSchema = (type: any) => {
     let formSchema: any = z.object(schemaFields);
 
-    if (type === 'signup') {
+    if (type === 'signup' || type === 'reset-password') {
       formSchema = formSchema.superRefine(
         ({ confirmPassword, password }: any, ctx: any) => {
           if (confirmPassword !== password) {
@@ -84,7 +88,7 @@ export default function AuthForm({
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      await onSubmit(data, source);
+      await onSubmit(data, source || locationSource);
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
@@ -96,12 +100,54 @@ export default function AuthForm({
     setShowPassword((prev) => ({ ...prev, [fieldName]: !prev[fieldName] }));
   };
 
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    const expiryTime =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('otpExpiry')
+        : '';
+    return expiryTime ? new Date(expiryTime).getTime() - Date.now() : 0;
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const expiryTime = window.localStorage.getItem('otpExpiry');
+      if (!expiryTime) {
+        clearInterval(interval);
+        setTimeLeft(0);
+        return;
+      }
+
+      const remaining = new Date(expiryTime).getTime() - Date.now();
+      setTimeLeft(remaining);
+
+      if (remaining <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isOtpResend]);
+
+  const formatTime = (milliseconds: number) => {
+    if (milliseconds <= 0) return 'OTP expired';
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}m ${seconds}s`;
+  };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className='space-y-6 w-full'
       >
+        {type === 'verify-otp' && (
+          <p className='text-center text-sm text-gray-500'>
+            The verification code expires in:{' '}
+            <span className='font-medium'>{formatTime(timeLeft)}</span>
+          </p>
+        )}
         <div className={`grid grid-cols-1 gap-5`}>
           {inputFields.map((input: any, i: number) => (
             <div key={i}>
@@ -188,6 +234,17 @@ export default function AuthForm({
                               )}
                             </button>
                           </>
+                        ) : input.type === 'otp' ? (
+                          <InputOTP maxLength={6} {...field} className='w-full'>
+                            <InputOTPGroup className='w-full'>
+                              <InputOTPSlot index={0} className='w-full' />
+                              <InputOTPSlot index={1} className='w-full' />
+                              <InputOTPSlot index={2} className='w-full' />
+                              <InputOTPSlot index={3} className='w-full' />
+                              <InputOTPSlot index={4} className='w-full' />
+                              <InputOTPSlot index={5} className='w-full' />
+                            </InputOTPGroup>
+                          </InputOTP>
                         ) : (
                           <Input
                             disabled={isLoading}
@@ -219,7 +276,7 @@ export default function AuthForm({
               </label>
             </div>
             <Link
-              href='/forgot-password'
+              href={`/${source}/forgot-password`}
               className='text-base text-primary underline hover:text-primary-600 transition'
             >
               Forgot password?
@@ -234,12 +291,17 @@ export default function AuthForm({
         >
           {submitButtonText}
         </Button>
-        <div className='flex items-center my-4'>
-          <div className='flex-grow border-t border-gray-400'></div>
-          <span className='mx-4 text-gray-500'>OR</span>
-          <div className='flex-grow border-t border-gray-400'></div>
-        </div>
-        <GoogleLogin source={source} />
+        {type === 'login' && type === 'signup' && (
+          <>
+            <div className='flex items-center my-4'>
+              <div className='flex-grow border-t border-gray-400'></div>
+              <span className='mx-4 text-gray-500'>OR</span>
+              <div className='flex-grow border-t border-gray-400'></div>
+            </div>
+
+            <GoogleLogin source={source} />
+          </>
+        )}
       </form>
     </Form>
   );
