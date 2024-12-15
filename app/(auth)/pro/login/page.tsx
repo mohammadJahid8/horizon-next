@@ -1,4 +1,3 @@
-// import { getProLoginData } from '@/app/actions';
 import { getProLoginData } from '@/app/actions';
 import ProLogin from '@/components/global/pro-login';
 
