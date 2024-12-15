@@ -28,8 +28,6 @@ const DocumentUpload = () => {
   const { user, refetchUser } = useAppContext();
   const router = useRouter();
 
-  // const { certificate, resume, governmentId } = user?.documents || {};
-
   const [files, setFiles] = useState<FileState>({
     certificate: null,
     resume: null,
@@ -41,8 +39,6 @@ const DocumentUpload = () => {
     resume: 0,
     governmentId: 0,
   });
-
-  console.log({ files });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -139,7 +135,7 @@ const DocumentUpload = () => {
   };
 
   const isFileUploaded = (type: keyof FileState) => {
-    return user?.documents[type] || uploadProgress[type] === 100;
+    return user?.documents?.[type] || uploadProgress?.[type] === 100;
   };
 
   return (
@@ -215,9 +211,9 @@ const DocumentUpload = () => {
                   />
                 )}
 
-                {typeof user?.documents[type] === 'string' && (
+                {typeof user?.documents?.[type] === 'string' && (
                   <SavedFile
-                    file={user?.documents[type]!}
+                    file={user?.documents?.[type]!}
                     type={type}
                     refetch={refetchUser}
                     setIsLoading={setIsLoading}

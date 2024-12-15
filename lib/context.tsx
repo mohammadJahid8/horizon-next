@@ -18,7 +18,6 @@ export function useAppContext() {
 
 const ContextProvider = ({ children }: any) => {
   const router = useRouter();
-  // const [user, setUser] = useState<any>(null);
   const [isOpenNeedMore, setIsOpenNeedMore] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
   const [isRefreshed, setIsRefreshed] = useState(false);
@@ -43,26 +42,11 @@ const ContextProvider = ({ children }: any) => {
     setIsPartnerOpen(false);
   };
 
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     const user = await getUser();
-  //     setUser(user);
-  //   };
-  //   getUserData();
-  // }, [user?.name, cookies]);
-
-  // console.time('user');
-  const {
-    // isLoading,
-    refetch: refetchUser,
-    data: user,
-  } = useQuery({
+  const { refetch: refetchUser, data: user } = useQuery({
     queryKey: [`user`],
     queryFn: async () => await getUser(),
   });
 
-  console.log({ user });
-  // console.timeEnd('user');
   useEffect(() => {
     const getCookies = async () => {
       const cookies = await getTokens();
@@ -88,7 +72,6 @@ const ContextProvider = ({ children }: any) => {
   const logOut = async () => {
     await logout();
     router.push('/');
-    // setUser(null);
   };
 
   const handleLogin = async (data: any, source: string) => {
@@ -121,7 +104,6 @@ const ContextProvider = ({ children }: any) => {
   };
 
   const handleSignup = async (data: any, source: string) => {
-    console.log('🚀 ~ handleSignup ~ data:', data);
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -134,7 +116,6 @@ const ContextProvider = ({ children }: any) => {
     });
 
     const responseData: any = await response.json();
-    console.log('responseData', responseData);
 
     if (responseData.status === 200) {
       source === 'pro'
@@ -160,7 +141,6 @@ const ContextProvider = ({ children }: any) => {
     Object.keys(user?.documents || {}).length > 0;
 
   const handleForgotPassword = async (data: any, source: string) => {
-    // console.log('🚀 ~ handleForgotPassword ~ source:', source);
     const response = await fetch('/api/auth/forgot-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -172,8 +152,6 @@ const ContextProvider = ({ children }: any) => {
     const responseData: any = await response.json();
 
     if (responseData.status === 200) {
-      console.log({ responseData });
-
       const otpExpiry = responseData.otpExpiry;
 
       window.localStorage.setItem('otpExpiry', otpExpiry);
@@ -197,7 +175,6 @@ const ContextProvider = ({ children }: any) => {
     email: string,
     source: string
   ) => {
-    console.log('🚀 ~ handleResetPassword ~ data:', data);
     const response = await fetch('/api/auth/reset-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

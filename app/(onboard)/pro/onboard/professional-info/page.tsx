@@ -23,8 +23,12 @@ const ProfessionalInfo = () => {
   const processedCertifications = certifications?.map((certification: any) => {
     return {
       ...certification,
-      issueDate: certification?.issueDate?.split('T')[0],
-      expireDate: certification?.expireDate?.split('T')[0],
+      issueDate: certification?.issueDate
+        ? certification?.issueDate?.split('T')[0]
+        : '',
+      expireDate: certification?.expireDate
+        ? certification?.expireDate?.split('T')[0]
+        : '',
     };
   });
 
@@ -100,15 +104,12 @@ const ProfessionalInfo = () => {
     name: 'certifications',
   });
 
-  console.log({ isDirty });
-
   const onSubmit = async (data: any) => {
     try {
       if (!isDirty) {
         return router.push('/pro/onboard/document-upload');
       }
 
-      console.log('data', data);
       setIsLoading(true);
       const certificationData = data.certifications.map(
         (certification: any) => {
@@ -148,15 +149,11 @@ const ProfessionalInfo = () => {
 
       const formData = new FormData();
 
-      console.log({ certificationFiles });
-
       for (const file of certificationFiles) {
         if (typeof file.certificateFile === 'object' && file.certificateFile) {
           formData.append(`${file.fileId}`, file.certificateFile, file.fileId);
         }
       }
-
-      console.log({ data });
 
       formData.append('data', JSON.stringify(data));
 
@@ -188,8 +185,6 @@ const ProfessionalInfo = () => {
 
   const watchCertificationFileData: any = watch('certifications');
   const watchSkills: any = watch('skills');
-
-  console.log({ watchSkills });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -611,8 +606,6 @@ const ProfessionalInfo = () => {
           </h2>
 
           <SkillsSelector
-            register={register}
-            control={control}
             errors={errors}
             setValue={setValue}
             watchSkills={watchSkills}

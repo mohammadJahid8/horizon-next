@@ -68,8 +68,6 @@ const PersonalInfo = () => {
 
       formData.append('data', JSON.stringify(rest));
 
-      console.log('formData', formData);
-
       const response = await fetch('/api/user/personal-information', {
         method: 'POST',
         body: formData,
