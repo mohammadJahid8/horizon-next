@@ -5,7 +5,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get('accessToken');
   const isAuthenticatedUser = await isAuthenticated(token?.value as string);
 
-  console.log('🚀 ~ middleware ~ isAuthenticatedUser:', isAuthenticatedUser);
+  // console.log('🚀 ~ middleware ~ isAuthenticatedUser:', isAuthenticatedUser);
 
   // Define all protected routes with patterns
   const protectedRoutes = [

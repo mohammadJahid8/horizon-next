@@ -7,6 +7,8 @@ interface OnboardButtonProps {
   text: string;
   className?: string;
   href?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const OnboardButton: React.FC<OnboardButtonProps> = ({
@@ -14,6 +16,7 @@ const OnboardButton: React.FC<OnboardButtonProps> = ({
   text,
   className,
   href,
+  type = 'button',
 }) => {
   return (
     <Button
@@ -23,6 +26,7 @@ const OnboardButton: React.FC<OnboardButtonProps> = ({
       )}
       disabled={disabled}
       href={href}
+      type={type}
     >
       {text}
     </Button>

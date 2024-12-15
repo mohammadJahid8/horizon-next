@@ -2,12 +2,13 @@
 import { Camera } from 'lucide-react';
 import React, { useState } from 'react';
 
-const Upload = () => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+const Upload = ({ setValue, image }: any) => {
+  const [imagePreview, setImagePreview] = useState<string | null>(image);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setValue('image', file, { shouldValidate: false });
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -40,6 +41,7 @@ const Upload = () => {
           id='profileImage'
           accept='image/*'
           className='hidden'
+          // {...register('image', { required: 'Image is required' })}
           onChange={handleImageChange}
         />
       </label>
