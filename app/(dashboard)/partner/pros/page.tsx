@@ -1,63 +1,46 @@
+import { getPros } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { FileText, Heart, MapPin, MoveUpRight, X } from 'lucide-react';
-import Image from 'next/image';
 import React from 'react';
 
-const pros = [
-  {
-    id: 1,
-    name: 'Leslie Alexander',
-    location: 'Brookline, MA, 02445',
-    bio: 'Floyd Miles is a magna cum laude Biomedical Engineering graduate from Gotham University. With experience as a Registered Nurse and a current role as a Health Educator, he brings expertise in patient care and health education. Certified in Patient Service Fundamentals by Johns Hopkins, he is based in Springfield, Illinois.',
-    email: 'deanna.curtis@example.com',
-    phone: '(307) 555-0133',
-    requirements: [
-      'Proof letter of a certain experience',
-      'Signed NDA',
-      'Form C',
-    ],
-    image: '/user.png',
-  },
-  {
-    id: 2,
-    name: 'Nishan Tomson',
-    location: 'Brookline, MA, 02445',
-    bio: 'Floyd Miles is a magna cum laude Biomedical Engineering graduate from Gotham University. With experience as a Registered Nurse and a current role as a Health Educator, he brings expertise in patient care and health education. Certified in Patient Service Fundamentals by Johns Hopkins, he is based in Springfield, Illinois.',
-    email: 'deanna.curtis@example.com',
-    phone: '(201) 555-0123',
-    image: '/user.png',
-  },
-];
+const PartnerPros = async () => {
+  const pros = await getPros();
 
-const availableSkills = ['PPE', 'VACCINE'];
-
-const PartnerPros = () => {
   return (
     <div className='flex flex-col gap-8'>
-      {pros.map((pro, index) => (
+      {pros?.map((pro: any, index: number) => (
         <div key={index} className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
           <div className='flex flex-col gap-4 w-full'>
             <div className='flex xs:flex-row flex-col justify-between gap-4 xs:items-center'>
               <div className='flex items-center gap-2'>
-                <Image
-                  src={pro.image}
-                  alt={pro.name}
+                <img
+                  src={pro?.personalInfo?.image || '/dummy-profile-pic.png'}
+                  alt={pro?.personalInfo?.name}
                   width={58}
                   height={58}
                   className='w-12 h-12 sm:size-[58px] rounded-full object-cover'
                 />
                 <div>
                   <h2 className='text-base sm:text-lg text-[#1C1C1C] inline-flex items-center gap-2 sm:pb-1 font-semibold'>
-                    {pro.name}{' '}
+                    {pro?.personalInfo?.firstName} {pro?.personalInfo?.lastName}
                   </h2>
                   <p className='text-[#6C6C6C] text-xs sm:text-sm flex items-center gap-1.5'>
-                    <MapPin className='size-4' /> {pro.location}
+                    <MapPin className='size-4' />{' '}
+                    {pro?.personalInfo?.address?.city &&
+                      `${pro.personalInfo.address.city}, `}
+                    {pro?.personalInfo?.address?.state &&
+                      `${pro.personalInfo.address.state}, `}
+                    {pro?.personalInfo?.address?.street &&
+                      `${pro.personalInfo.address.street}, `}
+                    {pro?.personalInfo?.address?.zipCode &&
+                      `${pro.personalInfo.address.zipCode}, `}
+                    {pro?.personalInfo?.address?.country}
                   </p>
                 </div>
               </div>
               <div className='flex items-start gap-3'>
                 <Button
-                  href={`/partner/pros/${pro.id}`}
+                  href={`/partner/pros/${pro._id}`}
                   variant='outline'
                   className='h-10 md:h-12 rounded-[12px] w-fit text-xs md:text-base'
                 >
@@ -74,34 +57,40 @@ const PartnerPros = () => {
               </div>
             </div>
 
-            <p className='text-sm md:text-base text-[#6C6C6C]'>{pro.bio}</p>
+            <p className='text-sm md:text-base text-[#6C6C6C]'>
+              {pro?.personalInfo?.bio}
+            </p>
 
             <div className='flex flex-wrap gap-3 items-center'>
-              {availableSkills.map((skill, index) => (
-                <Button
-                  key={index}
-                  className='bg-accent text-[#1C1C1C] text-xs md:text-sm h-7 md:h-9'
-                  variant='ghost'
-                >
-                  {skill}
-                </Button>
-              ))}
-              <span className='text-xs md:text-sm text-[#1C1C1C]'>
-                +12 more
-              </span>
+              {pro?.professionalInfo?.skills
+                ?.slice(0, 12)
+                .map((skill: string, index: number) => (
+                  <Button
+                    key={index}
+                    className='bg-accent text-[#1C1C1C] text-xs md:text-sm h-7 md:h-9'
+                    variant='ghost'
+                  >
+                    {skill}
+                  </Button>
+                ))}
+              {pro?.professionalInfo?.skills?.length > 12 && (
+                <span className='text-xs md:text-sm text-[#1C1C1C]'>
+                  +{pro?.professionalInfo?.skills?.length - 12} more
+                </span>
+              )}
             </div>
 
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-2 w-auto'>
               <div className='flex flex-col gap-2'>
                 <p className='text-[#6C6C6C] text-sm'>Email address</p>
                 <p className='text-[#1C1C1C] font-medium text-sm md:text-base'>
-                  {pro.email}
+                  {pro?.email}
                 </p>
               </div>
               <div className='flex flex-col gap-2'>
                 <p className='text-[#6C6C6C] text-sm'>Phone number</p>
                 <p className='text-[#1C1C1C] font-medium text-sm md:text-base'>
-                  {pro.phone}
+                  {pro?.phone}
                 </p>
               </div>
             </div>
@@ -113,14 +102,16 @@ const PartnerPros = () => {
                   Requirements
                 </p>
                 <ul className='flex flex-wrap justify-between text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] py-2 sm:px-4 sm:p-3 rounded-[12px] w-auto sm:w-max'>
-                  {pro.requirements?.map((requirement, idx) => (
-                    <li
-                      key={idx}
-                      className='text-start sm:text-center px-6 list-disc list-inside w-max'
-                    >
-                      {requirement}
-                    </li>
-                  ))}
+                  {pro?.requirements?.map(
+                    (requirement: string, idx: number) => (
+                      <li
+                        key={idx}
+                        className='text-start sm:text-center px-6 list-disc list-inside w-max'
+                      >
+                        {requirement}
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
             )}

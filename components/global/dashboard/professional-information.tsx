@@ -1,10 +1,22 @@
+'use client';
 import EditBtn from '@/components/global/dashboard/edit-btn';
 import Title from '@/components/global/title';
 import { Button } from '@/components/ui/button';
+import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
 import { MoveUpRight } from 'lucide-react';
+import moment from 'moment';
+import NoData from '../no-data';
 
 export default function ProfessionalInformation() {
+  const { user } = useAppContext();
+
+  const education = user?.professionalInfo?.education;
+  const experience = user?.professionalInfo?.experience;
+  const certifications = user?.professionalInfo?.certifications;
+
+  const noData = !education && !experience && !certifications;
+
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
@@ -12,121 +24,162 @@ export default function ProfessionalInformation() {
           text='Professional information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn />
+        <EditBtn href='/pro/onboard/professional-info' />
       </div>
-      <div className='space-y-6'>
-        <div className='border-b pb-6 flex flex-col gap-5 w-full'>
-          <SectionTitle text='Education' className='!text-lg md:!text-2xl' />
-          <div className='flex items-start gap-4 md:gap-6'>
-            <img
-              src='/education.svg'
-              alt='Education'
-              className='size-16 md:size-20'
-            />
-            <div className='flex flex-col gap-3 md:gap-6 w-full'>
-              <div className='flex flex-col gap-1 md:gap-2'>
-                <SectionTitle
-                  className='font-semibold !text-base md:!text-2xl'
-                  text='Bachelor of Science (B.Sc.) in Biomedical Engineering'
-                />
-                <SectionDescription
-                  text='Gotham University'
-                  className='!text-sm md:!text-lg'
-                />
-              </div>
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 w-full'>
-                <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-                  <SectionTitle
-                    text='Year of Graduation'
-                    className='text-sm md:!text-base font-medium'
-                  />
-                  <SectionDescription text='2023' />
-                </div>
-                <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-                  <SectionTitle
-                    text='Field of Study'
-                    className='text-sm md:!text-base font-medium'
-                  />
-                  <SectionDescription text='Biomedical Engineering' />
-                </div>
-                <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-                  <SectionTitle
-                    text='Grade'
-                    className='text-sm md:!text-base font-medium'
-                  />
-                  <SectionDescription text='Magna Cum Laude' />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='border-b pb-6 flex flex-col gap-5'>
-          <SectionTitle text='Experience' className='!text-lg md:!text-2xl' />
-          <ExperienceItem
-            title='Register Nurse'
-            company='Health Care Medical Clinic'
-            duration='March 2017 - February 2022'
-            location='2464 Royal Ln. Mesa, New Jersey 45463'
-            description='Provided direct patient care, administered medications, and coordinated with healthcare teams.'
-            image='/exp1.svg'
-          />
-          <ExperienceItem
-            title='Health Educator'
-            company='Wellness Center'
-            duration='June 2019 - Present'
-            location='2464 Royal Ln. Mesa, New Jersey 45463'
-            description='Developed health education programs, conducted workshops, and promoted wellness initiatives.'
-            image='/exp2.svg'
-          />
-        </div>
-        <div className='flex flex-col gap-5'>
-          <SectionTitle
-            text='Licenses & certifications'
-            className='!text-lg md:!text-2xl'
-          />
-          <div className='flex items-start gap-4 md:gap-6'>
-            <img
-              src='/license.svg'
-              alt='License'
-              className='size-16 md:size-20'
-            />
-            <div className='flex flex-col gap-1 md:gap-2'>
+      {!noData ? (
+        <div className='space-y-6'>
+          {education && (
+            <div className='border-b pb-6 flex flex-col gap-5 w-full'>
               <SectionTitle
-                className='font-semibold !text-base md:!text-2xl'
-                text='Patient Service Fundamentals'
+                text='Education'
+                className='!text-lg md:!text-2xl'
               />
-              <SectionDescription
-                text='Johns Hopkins School of Nursing'
-                className='!text-sm md:!text-lg font-medium'
-              />
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-6'>
-                <SectionDescription
-                  text='Issue Date: December 20, 2023'
-                  className='!text-sm md:!text-base text-[#595959] font-normal'
-                />
-                <SectionDescription
-                  text='Expire Date: December 20, 2023'
-                  className='!text-sm md:!text-base text-[#595959] font-normal'
-                />
-              </div>
-              <SectionDescription
-                text='Credential ID: 123 456 789'
-                className='!text-sm md:!text-base text-[#595959] font-normal'
-              />
-              <Button
-                variant='outline'
-                className='h-10 md:h-12 rounded-[12px] w-fit mt-4 text-xs md:text-base'
-              >
-                View Credential
-                <MoveUpRight className='size-4 ml-2' />
-              </Button>
+              {education?.map((item: any, index: number) => (
+                <EducationItem key={index} {...item} />
+              ))}
             </div>
+          )}
+          {experience && (
+            <div className='border-b pb-6 flex flex-col gap-5'>
+              <SectionTitle
+                text='Experience'
+                className='!text-lg md:!text-2xl'
+              />
+              {experience?.map((item: any, index: number) => (
+                <ExperienceItem key={index} {...item} image='/exp1.svg' />
+              ))}
+            </div>
+          )}
+          {certifications && (
+            <div className='flex flex-col gap-5'>
+              <SectionTitle
+                text='Licenses & certifications'
+                className='!text-lg md:!text-2xl'
+              />
+              {certifications?.map((item: any, index: number) => (
+                <CertificationItem key={index} {...item} />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <NoData />
+      )}
+    </div>
+  );
+}
+
+const EducationItem = ({
+  degree,
+  fieldOfStudy,
+  yearOfGraduation,
+  grade,
+  institution,
+}: {
+  degree: string;
+  fieldOfStudy: string;
+  yearOfGraduation: string;
+  grade: string;
+  institution: string;
+}) => {
+  return (
+    <div className='flex items-start gap-4 md:gap-6'>
+      <img
+        src='/education.svg'
+        alt='Education'
+        className='size-16 md:size-20'
+      />
+      <div className='flex flex-col gap-3 md:gap-6 w-full'>
+        <div className='flex flex-col gap-1 md:gap-2'>
+          <SectionTitle
+            className='font-semibold !text-base md:!text-2xl'
+            text={degree}
+          />
+          <SectionDescription
+            text={institution}
+            className='!text-sm md:!text-lg'
+          />
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 w-full'>
+          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+            <SectionTitle
+              text='Year of Graduation'
+              className='text-sm md:!text-base font-medium'
+            />
+            <SectionDescription text={yearOfGraduation} />
+          </div>
+          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+            <SectionTitle
+              text='Field of Study'
+              className='text-sm md:!text-base font-medium'
+            />
+            <SectionDescription text={fieldOfStudy} />
+          </div>
+          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+            <SectionTitle
+              text='Grade'
+              className='text-sm md:!text-base font-medium'
+            />
+            <SectionDescription text={grade} />
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+const CertificationItem = ({
+  certificateFile,
+  credentialId,
+  credentialUrl,
+  expireDate,
+  institution,
+  issueDate,
+  title,
+}: any) => {
+  return (
+    <div className='flex items-start gap-4 md:gap-6'>
+      <img
+        src={certificateFile}
+        alt='License'
+        className='size-16 md:size-20 object-cover rounded-full'
+      />
+      <div className='flex flex-col gap-1 md:gap-2'>
+        <SectionTitle
+          className='font-semibold !text-base md:!text-2xl'
+          text={title}
+        />
+        <SectionDescription
+          text={institution}
+          className='!text-sm md:!text-lg font-medium'
+        />
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-6'>
+          <SectionDescription
+            text={`Issue Date: ${moment(issueDate).format('MMM DD, YYYY')}`}
+            className='!text-sm md:!text-base text-[#595959] font-normal'
+          />
+          {expireDate && (
+            <SectionDescription
+              text={`Expire Date: ${moment(expireDate).format('MMM DD, YYYY')}`}
+              className='!text-sm md:!text-base text-[#595959] font-normal'
+            />
+          )}
+        </div>
+        <SectionDescription
+          text={`Credential ID: ${credentialId}`}
+          className='!text-sm md:!text-base text-[#595959] font-normal'
+        />
+        <Button
+          onClick={() => window.open(credentialUrl, '_blank')}
+          variant='outline'
+          className='h-10 md:h-12 rounded-[12px] w-fit mt-4 text-xs md:text-base'
+        >
+          View Credential
+          <MoveUpRight className='size-4 ml-2' />
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 const SectionTitle = ({
   text,
@@ -163,41 +216,33 @@ const SectionDescription = ({
   );
 };
 const ExperienceItem = ({
-  title,
-  company,
+  jobTitle,
+  companyName,
   duration,
-  location,
-  description,
+  responsibilities,
   image,
-}: {
-  title: string;
-  company: string;
-  duration: string;
-  location: string;
-  description: string;
-  image: string;
-}) => {
+}: any) => {
   return (
     <div className='flex items-start gap-4 md:gap-6'>
-      <img src={image} alt={title} className='size-16 md:size-20' />
+      <img src={image} alt={jobTitle} className='size-16 md:size-20' />
       <div className='flex flex-col gap-1 md:gap-2'>
         <SectionTitle
-          text={title}
+          text={jobTitle}
           className='font-semibold !text-base md:!text-2xl'
         />
         <SectionDescription
-          text={company}
+          text={companyName}
           className='!text-sm md:!text-lg font-medium'
         />
         <SectionDescription
           text={duration}
           className='!text-sm md:!text-base text-[#595959] font-normal'
         />
-        <SectionDescription
-          text={location}
+        {/* <SectionDescription
+          text={'yrdydhfghfghjh'}
           className='!text-sm md:!text-base text-[#595959] font-normal'
-        />
-        <SectionDescription text={description} className='mt-4' />
+        /> */}
+        <SectionDescription text={responsibilities} className='mt-4' />
       </div>
     </div>
   );

@@ -2,13 +2,21 @@ import Documents from '@/components/global/dashboard/documents';
 import PersonalInformation from '@/components/global/dashboard/personal-information';
 import ProfessionalInformation from '@/components/global/dashboard/professional-information';
 import Skills from '@/components/global/dashboard/skills';
-import { useParams, usePathname } from 'next/navigation';
 import React from 'react';
+import { getUserById } from '@/app/actions';
+import { redirect } from 'next/navigation';
 
-const ProFromPartner = () => {
+const ProFromPartner = async ({ params }: { params: { id: string } }) => {
+  const { id } = params;
+  const user = await getUserById(id);
+  // console.log({ user });
+
+  if (!user) {
+    return redirect('/partner/pros');
+  }
   return (
     <div className='flex flex-col gap-8'>
-      <PersonalInformation />
+      <PersonalInformation proUser={user} />
       <ProfessionalInformation />
       <Skills />
       <Documents />

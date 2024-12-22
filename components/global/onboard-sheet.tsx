@@ -9,7 +9,7 @@ import {
 import { MenuIcon } from 'lucide-react';
 import Onboard from './onboard';
 
-const OnboardSheet = () => {
+const OnboardSheet = ({ source }: { source: 'pro' | 'partner' }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -21,7 +21,7 @@ const OnboardSheet = () => {
       >
         <SheetTitle />
 
-        <Onboard />
+        <Onboard source={source} />
       </SheetContent>
     </Sheet>
   );

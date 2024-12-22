@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from './logo';
 import Steps from './steps';
 
-const Onboard = () => {
+const Onboard = ({ source }: { source: 'partner' | 'pro' }) => {
   return (
     <aside className='px-6 2xl:px-10 py-10 2xl:py-20 bg-white flex flex-col gap-[52px] overflow-y-auto scrollbar-hide'>
       <Logo />
@@ -14,7 +14,7 @@ const Onboard = () => {
             Profile To Make Managing Your Employment Documents Easier.
           </p>
         </div>
-        <Steps />
+        <Steps source={source} />
       </div>
     </aside>
   );

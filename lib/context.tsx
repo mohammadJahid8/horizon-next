@@ -5,8 +5,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { QueryCache, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -26,6 +26,7 @@ const ContextProvider = ({ children }: any) => {
   const [isOtpResend, setIsOtpResend] = useState(false);
   const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
 
+  const [completionPercentage, setCompletionPercentage] = useState(0);
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
   };
@@ -46,6 +47,8 @@ const ContextProvider = ({ children }: any) => {
     queryKey: [`user`],
     queryFn: async () => await getUser(),
   });
+
+  // console.log({ user });
 
   useEffect(() => {
     const getCookies = async () => {
@@ -74,6 +77,41 @@ const ContextProvider = ({ children }: any) => {
     router.push('/');
   };
 
+  const isPersonalInfoCompleted =
+    Object.keys(user?.personalInfo || {}).length > 0;
+  const isProfessionalInfoCompleted =
+    Object.keys(user?.professionalInfo || {}).length > 0;
+  const isDocumentUploadCompleted =
+    Object.keys(user?.documents || {}).length > 0;
+  const isCompanyInfoCompleted =
+    Object.keys(user?.companyInfo || {}).length > 0;
+
+  useEffect(() => {
+    const totalSteps = user?.role === 'pro' ? 3 : 2;
+    const completedStepsPro = [
+      Object.keys(user?.personalInfo || {}).length > 0,
+      Object.keys(user?.professionalInfo || {}).length > 0,
+      Object.keys(user?.documents || {}).length > 0,
+    ].filter(Boolean).length;
+
+    const completedStepsPartner = [
+      Object.keys(user?.personalInfo || {}).length > 0,
+      Object.keys(user?.companyInfo || {}).length > 0,
+    ].filter(Boolean).length;
+
+    const completionPercentage =
+      user?.role === 'pro'
+        ? (completedStepsPro / totalSteps) * 100
+        : (completedStepsPartner / totalSteps) * 100;
+    setCompletionPercentage(Math.floor(completionPercentage));
+  }, [
+    user?.personalInfo,
+    user?.professionalInfo,
+    user?.documents,
+    user?.companyInfo,
+    user?.role,
+  ]);
+
   const handleLogin = async (data: any, source: string) => {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
@@ -86,11 +124,24 @@ const ContextProvider = ({ children }: any) => {
     });
 
     const responseData: any = await response.json();
-
+    refetchUser();
     if (responseData.status === 200) {
-      source === 'pro'
-        ? (window.location.href = '/pro/onboard/personal-info')
-        : (window.location.href = `/partner/pros`);
+      const completionPercentage = responseData.completionPercentage;
+      setCompletionPercentage(completionPercentage);
+      const proPath =
+        completionPercentage > 50
+          ? '/pro/profile'
+          : '/pro/onboard/personal-info';
+
+      const partnerPath =
+        completionPercentage > 50
+          ? '/partner/profile'
+          : '/partner/onboard/personal-info';
+
+      console.log({ partnerPath, completionPercentage });
+
+      source === 'pro' && router.push(proPath);
+      source === 'partner' && router.push(partnerPath);
       return toast.success(responseData.message || `Login successful`, {
         position: 'top-center',
       });
@@ -132,13 +183,6 @@ const ContextProvider = ({ children }: any) => {
       });
     }
   };
-
-  const isPersonalInfoCompleted =
-    Object.keys(user?.personalInfo || {}).length > 0;
-  const isProfessionalInfoCompleted =
-    Object.keys(user?.professionalInfo || {}).length > 0;
-  const isDocumentUploadCompleted =
-    Object.keys(user?.documents || {}).length > 0;
 
   const handleForgotPassword = async (data: any, source: string) => {
     const response = await fetch('/api/auth/forgot-password', {
@@ -275,6 +319,7 @@ const ContextProvider = ({ children }: any) => {
         isPersonalInfoCompleted,
         isProfessionalInfoCompleted,
         isDocumentUploadCompleted,
+        isCompanyInfoCompleted,
         refetchUser,
         openNeedMore,
         openPartner,
@@ -298,6 +343,7 @@ const ContextProvider = ({ children }: any) => {
         isResendOTPLoading,
         setIsResendOTPLoading,
         handleResetPassword,
+        completionPercentage,
       }}
     >
       {children}

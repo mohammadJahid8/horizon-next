@@ -2,8 +2,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Copy } from 'lucide-react';
+import { useAppContext } from '@/lib/context';
 
 const ProAccountInfo = () => {
+  const { completionPercentage } = useAppContext();
   return (
     <>
       <div className='flex-1 flex flex-col sm:gap-3 gap-1'>
@@ -20,13 +22,15 @@ const ProAccountInfo = () => {
               <div
                 className='h-full'
                 style={{
-                  width: '90%',
+                  width: `${completionPercentage}%`,
                   background:
                     'linear-gradient(90deg, #33B55B 0%, #008000 100%)',
                 }}
               ></div>
             </div>
-            <span className='text-sm text-[#3A4742] font-medium ml-2'>90%</span>
+            <span className='text-sm text-[#3A4742] font-medium ml-2'>
+              {completionPercentage}%
+            </span>
           </div>
         </div>
       </div>

@@ -13,6 +13,25 @@ export async function getUser() {
   }
 }
 
+export async function getUserById(id: string) {
+  try {
+    const response = await api.get(`/user/profile/${id}`);
+    return response.data.data;
+  } catch (error) {
+    // console.error('Error fetching user profile by id:', error);
+    return null;
+  }
+}
+export async function getPros() {
+  try {
+    const response = await api.get(`/user/pros`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching pros:', error);
+    return null;
+  }
+}
+
 export async function getTokens() {
   const accessToken = cookies().get('accessToken')?.value;
   const refreshToken = cookies().get('refreshToken')?.value;

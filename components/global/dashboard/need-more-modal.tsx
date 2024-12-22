@@ -15,7 +15,6 @@ import { useAppContext } from '@/lib/context';
 
 export function NeedMoreModal() {
   const { isOpenNeedMore, openPartner, closeNeedMore } = useAppContext();
-  console.log({ isOpenNeedMore });
 
   return (
     <AlertDialog open={isOpenNeedMore} onOpenChange={closeNeedMore}>

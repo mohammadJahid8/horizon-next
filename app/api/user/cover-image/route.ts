@@ -6,14 +6,13 @@ export async function POST(req: Request) {
     const bodyData = await req.formData();
     const entries = Object.fromEntries(bodyData.entries());
 
-    const { data, image } = entries;
+    const { coverImage } = entries;
 
     const formData = new FormData();
 
-    if (image) formData.append('image', image as File);
-    if (data) formData.append('data', data);
+    if (coverImage) formData.append('coverImage', coverImage as File);
 
-    const response = await api.patch(`/user/personal-information`, formData, {
+    const response = await api.patch(`/user/cover-image`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     console.log('🚀 ~ POST ~ response:', response.data);
@@ -21,12 +20,12 @@ export async function POST(req: Request) {
     if (response.status === 200) {
       const res = NextResponse.json({
         status: 200,
-        message: 'Personal information updated successfully',
+        message: 'Cover image updated successfully',
       });
       return res;
     }
   } catch (error: any) {
-    console.error('Personal information update failed:', error.response);
+    console.error('Cover image update failed:', error.response);
     return NextResponse.json({
       status: 500,
       message: error.response.data.message,

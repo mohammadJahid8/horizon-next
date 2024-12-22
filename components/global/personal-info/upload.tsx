@@ -1,21 +1,15 @@
 'use client';
 import { Camera } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Upload = ({ setValue, image }: any) => {
+const Upload = ({ image, register, imageFile }: any) => {
   const [imagePreview, setImagePreview] = useState<string | null>(image);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setValue('image', file, { shouldValidate: false });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    if (typeof imageFile === 'object' && imageFile) {
+      setImagePreview(URL.createObjectURL(imageFile));
     }
-  };
+  }, [imageFile]);
 
   return (
     <div className='flex flex-col items-center justify-center'>
@@ -41,8 +35,8 @@ const Upload = ({ setValue, image }: any) => {
           id='profileImage'
           accept='image/*'
           className='hidden'
-          // {...register('image', { required: 'Image is required' })}
-          onChange={handleImageChange}
+          {...register('image')}
+          // onChange={handleImageChange}
         />
       </label>
     </div>
