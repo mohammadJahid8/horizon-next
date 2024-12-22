@@ -17,10 +17,10 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { openNeedMore } = useAppContext();
   const pathname = usePathname();
-  const params = useParams();
+  const { id } = useParams();
 
   const isProProfileFromPartner =
-    pathname.includes('partner/pros/') && params.id ? true : false;
+    pathname.includes('partner/pros/') && id ? true : false;
 
   return (
     <div
@@ -51,7 +51,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </div>
       )}
 
-      <ProfileInfo isProProfileFromPartner={isProProfileFromPartner} />
+      <ProfileInfo
+        isProProfileFromPartner={isProProfileFromPartner}
+        id={id as string}
+      />
       {!isProProfileFromPartner && <Tabs />}
       <div>{children}</div>
 

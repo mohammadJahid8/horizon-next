@@ -3,18 +3,14 @@ import React, { ReactNode } from 'react';
 import Onboard from '@/components/global/onboard';
 import OnboardContentLayout from '@/components/global/onboard-layout';
 
-interface OnboardLayoutProps {
-  children: ReactNode;
-}
-
-const OnboardLayout: React.FC<OnboardLayoutProps> = ({ children }) => {
+const OnboardLayout: React.FC<any> = ({ children, source }) => {
   return (
     <main>
       <div className='grid grid-rows-1 lg:grid-cols-[26%_auto] h-screen'>
         <div className='hidden lg:block'>
-          <Onboard source='pro' />
+          <Onboard source={source} />
         </div>
-        <OnboardContentLayout source='pro'>{children}</OnboardContentLayout>
+        <OnboardContentLayout source={source}>{children}</OnboardContentLayout>
       </div>
       <div className='fixed bottom-4 right-8 p-2.5 cursor-pointer hover:underline'>
         <span className='flex items-center'>

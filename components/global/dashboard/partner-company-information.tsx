@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import Title from '../title';
 import EditBtn from './edit-btn';
@@ -7,30 +8,24 @@ import { useAppContext } from '@/lib/context';
 import moment from 'moment';
 import NoData from '../no-data';
 
-const PersonalInformation = ({ proUser }: { proUser?: any }) => {
+const PartnerCompanyInformation = () => {
   const { user } = useAppContext();
 
-  const userData = proUser ? proUser : user;
+  const bio = user?.companyInfo?.bio;
+  const dateEstablished = user?.companyInfo?.dateEstablished;
+  const address = user?.companyInfo?.address;
+  const { street, city, state, zipCode, country } = address || {};
 
-  const firstName = userData?.personalInfo?.firstName;
-  const lastName = userData?.personalInfo?.lastName;
-  const dateOfBirth = userData?.personalInfo?.dateOfBirth;
-  const gender = userData?.personalInfo?.gender;
-  const address = userData?.personalInfo?.address;
-  const bio = userData?.personalInfo?.bio;
-
-  console.log({ bio });
-
-  const noData = !userData?.personalInfo;
+  const noData = !bio && !dateEstablished && !address;
 
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
         <Title
-          text='Personal information'
+          text='Company information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn href='/pro/onboard/personal-info' />
+        <EditBtn href='/partner/onboard/company-info' />
       </div>
       {!noData ? (
         <div className='space-y-6'>
@@ -38,35 +33,18 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
             <SectionTitle text='Bio' />
             <SectionDescription text={bio} />
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 border-b pb-6'>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Name' />
-              <SectionDescription text={`${firstName} ${lastName}`} />
-            </div>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Date of Birth' />
-              <SectionDescription
-                text={moment(dateOfBirth).format('MMMM Do YYYY')}
-              />
-            </div>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Gender' />
-              <SectionDescription text={gender} />
-            </div>
-          </div>
+
           <div className='border-b pb-6 flex flex-col gap-5'>
             <SectionTitle
-              text='Contact Details'
+              text='Company Details'
               className='uppercase text-[#9E9E9E]'
             />
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
-                <SectionTitle text='Email address' />
-                <SectionDescription text={userData?.email} />
-              </div>
-              <div className='flex flex-col gap-1.5 md:gap-2.5'>
-                <SectionTitle text='Phone Number' />
-                <SectionDescription text={userData?.phone} />
+                <SectionTitle text='Date Established' />
+                <SectionDescription
+                  text={moment(dateEstablished).format('MMMM Do YYYY')}
+                />
               </div>
             </div>
           </div>
@@ -75,23 +53,23 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
             <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='Street Address' />
-                <SectionDescription text={address?.street} />
+                <SectionDescription text={street} />
               </div>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='City' />
-                <SectionDescription text={address?.city} />
+                <SectionDescription text={city} />
               </div>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='State/Province' />
-                <SectionDescription text={address?.state} />
+                <SectionDescription text={state} />
               </div>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='Postal/Zip Code' />
-                <SectionDescription text={address?.zipCode} />
+                <SectionDescription text={zipCode} />
               </div>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='Country' />
-                <SectionDescription text={address?.country} />
+                <SectionDescription text={country} />
               </div>
             </div>
           </div>
@@ -103,7 +81,7 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
   );
 };
 
-export default PersonalInformation;
+export default PartnerCompanyInformation;
 
 const SectionTitle = ({
   text,

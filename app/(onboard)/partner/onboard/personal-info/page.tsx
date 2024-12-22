@@ -1,12 +1,12 @@
 import OnboardPersonalInfo from '@/components/global/onboard-personal-info';
 import React from 'react';
 
-const ProOnboardPersonalInfoPage = () => {
+const PartnerOnboardPersonalInfoPage = () => {
   return (
     <div>
-      <OnboardPersonalInfo source='pro' />
+      <OnboardPersonalInfo source='partner' />
     </div>
   );
 };
 
-export default ProOnboardPersonalInfoPage;
+export default PartnerOnboardPersonalInfoPage;

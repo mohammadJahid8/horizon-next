@@ -5,15 +5,16 @@ import { IdCard, User, FileText, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const Steps = () => {
+const Steps = ({ source }: { source: 'partner' | 'pro' }) => {
   const pathname = usePathname();
   const {
     isPersonalInfoCompleted,
     isProfessionalInfoCompleted,
     isDocumentUploadCompleted,
+    isCompanyInfoCompleted,
   } = useAppContext();
 
-  const steps = [
+  const proSteps = [
     {
       id: 1,
       name: 'Personal Information',
@@ -27,6 +28,7 @@ const Steps = () => {
       icon: <IdCard className='h-[18px] w-[18px]' />,
       link: '/pro/onboard/professional-info',
       completed: isProfessionalInfoCompleted,
+      disabled: !isPersonalInfoCompleted,
     },
     {
       id: 3,
@@ -34,8 +36,28 @@ const Steps = () => {
       icon: <FileText className='h-[18px] w-[18px]' />,
       link: '/pro/onboard/document-upload',
       completed: isDocumentUploadCompleted,
+      disabled: !isProfessionalInfoCompleted || !isPersonalInfoCompleted,
     },
   ];
+  const partnerSteps = [
+    {
+      id: 1,
+      name: 'Personal Information',
+      icon: <User className='h-[18px] w-[18px]' />,
+      link: '/partner/onboard/personal-info',
+      completed: isPersonalInfoCompleted,
+    },
+    {
+      id: 2,
+      name: 'Company Information',
+      icon: <IdCard className='h-[18px] w-[18px]' />,
+      link: '/partner/onboard/company-info',
+      completed: isCompanyInfoCompleted,
+      disabled: !isPersonalInfoCompleted,
+    },
+  ];
+
+  const steps = source === 'pro' ? proSteps : partnerSteps;
 
   return (
     <ul className='space-y-6'>
@@ -47,8 +69,15 @@ const Steps = () => {
               href={step.link}
               className={cn(
                 'flex items-center',
-                isActive ? 'text-[#1C1C1C]' : 'text-[#8d8d8d]'
+                isActive ? 'text-[#1C1C1C]' : 'text-[#8d8d8d]',
+                step.disabled && 'cursor-not-allowed'
               )}
+              onClick={(e) => {
+                if (step.disabled) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
             >
               <div
                 className={cn(

@@ -1,21 +1,53 @@
+import { useAppContext } from '@/lib/context';
 import { Camera } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
-const ProfileImage = () => {
-  const params = useParams();
-  const pathname = usePathname();
+const ProfileImage = ({
+  isProProfileFromPartner,
+  userProfileImage,
+}: {
+  isProProfileFromPartner?: boolean;
+  userProfileImage?: string;
+}) => {
+  const { user, refetchUser } = useAppContext();
 
-  const isProProfileFromPartner =
-    pathname.includes('partner/pros/') && params.id ? true : false;
-  const [profileImage, setProfileImage] = useState('/user.png');
+  const [profileImage, setProfileImage] = useState(
+    userProfileImage || '/dummy-profile-pic.jpg'
+  );
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+  useEffect(() => {
+    setProfileImage(userProfileImage || '/dummy-profile-pic.jpg');
+  }, [userProfileImage]);
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    try {
+      const file = event.target.files?.[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setProfileImage(imageUrl);
+      }
+      const formData = new FormData();
+
+      formData.append('image', file!);
+
+      const response = await fetch('/api/user/personal-information', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const responseData = await response.json();
+      if (responseData.status === 200) {
+        refetchUser();
+        toast.success('Profile image updated successfully!');
+      } else {
+        toast.error(responseData.message || 'Something went wrong!');
+      }
+    } catch (error: any) {
+      console.log('inside catch', error);
+      toast.error(error.message || 'Something went wrong!');
     }
   };
 

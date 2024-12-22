@@ -53,6 +53,7 @@ const Button = React.forwardRef<
     <Comp
       href={href as string}
       className={cn(buttonVariants({ variant, size, className }))}
+      prefetch={href ? true : false}
       // @ts-ignore
       ref={ref}
       {...props}
