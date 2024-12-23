@@ -11,7 +11,6 @@ const Steps = ({ source }: { source: 'partner' | 'pro' }) => {
     isPersonalInfoCompleted,
     isProfessionalInfoCompleted,
     isDocumentUploadCompleted,
-    isCompanyInfoCompleted,
   } = useAppContext();
 
   const proSteps = [
@@ -46,14 +45,7 @@ const Steps = ({ source }: { source: 'partner' | 'pro' }) => {
       icon: <User className='h-[18px] w-[18px]' />,
       link: '/partner/onboard/personal-info',
       completed: isPersonalInfoCompleted,
-    },
-    {
-      id: 2,
-      name: 'Company Information',
-      icon: <IdCard className='h-[18px] w-[18px]' />,
-      link: '/partner/onboard/company-info',
-      completed: isCompanyInfoCompleted,
-      disabled: !isPersonalInfoCompleted,
+      disabled: false,
     },
   ];
 

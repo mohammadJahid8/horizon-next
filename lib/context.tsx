@@ -83,8 +83,6 @@ const ContextProvider = ({ children }: any) => {
     Object.keys(user?.professionalInfo || {}).length > 0;
   const isDocumentUploadCompleted =
     Object.keys(user?.documents || {}).length > 0;
-  const isCompanyInfoCompleted =
-    Object.keys(user?.companyInfo || {}).length > 0;
 
   useEffect(() => {
     const totalSteps = user?.role === 'pro' ? 3 : 2;
@@ -96,7 +94,6 @@ const ContextProvider = ({ children }: any) => {
 
     const completedStepsPartner = [
       Object.keys(user?.personalInfo || {}).length > 0,
-      Object.keys(user?.companyInfo || {}).length > 0,
     ].filter(Boolean).length;
 
     const completionPercentage =
@@ -104,13 +101,7 @@ const ContextProvider = ({ children }: any) => {
         ? (completedStepsPro / totalSteps) * 100
         : (completedStepsPartner / totalSteps) * 100;
     setCompletionPercentage(Math.floor(completionPercentage));
-  }, [
-    user?.personalInfo,
-    user?.professionalInfo,
-    user?.documents,
-    user?.companyInfo,
-    user?.role,
-  ]);
+  }, [user?.personalInfo, user?.professionalInfo, user?.documents, user?.role]);
 
   const handleLogin = async (data: any, source: string) => {
     const response = await fetch('/api/auth/login', {
@@ -319,7 +310,6 @@ const ContextProvider = ({ children }: any) => {
         isPersonalInfoCompleted,
         isProfessionalInfoCompleted,
         isDocumentUploadCompleted,
-        isCompanyInfoCompleted,
         refetchUser,
         openNeedMore,
         openPartner,
