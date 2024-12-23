@@ -32,6 +32,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
     address,
     companyName,
     industry,
+    dateEstablished,
   } = user?.personalInfo || {};
 
   const proDefaultValues = {
@@ -56,6 +57,15 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
     lastName: lastName || '',
     companyName: companyName || '',
     industry: industry || '',
+    bio: bio || '',
+    dateEstablished: source === 'partner' ? dateEstablished?.split('T')[0] : '',
+    address: {
+      street: address?.street || '',
+      city: address?.city || '',
+      state: address?.state || '',
+      zipCode: address?.zipCode || '',
+      country: address?.country || '',
+    },
   };
 
   const {
@@ -81,7 +91,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
       const path =
         source === 'pro'
           ? '/pro/onboard/professional-info'
-          : '/partner/onboard/company-info';
+          : '/partner/profile';
       if (!isDirty) {
         router.push(path);
         return;
@@ -137,20 +147,6 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
         <div className='text-center flex flex-col gap-3'>
           <Upload register={register} image={image} imageFile={imageFile} />
         </div>
-
-        {source === 'pro' && (
-          <div className='flex flex-col gap-3'>
-            <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
-              About/Bio
-            </h2>
-            <Textarea
-              {...register('bio', { required: 'Bio is required' })}
-              placeholder='Write about yourself; include key areas responsibility, skills, experiences and specific qualification etc.'
-              className='resize-none bg-[#f9f9f9] h-[280px] text-[#5E6864] rounded-[12px]'
-            />
-            {errors.bio && renderError(errors.bio.message as string)}
-          </div>
-        )}
 
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
           <div className='flex flex-col gap-3'>
@@ -281,85 +277,114 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
           )}
         </div>
 
-        {source === 'pro' && (
-          <div className='flex flex-col gap-5'>
-            <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
-              Address
-            </h2>
+        {source === 'partner' && (
+          <div className='flex flex-col gap-3'>
+            <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+              Date of Establishment
+            </label>
+            <Input
+              {...register('dateEstablished', {
+                required: 'Date of establishment is required',
+              })}
+              className='rounded-[12px] h-14 bg-[#f9f9f9]'
+              type='date'
+              placeholder='DD/MM/YYYY'
+              name='dateEstablished'
+            />
+            {errors.dateEstablished &&
+              renderError(errors.dateEstablished.message as string)}
+          </div>
+        )}
+        <div className='flex flex-col gap-3'>
+          <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
+            About/Bio
+          </h2>
+          <Textarea
+            {...register('bio', { required: 'Bio is required' })}
+            placeholder='Write about yourself; include key areas responsibility, skills, experiences and specific qualification etc.'
+            className='resize-none bg-[#f9f9f9] h-[280px] text-[#5E6864] rounded-[12px]'
+          />
+          {errors.bio && renderError(errors.bio.message as string)}
+        </div>
+
+        <div className='flex flex-col gap-5'>
+          <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
+            Address
+          </h2>
+          <div className='flex flex-col gap-3'>
+            <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+              Street address
+            </label>
+            <Input
+              className='rounded-[12px] h-14 bg-[#f9f9f9]'
+              placeholder='Input Text'
+              {...register('address.street', {
+                required: 'Street address is required',
+              })}
+            />
+            {errors.address?.street &&
+              renderError(errors.address.street.message as string)}
+          </div>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                Street address
+                City
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
                 placeholder='Input Text'
-                {...register('address.street', {
-                  required: 'Street address is required',
+                {...register('address.city', {
+                  required: 'City is required',
                 })}
               />
-              {errors.address?.street &&
-                renderError(errors.address.street.message as string)}
+              {errors.address?.city &&
+                renderError(errors.address.city.message as string)}
             </div>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
-              <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  City
-                </label>
-                <Input
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  placeholder='Input Text'
-                  {...register('address.city', {
-                    required: 'City is required',
-                  })}
-                />
-                {errors.address?.city &&
-                  renderError(errors.address.city.message as string)}
-              </div>
-              <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  State/Province
-                </label>
-                <Input
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  placeholder='Input Text'
-                  {...register('address.state', {
-                    required: 'State is required',
-                  })}
-                />
-                {errors.address?.state &&
-                  renderError(errors.address.state.message as string)}
-              </div>
-              <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Postal/Zip code
-                </label>
-                <Input
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  placeholder='Input Text'
-                  {...register('address.zipCode', {
-                    required: 'Zip code is required',
-                  })}
-                />
-                {errors.address?.zipCode &&
-                  renderError(errors.address.zipCode.message as string)}
-              </div>
-              <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Country
-                </label>
-                <Input
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  placeholder='Input Text'
-                  {...register('address.country', {
-                    required: 'Country is required',
-                  })}
-                />
-                {errors.address?.country &&
-                  renderError(errors.address.country.message as string)}
-              </div>
+            <div className='flex flex-col gap-3'>
+              <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+                State/Province
+              </label>
+              <Input
+                className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                placeholder='Input Text'
+                {...register('address.state', {
+                  required: 'State is required',
+                })}
+              />
+              {errors.address?.state &&
+                renderError(errors.address.state.message as string)}
+            </div>
+            <div className='flex flex-col gap-3'>
+              <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+                Postal/Zip code
+              </label>
+              <Input
+                className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                placeholder='Input Text'
+                {...register('address.zipCode', {
+                  required: 'Zip code is required',
+                })}
+              />
+              {errors.address?.zipCode &&
+                renderError(errors.address.zipCode.message as string)}
+            </div>
+            <div className='flex flex-col gap-3'>
+              <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+                Country
+              </label>
+              <Input
+                className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                placeholder='Input Text'
+                {...register('address.country', {
+                  required: 'Country is required',
+                })}
+              />
+              {errors.address?.country &&
+                renderError(errors.address.country.message as string)}
             </div>
           </div>
-        )}
+        </div>
+
         <OnboardButton text='Next' type='submit' />
       </div>
     </form>
