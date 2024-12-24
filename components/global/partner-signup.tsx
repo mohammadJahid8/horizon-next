@@ -7,14 +7,6 @@ import AuthForm from '@/components/auth/auth-form';
 import { useAppContext } from '@/lib/context';
 const signupFields = [
   {
-    name: 'name',
-    label: 'Full Name',
-    type: 'text',
-    placeholder: 'Enter your full name...',
-    validation: z.string().min(1, { message: 'Full name has to be filled.' }),
-  },
-
-  {
     name: 'email',
     label: 'Company Email',
     type: 'email',

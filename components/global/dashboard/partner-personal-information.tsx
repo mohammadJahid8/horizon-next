@@ -13,8 +13,7 @@ const PartnerPersonalInformation = () => {
   const firstName = user?.personalInfo?.firstName;
   const lastName = user?.personalInfo?.lastName;
   const dateOfBirth = user?.personalInfo?.dateOfBirth;
-  const gender = user?.personalInfo?.gender;
-
+  const address = user?.personalInfo?.address;
   const noData = !user?.personalInfo;
 
   return (
@@ -62,6 +61,32 @@ const PartnerPersonalInformation = () => {
               <SectionTitle text='Phone Number' />
               <SectionDescription text={user?.phone} />
             </div> */}
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-5'>
+            <SectionTitle text='Address' className='uppercase text-[#9E9E9E]' />
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Street Address' />
+                <SectionDescription text={address?.street} />
+              </div>
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='City' />
+                <SectionDescription text={address?.city} />
+              </div>
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='State/Province' />
+                <SectionDescription text={address?.state} />
+              </div>
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Postal/Zip Code' />
+                <SectionDescription text={address?.zipCode} />
+              </div>
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Country' />
+                <SectionDescription text={address?.country} />
+              </div>
             </div>
           </div>
         </div>
