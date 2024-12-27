@@ -5,9 +5,10 @@ import CommonNavbar from '@/components/global/common-navbar';
 import Provider from '@/lib/provider';
 import { Toaster } from 'sonner';
 import Refresh from '@/components/global/refresh';
-import { getUser } from './actions';
+import { getEnvironment, getUser } from './actions';
 import CommonFooter from '@/components/global/common-footer';
 import { getFooterData } from './actions';
+import { transformEnvironment } from '@/utils/transformEnvironment';
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -34,12 +35,15 @@ export default async function RootLayout({
 }>) {
   const user = await getUser();
   const footerData = await getFooterData();
+  const environment = await getEnvironment();
+  const environmentType = transformEnvironment(environment?.environmentType);
+
   return (
     <html lang='en'>
       <body className={`${poppins.className}`}>
         <Provider>
           <Refresh />
-          <CommonNavbar user={user} />
+          <CommonNavbar user={user} environmentType={environmentType} />
           <main>{children}</main>
           <CommonFooter footerData={footerData} />
           <Toaster />

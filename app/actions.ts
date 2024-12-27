@@ -45,6 +45,10 @@ export async function logout() {
   cookies().delete('tokenRefreshIn');
 }
 
+export async function getEnvironment() {
+  const response = await client.fetch(`*[_type == "environment"][0]`);
+  return response;
+}
 export async function getHomeData() {
   const response = await client.fetch(`*[_type == "home"][0]`);
   return response;

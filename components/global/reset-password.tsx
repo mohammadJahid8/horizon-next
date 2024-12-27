@@ -37,7 +37,6 @@ export default function ResetPassword({
   const { handleResetPassword } = useAppContext();
   const params = useSearchParams();
   const email = params.get('email');
-  console.log({ email });
   const handleSubmit = async (data: any) => {
     await handleResetPassword(data, email, source);
   };

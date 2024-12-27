@@ -84,8 +84,6 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log({ isDirty });
-
   const onSubmit = async (data: any) => {
     try {
       const path =
@@ -136,8 +134,6 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
   };
 
   const imageFile = watch('image')?.[0];
-  console.log({ imageFile });
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {isLoading && <LoadingOverlay />}

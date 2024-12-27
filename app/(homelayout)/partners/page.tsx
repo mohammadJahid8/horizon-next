@@ -8,9 +8,13 @@ import { BriefcaseIcon, FileText, IdCardIcon, UserIcon } from 'lucide-react';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import Image from 'next/image';
-import { getPartnerData } from '@/app/actions';
+import { getEnvironment, getPartnerData } from '@/app/actions';
+import StayTuned from '@/components/global/landing/stay-tuned';
+import { transformEnvironment } from '@/utils/transformEnvironment';
 export const dynamic = 'force-dynamic';
 export default async function PartnerLandingPage() {
+  const environment = await getEnvironment();
+  const environmentType = transformEnvironment(environment?.environmentType);
   const partnerData = await getPartnerData();
   const {
     section1 = {},
@@ -66,7 +70,7 @@ export default async function PartnerLandingPage() {
     });
   return (
     <div className='mt-16 relative overflow-hidden'>
-      <PartnerBanner {...section1} />
+      <PartnerBanner {...section1} environmentType={environmentType} />
 
       <Image
         src='/vector-banner.svg'
@@ -84,12 +88,13 @@ export default async function PartnerLandingPage() {
         height={512}
         className='absolute -left-36 top-[150rem] w-[689px] h-[512px] z-10 md:block hidden'
       />
-      <ExpandJob {...section3} />
+      <ExpandJob {...section3} environmentType={environmentType} />
       <Features {...section4} />
       <GetStarted images={images} stepsBgColor={stepsBgColor} steps={steps} />
-      <Grow source='partner' {...section6} />
+      <Grow source='partner' {...section6} environmentType={environmentType} />
       <Testimonial source='partner' {...section7} />
       <Faqs {...section8} />
+      <StayTuned />
     </div>
   );
 }

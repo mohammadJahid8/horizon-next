@@ -1,6 +1,7 @@
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
+import { Toaster as Toaster2 } from '@/components/ui/toaster';
 import ContextProvider from './context';
 import { useState } from 'react';
 
@@ -25,6 +26,7 @@ export default function Provider({ children }: any) {
         {children}
 
         <Toaster />
+        <Toaster2 />
       </ContextProvider>
     </QueryClientProvider>
   );

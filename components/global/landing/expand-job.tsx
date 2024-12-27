@@ -4,6 +4,7 @@ import Container from '../container';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import CareerButton from './career-button';
 
 const ExpandJob = ({
   description,
@@ -13,6 +14,7 @@ const ExpandJob = ({
   titleBold,
   subtitle,
   subDescription,
+  environmentType,
 }: any) => {
   return (
     <div className='bg-[#6ADD8D] relative my-16 min-h-[500px]'>
@@ -61,12 +63,21 @@ const ExpandJob = ({
               </div>
             ))}
           </div>
-          <Button
-            href='/partner/signup'
-            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto mt-10'
-          >
-            {buttonText}
-          </Button>
+          {environmentType !== 'waitlist' ? (
+            <Button
+              href='/partner/signup'
+              className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto mt-10'
+            >
+              {buttonText}
+            </Button>
+          ) : (
+            <div className='mt-10'>
+              <CareerButton
+                environmentType={environmentType}
+                buttonText={buttonText}
+              />
+            </div>
+          )}
         </div>
       </Container>
     </div>

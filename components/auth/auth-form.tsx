@@ -41,7 +41,6 @@ export default function AuthForm({
   const { isLoading, setIsLoading, isOtpResend } = useAppContext();
   const location = usePathname();
   const locationSource = location.split('/')[1];
-  console.log({ source });
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(

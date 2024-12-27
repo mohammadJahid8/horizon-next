@@ -3,6 +3,7 @@ import React from 'react';
 import Container from '../container';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import CareerButton from './career-button';
 
 const CareerPro = ({
   buttonText,
@@ -12,6 +13,7 @@ const CareerPro = ({
   subtitle,
   subDescription,
   proCategories,
+  environmentType,
 }: any) => {
   return (
     <div className='bg-[#BBF8DC] relative md:mt-56 my-16 min-h-[500px]'>
@@ -52,12 +54,21 @@ const CareerPro = ({
               </div>
             ))}
           </div>
-          <Button
-            href='/pro/signup'
-            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto mt-10'
-          >
-            {buttonText}
-          </Button>
+          {environmentType !== 'waitlist' ? (
+            <Button
+              href='/pro/signup'
+              className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto mt-10'
+            >
+              {buttonText}
+            </Button>
+          ) : (
+            <div className='mt-10'>
+              <CareerButton
+                buttonText={buttonText}
+                environmentType={environmentType}
+              />
+            </div>
+          )}
         </div>
       </Container>
     </div>

@@ -104,14 +104,11 @@ const OnboardProfessionalInfo = () => {
     name: 'certifications',
   });
 
-  console.log({ isDirty });
-
   const onSubmit = async (data: any) => {
     try {
       if (!isDirty) {
         return router.push('/pro/onboard/document-upload');
       }
-      console.log({ data });
 
       setIsLoading(true);
       const certificationData = data.certifications.map(

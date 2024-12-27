@@ -8,11 +8,15 @@ import Partners from '@/components/global/landing/partners';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
-import { getHomeData } from './actions';
+import { getEnvironment, getHomeData } from './actions';
+import StayTuned from '@/components/global/landing/stay-tuned';
+import { transformEnvironment } from '@/utils/transformEnvironment';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
+  const environment = await getEnvironment();
+  const environmentType = transformEnvironment(environment?.environmentType);
   const homeData = await getHomeData();
   const {
     section1 = {},
@@ -25,7 +29,6 @@ export default async function Home() {
     section8 = {},
     section9 = {},
   } = homeData || {};
-  console.log('🚀 ~ Home ~ homeData:', section1);
   const whyUsImages = ['/secure.svg', '/peace.svg', '/status.svg'];
   const features =
     section2?.features &&
@@ -70,17 +73,22 @@ export default async function Home() {
 
   return (
     <div className='mt-16'>
-      <Banner {...section1} />
+      <Banner {...section1} environmentType={environmentType} />
 
-      <WhyHorizzon {...section2} features={features} />
+      <WhyHorizzon
+        {...section2}
+        features={features}
+        environmentType={environmentType}
+      />
 
       <GetStarted images={images} stepsBgColor={stepsBgColor} steps={steps} />
-      <Career {...section4} />
-      <Partners {...section5} />
+      <Career {...section4} environmentType={environmentType} />
+      <Partners {...section5} environmentType={environmentType} />
       <Comparison {...section6} />
-      <Grow source='home' {...section7} />
+      <Grow source='home' {...section7} environmentType={environmentType} />
       <Testimonial source='home' {...section8} />
       <Faqs {...section9} />
+      <StayTuned />
     </div>
   );
 }

@@ -1,14 +1,9 @@
 import React from 'react';
 import ProfileName from './profile-name';
-import { CircleHelp, Copy, Star } from 'lucide-react';
-import { useAppContext } from '@/lib/context';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { CircleHelp, Star } from 'lucide-react';
 
 const PartnerInfo = ({ user }: any) => {
-  const { completionPercentage } = useAppContext();
   const personalInfo = user?.personalInfo;
-  console.log({ personalInfo });
 
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
   const companyName = personalInfo?.companyName;

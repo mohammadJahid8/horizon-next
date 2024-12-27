@@ -2,8 +2,9 @@ import React from 'react';
 import Container from '../container';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import ProButton from './pro-button';
 
-const PartnerBanner = () => {
+const PartnerBanner = ({ environmentType }: { environmentType: string }) => {
   return (
     <div className='partner-banner-bg'>
       <Container className='h-full w-full pt-32 pb-12 text-center relative z-10'>
@@ -18,12 +19,16 @@ const PartnerBanner = () => {
             Create your profile and start exploring CNA profiles. Send your
             offers with potential CNA’s to accelerate your Job recruiting.
           </p>
-          <Button
-            href='/partner/signup'
-            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'
-          >
-            Get Started
-          </Button>
+          {environmentType !== 'waitlist' ? (
+            <Button
+              href='/partner/signup'
+              className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto'
+            >
+              Get Started
+            </Button>
+          ) : (
+            <ProButton />
+          )}
 
           <div className='max-w-[982px] mx-auto w-full'>
             <Image

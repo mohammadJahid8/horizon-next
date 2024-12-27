@@ -1,18 +1,22 @@
-import { getProData } from '@/app/actions';
+import { getEnvironment, getProData } from '@/app/actions';
 import CareerPro from '@/components/global/landing/career-pro';
 import Faqs from '@/components/global/landing/faqs';
 import Features from '@/components/global/landing/features';
 import GetStarted from '@/components/global/landing/get-started';
 import Grow from '@/components/global/landing/grow';
 import ProBanner from '@/components/global/landing/pro-banner';
+import StayTuned from '@/components/global/landing/stay-tuned';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
+import { transformEnvironment } from '@/utils/transformEnvironment';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
 import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProLandingPage() {
+  const environment = await getEnvironment();
+  const environmentType = transformEnvironment(environment?.environmentType);
   const proData = await getProData();
   const {
     section1 = {},
@@ -69,7 +73,7 @@ export default async function ProLandingPage() {
     });
   return (
     <div className='mt-16 relative overflow-hidden'>
-      <ProBanner {...section1} />
+      <ProBanner {...section1} environmentType={environmentType} />
       <Image
         src='/vector-banner.svg'
         alt='partner bg'
@@ -85,12 +89,13 @@ export default async function ProLandingPage() {
         height={384}
         className='absolute -left-36 top-[155rem] w-[453px] h-[384px] z-10 md:block hidden'
       />
-      <CareerPro {...section3} />
+      <CareerPro {...section3} environmentType={environmentType} />
       <Features {...section4} />
       <GetStarted images={images} stepsBgColor={stepsBgColor} steps={steps} />
-      <Grow source='pro' {...section6} />
+      <Grow source='pro' {...section6} environmentType={environmentType} />
       <Testimonial source='pro' {...section7} />
       <Faqs {...section8} />
+      <StayTuned />
     </div>
   );
 }

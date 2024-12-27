@@ -12,7 +12,6 @@ const Documents: React.FC = () => {
   const documents = user?.documents;
 
   const noData = !documents;
-  console.log({ noData });
 
   const availableDocuments = [
     documents?.certificate && {

@@ -2,6 +2,8 @@ import React from 'react';
 import Container from '../container';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { scrollToSection } from '@/lib/utils';
+import PartnerButton from './partner-button';
 
 const Partners = ({
   buttonText,
@@ -9,6 +11,7 @@ const Partners = ({
   titleBold,
   description,
   badgeText,
+  environmentType,
 }: any) => {
   return (
     <div className='bg-[#BBF8DC] relative md:my-28 my-16 min-h-[500px]'>
@@ -25,12 +28,10 @@ const Partners = ({
           <p className='md:text-lg text-sm text-[#6C6C6C] md:text-left text-center'>
             {description}
           </p>
-          <Button
-            href='/partner/signup'
-            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
-          >
-            {buttonText}
-          </Button>
+          <PartnerButton
+            environmentType={environmentType}
+            buttonText={buttonText}
+          />
         </div>
         <Image
           src='/partners.svg'

@@ -8,10 +8,15 @@ import { useState, useEffect } from 'react';
 import Logo from './logo';
 import Container from './container';
 import { SelectAuthPath } from './landing/select-auth-path';
-import { useAppContext } from '@/lib/context';
+import { scrollToSection } from '@/lib/utils';
 
-export default function Navbar({ user }: { user: any }) {
-  const { logOut } = useAppContext();
+export default function Navbar({
+  user,
+  environmentType,
+}: {
+  user: any;
+  environmentType: string;
+}) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -100,47 +105,61 @@ export default function Navbar({ user }: { user: any }) {
                       </Link>
                     ))}
                   </div>
-                  {!user?.email && (
-                    <div className='flex flex-col gap-12 w-full'>
-                      {pathname !== '/' ? (
-                        <>
-                          <Button
-                            href={loginPath}
-                            className='text-white w-full'
-                            onClick={() => setIsOpen(false)}
-                          >
-                            Login
-                          </Button>
-                          <Link
-                            href={registerPath}
-                            className='text-[#6C6C6C] hover:text-primary text-base font-medium'
-                            onClick={() => setIsOpen(false)}
-                          >
-                            Register
-                          </Link>
-                        </>
-                      ) : (
-                        <>
-                          <SelectAuthPath type='Login'>
-                            <Button
-                              className='text-white w-full'
-                              // onClick={() => setIsOpen(false)}
-                            >
-                              Login
-                            </Button>
-                          </SelectAuthPath>
-                          <SelectAuthPath type='Register'>
-                            <Button
-                              variant='link'
-                              className='text-[#6C6C6C] hover:text-primary text-base font-medium'
-                              // onClick={() => setIsOpen(false)}
-                            >
-                              Register
-                            </Button>
-                          </SelectAuthPath>
-                        </>
+                  {environmentType === 'waitlist' ? (
+                    <Button
+                      onClick={() => {
+                        setIsOpen(false);
+                        scrollToSection('joinwaitlist');
+                      }}
+                      className='text-white h-10 px-5 rounded-lg font-medium'
+                    >
+                      Join the waitlist
+                    </Button>
+                  ) : (
+                    <>
+                      {!user?.email && (
+                        <div className='flex flex-col gap-12 w-full'>
+                          {pathname !== '/' ? (
+                            <>
+                              <Button
+                                href={loginPath}
+                                className='text-white w-full'
+                                onClick={() => setIsOpen(false)}
+                              >
+                                Login
+                              </Button>
+                              <Link
+                                href={registerPath}
+                                className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                                onClick={() => setIsOpen(false)}
+                              >
+                                Register
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <SelectAuthPath type='Login'>
+                                <Button
+                                  className='text-white w-full'
+                                  // onClick={() => setIsOpen(false)}
+                                >
+                                  Login
+                                </Button>
+                              </SelectAuthPath>
+                              <SelectAuthPath type='Register'>
+                                <Button
+                                  variant='link'
+                                  className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                                  // onClick={() => setIsOpen(false)}
+                                >
+                                  Register
+                                </Button>
+                              </SelectAuthPath>
+                            </>
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
 
                   {user?.email && (
@@ -182,42 +201,55 @@ export default function Navbar({ user }: { user: any }) {
             </div>
           </div>
 
-          {!user?.email && (
+          {environmentType === 'waitlist' ? (
             <div className='hidden md:flex items-center space-x-6'>
-              {pathname !== '/' ? (
-                <>
-                  <Link
-                    href={registerPath}
-                    className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
-                  >
-                    Register
-                  </Link>
-
-                  <Button
-                    href={loginPath}
-                    className='text-white h-10 px-5 rounded-lg font-medium'
-                  >
-                    Login
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <SelectAuthPath type='Register'>
-                    <Button
-                      variant='special'
-                      className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
-                    >
-                      Register
-                    </Button>
-                  </SelectAuthPath>
-                  <SelectAuthPath type='Login'>
-                    <Button className='text-white h-10 px-5 rounded-lg font-medium'>
-                      Login
-                    </Button>
-                  </SelectAuthPath>
-                </>
-              )}
+              <Button
+                onClick={() => scrollToSection('joinwaitlist')}
+                className='text-white h-10 px-5 rounded-lg font-medium'
+              >
+                Join the waitlist
+              </Button>
             </div>
+          ) : (
+            <>
+              {!user?.email && (
+                <div className='hidden md:flex items-center space-x-6'>
+                  {pathname !== '/' ? (
+                    <>
+                      <Link
+                        href={registerPath}
+                        className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+                      >
+                        Register
+                      </Link>
+
+                      <Button
+                        href={loginPath}
+                        className='text-white h-10 px-5 rounded-lg font-medium'
+                      >
+                        Login
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <SelectAuthPath type='Register'>
+                        <Button
+                          variant='special'
+                          className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
+                        >
+                          Register
+                        </Button>
+                      </SelectAuthPath>
+                      <SelectAuthPath type='Login'>
+                        <Button className='text-white h-10 px-5 rounded-lg font-medium'>
+                          Login
+                        </Button>
+                      </SelectAuthPath>
+                    </>
+                  )}
+                </div>
+              )}
+            </>
           )}
           {user?.email && (
             <div className='hidden md:flex items-center space-x-6'>

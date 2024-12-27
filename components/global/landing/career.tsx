@@ -2,6 +2,7 @@ import React from 'react';
 import Container from '../container';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import CareerButton from './career-button';
 
 const Career = ({
   buttonText,
@@ -9,6 +10,7 @@ const Career = ({
   titleBold,
   description,
   badgeText,
+  environmentType,
 }: any) => {
   return (
     <Container className='py-20 flex gap-12 lg:flex-row flex-col-reverse items-center'>
@@ -26,12 +28,10 @@ const Career = ({
         <p className='md:text-lg text-sm text-[#6C6C6C] md:text-left text-center'>
           {description}
         </p>
-        <Button
-          href='/pro/signup'
-          className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
-        >
-          {buttonText}
-        </Button>
+        <CareerButton
+          environmentType={environmentType}
+          buttonText={buttonText}
+        />
       </div>
     </Container>
   );

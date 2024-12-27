@@ -3,6 +3,7 @@
 import React from 'react';
 import Container from '../container';
 import { Button } from '@/components/ui/button';
+import { scrollToSection } from '@/lib/utils';
 
 const Grow = ({
   source,
@@ -11,6 +12,7 @@ const Grow = ({
   googlePlayLink,
   appStoreLink,
   buttonText,
+  environmentType,
 }: {
   source: string;
   title: string;
@@ -18,6 +20,7 @@ const Grow = ({
   googlePlayLink: string;
   appStoreLink: string;
   buttonText: string;
+  environmentType: string;
 }) => {
   const bg =
     source === 'partner'
@@ -40,31 +43,42 @@ const Grow = ({
             </h1>
             <p className='md:text-lg text-sm text-[#FAFAFA]'>{description}</p>
           </div>
-          <Button
-            href={buttonHref}
-            className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
-          >
-            {buttonText}
-          </Button>
-          <div>
-            <p className='text-[#FAFAFA] text-base'>Download Now</p>
-            <div className='flex md:space-x-6 pt-2 md:flex-row flex-col items-center'>
-              <a href={appStoreLink} target='_blank'>
-                <img
-                  src='/appstore-white.svg'
-                  alt='Download on the App Store'
-                  className='w-[174px] h-[72px] md:w-[223px] md:h-full'
-                />
-              </a>
-              <a href={googlePlayLink} target='_blank'>
-                <img
-                  src='/playstore-white.svg'
-                  alt='Get it on Google Play'
-                  className='w-[174px] h-[72px] md:w-[223px] md:h-full'
-                />
-              </a>
+          {environmentType === 'waitlist' ? (
+            <Button
+              onClick={() => scrollToSection('joinwaitlist')}
+              className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
+            >
+              Join the waitlist
+            </Button>
+          ) : (
+            <Button
+              href={buttonHref}
+              className='px-9 h-14 rounded-[12px] w-fit text-base md:text-lg font-semibold mx-auto md:mx-0'
+            >
+              {buttonText}
+            </Button>
+          )}
+          {environmentType !== 'waitlist' && (
+            <div>
+              <p className='text-[#FAFAFA] text-base'>Download Now</p>
+              <div className='flex md:space-x-6 pt-2 md:flex-row flex-col items-center'>
+                <a href={appStoreLink} target='_blank'>
+                  <img
+                    src='/appstore-white.svg'
+                    alt='Download on the App Store'
+                    className='w-[174px] h-[72px] md:w-[223px] md:h-full'
+                  />
+                </a>
+                <a href={googlePlayLink} target='_blank'>
+                  <img
+                    src='/playstore-white.svg'
+                    alt='Get it on Google Play'
+                    className='w-[174px] h-[72px] md:w-[223px] md:h-full'
+                  />
+                </a>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Container>
     </div>
