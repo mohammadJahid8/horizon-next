@@ -15,7 +15,7 @@ const ProInfo = ({ user, isProProfileFromPartner }: any) => {
       <div className='flex justify-between lg:flex-row flex-col sm:gap-6 gap-3'>
         <div className='flex-1 flex flex-col sm:gap-3 gap-1'>
           <p className='text-base sm:text-xl text-[#3A4742] font-medium'>
-            {name}
+            {/* {name} */}
           </p>
 
           {!isProProfileFromPartner && (

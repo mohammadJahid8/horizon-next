@@ -147,26 +147,28 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              First name
+              First name <span className='text-red-500'>*</span>
             </label>
             <Input
               {...register('firstName', { required: 'First name is required' })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
               placeholder='Please enter your full name'
               name='firstName'
+              isError={!!errors.firstName}
             />
             {errors.firstName &&
               renderError(errors.firstName.message as string)}
           </div>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Last name
+              Last name <span className='text-red-500'>*</span>
             </label>
             <Input
               {...register('lastName', { required: 'Last name is required' })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
               placeholder='Please enter your full name'
               name='lastName'
+              isError={!!errors.lastName}
             />
             {errors.lastName && renderError(errors.lastName.message as string)}
           </div>
@@ -174,7 +176,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
             <>
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Date of Birth
+                  Date of Birth <span className='text-red-500'>*</span>
                 </label>
                 <Input
                   {...register('dateOfBirth', {
@@ -184,13 +186,16 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                   type='date'
                   placeholder='DD/MM/YYYY'
                   name='dateOfBirth'
+                  isError={!!errors.dateOfBirth}
                 />
                 {errors.dateOfBirth &&
                   renderError(errors.dateOfBirth.message as string)}
               </div>
 
               <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium'>Gender</label>
+                <label className='text-base font-medium'>
+                  Gender <span className='text-red-500'>*</span>
+                </label>
                 <Controller
                   name='gender'
                   control={control}
@@ -221,7 +226,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
             <>
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Company Name
+                  Company Name <span className='text-red-500'>*</span>
                 </label>
                 <Input
                   {...register('companyName', {
@@ -230,13 +235,16 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                   className='rounded-[12px] h-14 bg-[#f9f9f9]'
                   placeholder='Please enter your company name'
                   name='companyName'
+                  isError={!!errors.companyName}
                 />
                 {errors.companyName &&
                   renderError(errors.companyName.message as string)}
               </div>
 
               <div className='flex flex-col gap-3'>
-                <label className='text-base font-medium'>Industry</label>
+                <label className='text-base font-medium'>
+                  Company Industry <span className='text-red-500'>*</span>
+                </label>
                 <Controller
                   name='industry'
                   control={control}
@@ -246,7 +254,10 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className='rounded-[12px] h-14 bg-[#f9f9f9]'>
+                      <SelectTrigger
+                        className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                        isError={!!errors.industry}
+                      >
                         <SelectValue placeholder='Industry' />
                       </SelectTrigger>
                       <SelectContent>
@@ -267,7 +278,8 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                     </Select>
                   )}
                 />
-                {errors.gender && renderError(errors.gender.message as string)}
+                {errors.industry &&
+                  renderError(errors.industry.message as string)}
               </div>
             </>
           )}
@@ -276,7 +288,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
         {source === 'partner' && (
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Date of Establishment
+              Date of Establishment <span className='text-red-500'>*</span>
             </label>
             <Input
               {...register('dateEstablished', {
@@ -286,6 +298,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               type='date'
               placeholder='DD/MM/YYYY'
               name='dateEstablished'
+              isError={!!errors.dateEstablished}
             />
             {errors.dateEstablished &&
               renderError(errors.dateEstablished.message as string)}
@@ -296,11 +309,11 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
             About/Bio
           </h2>
           <Textarea
-            {...register('bio', { required: 'Bio is required' })}
+            {...register('bio')}
             placeholder='Write about yourself; include key areas responsibility, skills, experiences and specific qualification etc.'
             className='resize-none bg-[#f9f9f9] h-[280px] text-[#5E6864] rounded-[12px]'
           />
-          {errors.bio && renderError(errors.bio.message as string)}
+          {/* {errors.bio && renderError(errors.bio.message as string)} */}
         </div>
 
         <div className='flex flex-col gap-5'>
@@ -309,7 +322,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
           </h2>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Street address
+              Street address <span className='text-red-500'>*</span>
             </label>
             <Input
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -317,6 +330,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               {...register('address.street', {
                 required: 'Street address is required',
               })}
+              isError={!!errors.address?.street}
             />
             {errors.address?.street &&
               renderError(errors.address.street.message as string)}
@@ -324,7 +338,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                City
+                City <span className='text-red-500'>*</span>
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -332,13 +346,14 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                 {...register('address.city', {
                   required: 'City is required',
                 })}
+                isError={!!errors.address?.city}
               />
               {errors.address?.city &&
                 renderError(errors.address.city.message as string)}
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                State/Province
+                State/Province <span className='text-red-500'>*</span>
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -346,13 +361,14 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                 {...register('address.state', {
                   required: 'State is required',
                 })}
+                isError={!!errors.address?.state}
               />
               {errors.address?.state &&
                 renderError(errors.address.state.message as string)}
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                Postal/Zip code
+                Postal/Zip code <span className='text-red-500'>*</span>
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -360,13 +376,14 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                 {...register('address.zipCode', {
                   required: 'Zip code is required',
                 })}
+                isError={!!errors.address?.zipCode}
               />
               {errors.address?.zipCode &&
                 renderError(errors.address.zipCode.message as string)}
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                Country
+                Country <span className='text-red-500'>*</span>
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -374,6 +391,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                 {...register('address.country', {
                   required: 'Country is required',
                 })}
+                isError={!!errors.address?.country}
               />
               {errors.address?.country &&
                 renderError(errors.address.country.message as string)}

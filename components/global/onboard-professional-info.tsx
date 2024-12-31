@@ -213,14 +213,12 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.degree`, {
-                      required: 'Degree is required',
-                    })}
+                    {...register(`education.${index}.degree`)}
                   />
-                  {errors?.education &&
+                  {/* {errors?.education &&
                     errors?.education[index] &&
                     errors?.education[index]?.degree &&
-                    renderError(errors?.education[index]?.degree?.message!)}
+                    renderError(errors?.education[index]?.degree?.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -229,14 +227,12 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.institution`, {
-                      required: 'Institution is required',
-                    })}
+                    {...register(`education.${index}.institution`)}
                   />
-                  {errors.education &&
+                  {/* {errors.education &&
                     errors.education[index] &&
                     errors.education[index].institution &&
-                    renderError(errors.education[index].institution.message!)}
+                    renderError(errors.education[index].institution.message!)} */}
                 </div>
               </div>
               <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
@@ -248,16 +244,14 @@ const OnboardProfessionalInfo = () => {
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
                     type='number'
-                    {...register(`education.${index}.yearOfGraduation`, {
-                      required: 'Year of Graduation is required',
-                    })}
+                    {...register(`education.${index}.yearOfGraduation`)}
                   />
-                  {errors.education &&
-                    errors.education[index] &&
-                    errors.education[index].yearOfGraduation &&
-                    renderError(
-                      errors.education[index].yearOfGraduation.message!
-                    )}
+                  {/* {errors.education &&
+                      errors.education[index] &&
+                      errors.education[index].yearOfGraduation &&
+                      renderError(
+                        errors.education[index].yearOfGraduation.message!
+                      )} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -266,14 +260,12 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.fieldOfStudy`, {
-                      required: 'Field of Study is required',
-                    })}
+                    {...register(`education.${index}.fieldOfStudy`)}
                   />
-                  {errors.education &&
+                  {/* {errors.education &&
                     errors.education[index] &&
                     errors.education[index].fieldOfStudy &&
-                    renderError(errors.education[index].fieldOfStudy.message!)}
+                    renderError(errors.education[index].fieldOfStudy.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -282,14 +274,12 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.grade`, {
-                      required: 'Grade is required',
-                    })}
+                    {...register(`education.${index}.grade`)}
                   />
-                  {errors.education &&
+                  {/* {errors.education &&
                     errors.education[index] &&
                     errors.education[index].grade &&
-                    renderError(errors.education[index].grade.message!)}
+                    renderError(errors.education[index].grade.message!)} */}
                 </div>
               </div>
               {index > 0 && (
@@ -329,30 +319,27 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`experience.${index}.jobTitle`, {
-                      required: 'Job Title is required',
-                    })}
+                    {...register(`experience.${index}.jobTitle`)}
                   />
-                  {errors.experience &&
+                  {/* {errors.experience &&
                     errors.experience[index] &&
                     errors.experience[index].jobTitle &&
-                    renderError(errors.experience[index].jobTitle.message!)}
+                    renderError(errors.experience[index].jobTitle.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Company Name
+                    Company Name <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`experience.${index}.companyName`, {
-                      required: 'Company Name is required',
-                    })}
+                    {...register(`experience.${index}.companyName`)}
+                    isError={!!errors.experience?.[index]?.companyName}
                   />
-                  {errors.experience &&
+                  {/* {errors.experience &&
                     errors.experience[index] &&
                     errors.experience[index].companyName &&
-                    renderError(errors.experience[index].companyName.message!)}
+                    renderError(errors.experience[index].companyName.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -361,14 +348,12 @@ const OnboardProfessionalInfo = () => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`experience.${index}.duration`, {
-                      required: 'Duration is required',
-                    })}
+                    {...register(`experience.${index}.duration`)}
                   />
-                  {errors.experience &&
+                  {/* {errors.experience &&
                     errors.experience[index] &&
                     errors.experience[index].duration &&
-                    renderError(errors.experience[index].duration.message!)}
+                    renderError(errors.experience[index].duration.message!)} */}
                 </div>
               </div>
 
@@ -379,16 +364,14 @@ const OnboardProfessionalInfo = () => {
                 <Input
                   className='rounded-[12px] h-14 bg-[#f9f9f9]'
                   placeholder='Input Text'
-                  {...register(`experience.${index}.responsibilities`, {
-                    required: 'Responsibilities is required',
-                  })}
+                  {...register(`experience.${index}.responsibilities`)}
                 />
-                {errors.experience &&
+                {/* {errors.experience &&
                   errors.experience[index] &&
                   errors.experience[index].responsibilities &&
                   renderError(
                     errors.experience[index].responsibilities.message!
-                  )}
+                  )} */}
               </div>
 
               {index > 0 && (
@@ -422,7 +405,7 @@ const OnboardProfessionalInfo = () => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Title
+                    Title <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -430,6 +413,7 @@ const OnboardProfessionalInfo = () => {
                     {...register(`certifications.${index}.title`, {
                       required: 'Title is required',
                     })}
+                    isError={!!errors.certifications?.[index]?.title}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
@@ -438,7 +422,7 @@ const OnboardProfessionalInfo = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Name of Institute
+                    Name of Institute <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -446,6 +430,7 @@ const OnboardProfessionalInfo = () => {
                     {...register(`certifications.${index}.institution`, {
                       required: 'Name of Institute is required',
                     })}
+                    isError={!!errors.certifications?.[index]?.institution}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
@@ -458,7 +443,7 @@ const OnboardProfessionalInfo = () => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Issue Date
+                    Issue Date <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     type='date'
@@ -467,6 +452,7 @@ const OnboardProfessionalInfo = () => {
                     {...register(`certifications.${index}.issueDate`, {
                       required: 'Issue Date is required',
                     })}
+                    isError={!!errors.certifications?.[index]?.issueDate}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
@@ -494,22 +480,20 @@ const OnboardProfessionalInfo = () => {
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                    placeholder='https://'
-                    {...register(`certifications.${index}.credentialUrl`, {
-                      required: 'Credential URL is required',
-                    })}
+                    placeholder='https://www.credential.com/1234567890'
+                    {...register(`certifications.${index}.credentialUrl`)}
                     type='url'
                   />
-                  {errors.certifications &&
+                  {/* {errors.certifications &&
                     errors.certifications[index] &&
                     errors.certifications[index].credentialUrl &&
                     renderError(
                       errors.certifications[index].credentialUrl.message!
-                    )}
+                    )} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Credential ID
+                    Credential ID <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -517,6 +501,7 @@ const OnboardProfessionalInfo = () => {
                     {...register(`certifications.${index}.credentialId`, {
                       required: 'Credential ID is required',
                     })}
+                    isError={!!errors.certifications?.[index]?.credentialId}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
@@ -606,7 +591,7 @@ const OnboardProfessionalInfo = () => {
         </div>
         <div className='flex flex-col gap-5' id='skills'>
           <h2 className='text-2xl font-medium leading-[33.6px] text-gray-800'>
-            Skills
+            Skills <span className='text-red-500'>*</span>
           </h2>
 
           <SkillsSelector
