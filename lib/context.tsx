@@ -26,7 +26,6 @@ const ContextProvider = ({ children }: any) => {
   const [isOtpResend, setIsOtpResend] = useState(false);
   const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
 
-  const [completionPercentage, setCompletionPercentage] = useState(0);
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
   };
@@ -84,25 +83,6 @@ const ContextProvider = ({ children }: any) => {
   const isDocumentUploadCompleted =
     Object.keys(user?.documents || {}).length > 0;
 
-  useEffect(() => {
-    const totalSteps = user?.role === 'pro' ? 3 : 2;
-    const completedStepsPro = [
-      Object.keys(user?.personalInfo || {}).length > 0,
-      Object.keys(user?.professionalInfo || {}).length > 0,
-      Object.keys(user?.documents || {}).length > 0,
-    ].filter(Boolean).length;
-
-    const completedStepsPartner = [
-      Object.keys(user?.personalInfo || {}).length > 0,
-    ].filter(Boolean).length;
-
-    const completionPercentage =
-      user?.role === 'pro'
-        ? (completedStepsPro / totalSteps) * 100
-        : (completedStepsPartner / totalSteps) * 100;
-    setCompletionPercentage(Math.floor(completionPercentage));
-  }, [user?.personalInfo, user?.professionalInfo, user?.documents, user?.role]);
-
   const handleLogin = async (data: any, source: string) => {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
@@ -118,7 +98,6 @@ const ContextProvider = ({ children }: any) => {
     refetchUser();
     if (responseData.status === 200) {
       const completionPercentage = responseData.completionPercentage;
-      setCompletionPercentage(completionPercentage);
       const proPath =
         completionPercentage > 50
           ? '/pro/profile'
@@ -333,7 +312,6 @@ const ContextProvider = ({ children }: any) => {
         isResendOTPLoading,
         setIsResendOTPLoading,
         handleResetPassword,
-        completionPercentage,
       }}
     >
       {children}

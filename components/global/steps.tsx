@@ -2,11 +2,34 @@
 import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
 import { IdCard, User, FileText, Check } from 'lucide-react';
+import moment from 'moment';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const Steps = ({ source }: { source: 'partner' | 'pro' }) => {
+const Steps = ({
+  source,
+  isEdit,
+}: {
+  source: 'partner' | 'pro';
+  isEdit?: boolean;
+}) => {
   const pathname = usePathname();
+  const { user } = useAppContext();
+
+  const isEditPersonalInfo = pathname.includes('edit/personal-information');
+  const isEditProfessionalInfo = pathname.includes(
+    'edit/professional-information'
+  );
+  const isEditDocumentUpload = pathname.includes('edit/documents');
+
+  const updatedAt = isEditPersonalInfo
+    ? user?.personalInfo?.updatedAt
+    : isEditProfessionalInfo
+      ? user?.professionalInfo?.updatedAt
+      : isEditDocumentUpload
+        ? user?.documents?.updatedAt
+        : null;
+
   const {
     isPersonalInfoCompleted,
     isProfessionalInfoCompleted,
@@ -51,61 +74,99 @@ const Steps = ({ source }: { source: 'partner' | 'pro' }) => {
 
   const steps = source === 'pro' ? proSteps : partnerSteps;
 
+  const label = isEditPersonalInfo
+    ? 'Personal Information'
+    : isEditProfessionalInfo
+      ? 'Professional Information'
+      : isEditDocumentUpload
+        ? 'Document Upload'
+        : 'Personal Information';
+
   return (
     <ul className='space-y-6'>
-      {steps.map((step) => {
-        const isActive = pathname === step.link || step.completed;
-        return (
-          <li key={step.id} className='flex items-center'>
-            <Link
-              href={step.link}
-              className={cn(
-                'flex items-center',
-                isActive ? 'text-[#1C1C1C]' : 'text-[#8d8d8d]',
-                step.disabled && 'cursor-not-allowed'
-              )}
-              onClick={(e) => {
-                if (step.disabled) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              }}
-            >
+      {isEdit ? (
+        <>
+          <li className='flex items-center'>
+            <div className={cn('flex items-center')}>
               <div
                 className={cn(
-                  'h-10 w-10 mr-3 rounded-full border flex items-center justify-center',
-                  isActive
-                    ? 'border-[#33B55B] text-[#33B55B]'
-                    : 'border-[#8e8e8e] text-[#8e8e8e]',
-                  step.completed && 'bg-[#33B55B] text-white'
+                  'h-10 w-10 mr-3 rounded-full border flex items-center justify-center border-[#33B55B] text-[#33B55B]'
                 )}
               >
-                {step.completed ? (
-                  <Check className='h-[18px] w-[18px]' />
-                ) : (
-                  step.icon
-                )}
+                <User className='h-[18px] w-[18px]' />
               </div>
               <div className='flex flex-col gap-[10px]'>
-                <span
-                  className={cn(
-                    'text-sm font-medium',
-                    isActive ? 'text-[#6C6C6C]' : 'text-[#b6b6b6]'
-                  )}
-                >
-                  Step - {step.id}
-                </span>
-                <p className='text-lg font-medium'>{step.name}</p>
-                {isActive && (
-                  <span className='text-sm font-medium text-[#33B55B]'>
-                    In progress
-                  </span>
+                <p className='text-lg font-medium'>{label}</p>
+
+                {updatedAt && (
+                  <p className='text-sm font-medium text-[#6C6C6C]'>
+                    Last updated{' '}
+                    <span className='text-[#1C1C1C]'>
+                      {moment(updatedAt).format('h:mm a, d MMM yyyy')}
+                    </span>
+                  </p>
                 )}
               </div>
-            </Link>
+            </div>
           </li>
-        );
-      })}
+        </>
+      ) : (
+        <>
+          {steps.map((step) => {
+            const isActive = pathname === step.link || step.completed;
+            return (
+              <li key={step.id} className='flex items-center'>
+                <Link
+                  href={step.link}
+                  className={cn(
+                    'flex items-center',
+                    isActive ? 'text-[#1C1C1C]' : 'text-[#8d8d8d]',
+                    step.disabled && 'cursor-not-allowed'
+                  )}
+                  onClick={(e) => {
+                    if (step.disabled) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                >
+                  <div
+                    className={cn(
+                      'h-10 w-10 mr-3 rounded-full border flex items-center justify-center',
+                      isActive
+                        ? 'border-[#33B55B] text-[#33B55B]'
+                        : 'border-[#8e8e8e] text-[#8e8e8e]',
+                      step.completed && 'bg-[#33B55B] text-white'
+                    )}
+                  >
+                    {step.completed ? (
+                      <Check className='h-[18px] w-[18px]' />
+                    ) : (
+                      step.icon
+                    )}
+                  </div>
+                  <div className='flex flex-col gap-[10px]'>
+                    <span
+                      className={cn(
+                        'text-sm font-medium',
+                        isActive ? 'text-[#6C6C6C]' : 'text-[#b6b6b6]'
+                      )}
+                    >
+                      Step - {step.id}
+                    </span>
+                    <p className='text-lg font-medium'>{step.name}</p>
+                    {isActive && (
+                      <span className='text-sm font-medium text-[#33B55B]'>
+                        In progress
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </>
+      )}
     </ul>
   );
 };

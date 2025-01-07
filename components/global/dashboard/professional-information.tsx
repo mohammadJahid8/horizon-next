@@ -24,7 +24,7 @@ export default function ProfessionalInformation() {
           text='Professional information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn href='/pro/onboard/professional-info' />
+        <EditBtn href={`/pro/edit/professional-information?edit=true`} />
       </div>
       {!noData ? (
         <div className='space-y-6'>

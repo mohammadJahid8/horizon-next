@@ -37,7 +37,7 @@ const Documents: React.FC = () => {
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
         <Title text='Documents' className='mb-0 !text-lg md:!text-2xl' />
-        <EditBtn href='/pro/onboard/document-upload' />
+        <EditBtn href={`/pro/edit/documents?edit=true`} />
       </div>
       {!noData ? (
         <div className='flex flex-wrap md:flex-nowrap gap-6'>

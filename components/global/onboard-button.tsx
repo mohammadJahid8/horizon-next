@@ -17,6 +17,7 @@ const OnboardButton: React.FC<OnboardButtonProps> = ({
   className,
   href,
   type = 'button',
+  onClick,
 }) => {
   return (
     <Button
@@ -27,6 +28,7 @@ const OnboardButton: React.FC<OnboardButtonProps> = ({
       disabled={disabled}
       href={href}
       type={type}
+      onClick={onClick}
     >
       {text}
     </Button>

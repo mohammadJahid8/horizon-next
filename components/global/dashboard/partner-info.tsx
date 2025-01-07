@@ -15,6 +15,28 @@ const PartnerInfo = ({ user }: any) => {
           <p className='text-base sm:text-xl text-[#3A4742] font-medium'>
             {companyName}
           </p>
+          {user?.completionPercentage && (
+            <div className='flex items-start sm:items-center sm:flex-row flex-col'>
+              <span className='text-sm text-[#6d6d6d] mr-6'>
+                Profile Completion
+              </span>
+              <div className='flex items-center'>
+                <div className='w-[185px] h-2 bg-[#FAFAFA] rounded-full overflow-hidden'>
+                  <div
+                    className='h-full'
+                    style={{
+                      width: `${user?.completionPercentage}%`,
+                      background:
+                        'linear-gradient(90deg, #33B55B 0%, #008000 100%)',
+                    }}
+                  ></div>
+                </div>
+                <span className='text-sm text-[#3A4742] font-medium ml-2'>
+                  {user?.completionPercentage}%
+                </span>
+              </div>
+            </div>
+          )}
         </div>
         <Tracks />
       </div>

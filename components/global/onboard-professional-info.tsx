@@ -13,9 +13,12 @@ import { useAppContext } from '@/lib/context';
 import { toast } from 'sonner';
 import LoadingOverlay from '@/components/global/loading-overlay';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const OnboardProfessionalInfo = () => {
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get('edit') === 'true';
+
   const { user, refetchUser } = useAppContext();
   const { education, experience, certifications, skills } =
     user?.professionalInfo || {};
@@ -106,7 +109,7 @@ const OnboardProfessionalInfo = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      if (!isDirty) {
+      if (!isDirty && !isEdit) {
         return router.push('/pro/onboard/document-upload');
       }
 
@@ -165,9 +168,17 @@ const OnboardProfessionalInfo = () => {
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        toast.success('Professional information submitted successfully!');
+        toast.success(
+          isEdit
+            ? 'Professional information updated successfully!'
+            : 'Professional information submitted successfully!'
+        );
         reset();
-        router.push('/pro/onboard/document-upload');
+        if (isEdit) {
+          router.back();
+        } else {
+          router.push('/pro/onboard/document-upload');
+        }
       } else {
         toast.error(responseData.message || 'Something went wrong!');
       }
@@ -613,15 +624,15 @@ const OnboardProfessionalInfo = () => {
 
         <div className='flex gap-5'>
           <OnboardButton
-            text='Previous'
+            text={isEdit ? 'Cancel' : 'Previous'}
             className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
-            href='/pro/onboard/personal-info'
+            onClick={() => router.back()}
           />
           <OnboardButton
-            text='Next'
+            text={isEdit ? 'Save & Exit' : 'Next'}
             className='w-full'
             type='submit'
-            // href='/pro/onboard/document-upload'
+            disabled={!isDirty && isEdit}
           />
         </div>
       </div>

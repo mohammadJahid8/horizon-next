@@ -13,7 +13,7 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 import OnboardButton from '@/components/global/onboard-button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Controller, useForm } from 'react-hook-form';
 import LoadingOverlay from '@/components/global/loading-overlay';
@@ -21,6 +21,9 @@ import { useState } from 'react';
 import { useAppContext } from '@/lib/context';
 
 const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get('edit') === 'true';
+
   const { refetchUser, user } = useAppContext();
   const {
     image,
@@ -90,9 +93,8 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
         source === 'pro'
           ? '/pro/onboard/professional-info'
           : '/partner/profile';
-      if (!isDirty) {
-        router.push(path);
-        return;
+      if (!isDirty && !isEdit) {
+        return router.push(path);
       }
       setIsLoading(true);
 
@@ -115,9 +117,17 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        toast.success('Personal information submitted successfully!');
+        toast.success(
+          isEdit
+            ? 'Personal information updated successfully!'
+            : 'Personal information submitted successfully!'
+        );
         reset();
-        router.push(path);
+        if (isEdit) {
+          router.back();
+        } else {
+          router.push(path);
+        }
       } else {
         toast.error(responseData.message || 'Something went wrong!');
       }
@@ -262,16 +272,16 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectItem value='Dentistry'>Dentistry</SelectItem>
-                          <SelectItem value='Pharmacy'>Pharmacy</SelectItem>
-                          <SelectItem value='Pharmaceutical'>
-                            Pharmaceutical
+                          <SelectItem value='Assisted Living'>
+                            Assisted Living
                           </SelectItem>
-                          <SelectItem value='Medical Devices'>
-                            Medical Devices
+                          <SelectItem value='Home Care'>Home Care</SelectItem>
+                          <SelectItem value='Home Health'>
+                            Home Health
                           </SelectItem>
-                          <SelectItem value='Medical Supplies'>
-                            Medical Supplies
+                          <SelectItem value='Hospitals'>Hospitals</SelectItem>
+                          <SelectItem value='Nursing Home'>
+                            Nursing Home
                           </SelectItem>
                         </SelectGroup>
                       </SelectContent>
@@ -399,7 +409,21 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
           </div>
         </div>
 
-        <OnboardButton text='Next' type='submit' />
+        <div className='flex gap-5'>
+          {isEdit && (
+            <OnboardButton
+              text='Cancel'
+              onClick={() => router.back()}
+              className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+            />
+          )}
+          <OnboardButton
+            text={isEdit ? 'Save & Exit' : 'Next'}
+            type='submit'
+            className='w-full'
+            disabled={!isDirty && isEdit}
+          />
+        </div>
       </div>
     </form>
   );

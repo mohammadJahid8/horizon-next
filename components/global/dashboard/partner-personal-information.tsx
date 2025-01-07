@@ -23,7 +23,7 @@ const PartnerPersonalInformation = () => {
           text='Personal information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn href='/partner/onboard/personal-info' />
+        <EditBtn href={`/partner/edit/personal-information?edit=true`} />
       </div>
       {!noData ? (
         <div className='space-y-6'>

@@ -19,8 +19,6 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
   const address = userData?.personalInfo?.address;
   const bio = userData?.personalInfo?.bio;
 
-  console.log({ bio });
-
   const noData = !userData?.personalInfo;
 
   return (
@@ -30,7 +28,7 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
           text='Personal information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn href='/pro/onboard/personal-info' />
+        <EditBtn href={`/pro/edit/personal-information?edit=true`} />
       </div>
       {!noData ? (
         <div className='space-y-6'>

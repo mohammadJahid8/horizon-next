@@ -9,7 +9,7 @@ import Loading from '@/components/global/loading';
 import { useAppContext } from '@/lib/context';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingOverlay from '@/components/global/loading-overlay';
 
 interface FileState {
@@ -25,6 +25,9 @@ interface UploadProgressState {
 }
 
 const OnboardDocumentUpload = () => {
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get('edit') === 'true';
+
   const { user, refetchUser } = useAppContext();
   const router = useRouter();
 
@@ -98,10 +101,12 @@ const OnboardDocumentUpload = () => {
     setUploadProgress({ ...uploadProgress, [type]: 0 });
   };
 
+  const isNoFile = !files.certificate && !files.resume && !files.governmentId;
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!files.certificate && !files.resume && !files.governmentId) {
+    if (isNoFile && !isEdit) {
       return router.push('/pro/onboard/completed');
     }
 
@@ -123,7 +128,11 @@ const OnboardDocumentUpload = () => {
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        router.push('/pro/onboard/completed');
+        if (isEdit) {
+          router.back();
+        } else {
+          router.push('/pro/onboard/completed');
+        }
       } else {
         throw new Error(responseData.message || 'Something went wrong!');
       }
@@ -225,11 +234,16 @@ const OnboardDocumentUpload = () => {
         </div>
 
         <div className='flex gap-5'>
-          <OnboardButton text='Submit' className='w-full' type='submit' />
           <OnboardButton
-            text='Skip for now'
+            text={!isEdit ? 'Skip for now' : 'Cancel'}
             className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
             href='/pro/profile'
+          />
+          <OnboardButton
+            text={isEdit ? 'Save & Exit' : 'Submit'}
+            className='w-full'
+            type='submit'
+            disabled={isNoFile}
           />
         </div>
       </form>
