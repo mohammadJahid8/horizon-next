@@ -1,10 +1,10 @@
 import OnboardPersonalInfo from '@/components/global/onboard-personal-info';
 import React from 'react';
 
-const EditPersonalInformation = ({ params }: { params: { id: string } }) => {
+const EditPersonalInformation = () => {
   return (
     <div>
-      <OnboardPersonalInfo source='pro' id={params.id} />
+      <OnboardPersonalInfo source='pro' />
     </div>
   );
 };

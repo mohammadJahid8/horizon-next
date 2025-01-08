@@ -339,7 +339,7 @@ const OnboardProfessionalInfo = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Company Name <span className='text-red-500'>*</span>
+                    Company Name
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
@@ -458,7 +458,7 @@ const OnboardProfessionalInfo = () => {
                   </label>
                   <Input
                     type='date'
-                    className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                    className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                     placeholder='DD/MM/YYYY'
                     {...register(`certifications.${index}.issueDate`, {
                       required: 'Issue Date is required',
@@ -474,14 +474,23 @@ const OnboardProfessionalInfo = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Expire Date
+                    Expire Date <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     type='date'
-                    className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                    className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                     placeholder='DD/MM/YYYY'
-                    {...register(`certifications.${index}.expireDate`)}
+                    {...register(`certifications.${index}.expireDate`, {
+                      required: 'Expire Date is required',
+                    })}
+                    isError={!!errors.certifications?.[index]?.expireDate}
                   />
+                  {errors.certifications &&
+                    errors.certifications[index] &&
+                    errors.certifications[index].expireDate &&
+                    renderError(
+                      errors.certifications[index].expireDate.message!
+                    )}
                 </div>
               </div>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>

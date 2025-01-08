@@ -18,8 +18,8 @@ const Onboard = ({ source }: { source: 'partner' | 'pro' }) => {
           </h2>
           {!isEdit && (
             <p className='text-base'>
-              Welcome To Healthcare! Let&apos;s Get Started With Setting Up Your
-              Profile To Make Managing Your Employment Documents Easier.
+              Welcome to healthcare! Let&apos;s get started with setting up your
+              profile to make managing your employment documents easier.
             </p>
           )}
         </div>

@@ -162,7 +162,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
             <Input
               {...register('firstName', { required: 'First name is required' })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
-              placeholder='Please enter your full name'
+              placeholder='Please enter your first name'
               name='firstName'
               isError={!!errors.firstName}
             />
@@ -176,7 +176,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
             <Input
               {...register('lastName', { required: 'Last name is required' })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
-              placeholder='Please enter your full name'
+              placeholder='Please enter your last name'
               name='lastName'
               isError={!!errors.lastName}
             />
@@ -192,11 +192,12 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
                   {...register('dateOfBirth', {
                     required: 'Date of birth is required',
                   })}
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
+                  className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                   type='date'
                   placeholder='DD/MM/YYYY'
                   name='dateOfBirth'
                   isError={!!errors.dateOfBirth}
+                  max={new Date().toISOString().split('T')[0]}
                 />
                 {errors.dateOfBirth &&
                   renderError(errors.dateOfBirth.message as string)}
@@ -304,7 +305,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               {...register('dateEstablished', {
                 required: 'Date of establishment is required',
               })}
-              className='rounded-[12px] h-14 bg-[#f9f9f9]'
+              className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
               type='date'
               placeholder='DD/MM/YYYY'
               name='dateEstablished'
