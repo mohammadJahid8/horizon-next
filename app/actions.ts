@@ -18,7 +18,14 @@ export async function getUserById(id: string) {
     const response = await api.get(`/user/profile/${id}`);
     return response.data.data;
   } catch (error) {
-    // console.error('Error fetching user profile by id:', error);
+    return null;
+  }
+}
+export async function getOffers() {
+  try {
+    const response = await api.get(`/user/offer`);
+    return response.data.data;
+  } catch (error) {
     return null;
   }
 }

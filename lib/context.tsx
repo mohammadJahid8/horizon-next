@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { getTokens, getUser, logout } from '@/app/actions';
+import { getOffers, getTokens, getUser, logout } from '@/app/actions';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
@@ -25,12 +25,14 @@ const ContextProvider = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpResend, setIsOtpResend] = useState(false);
   const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
+  const [isNeedMore, setIsNeedMore] = useState<string | null>(null);
 
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
   };
 
-  const openPartner = () => {
+  const openPartner = (type: string) => {
+    setIsNeedMore(type);
     setIsPartnerOpen(true);
   };
 
@@ -45,6 +47,14 @@ const ContextProvider = ({ children }: any) => {
   const { refetch: refetchUser, data: user } = useQuery({
     queryKey: [`user`],
     queryFn: async () => await getUser(),
+  });
+  const {
+    refetch: refetchOffers,
+    data: offers,
+    isLoading: isOffersLoading,
+  } = useQuery({
+    queryKey: [`offers`, user?._id],
+    queryFn: async () => await getOffers(),
   });
 
   // console.log({ user });
@@ -312,6 +322,11 @@ const ContextProvider = ({ children }: any) => {
         isResendOTPLoading,
         setIsResendOTPLoading,
         handleResetPassword,
+        isNeedMore,
+        setIsNeedMore,
+        offers,
+        refetchOffers,
+        isOffersLoading,
       }}
     >
       {children}

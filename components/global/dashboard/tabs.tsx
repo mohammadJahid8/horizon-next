@@ -9,16 +9,16 @@ const tabItemsPro = [
   { label: 'Offers (3)', href: '/pro/offers' },
   { label: 'Jobs (1)', href: '/pro/jobs' },
 ];
-const tabItemsPartner = [
-  { label: 'Profile', href: '/partner/profile' },
-  { label: 'Pros', href: '/partner/pros' },
-  { label: 'Offers (3)', href: '/partner/offers' },
-];
 
 const Tabs: React.FC = () => {
   const pathname = usePathname();
-  const { user } = useAppContext();
+  const { user, offers } = useAppContext();
 
+  const tabItemsPartner = [
+    { label: 'Profile', href: '/partner/profile' },
+    { label: 'Pros', href: '/partner/pros' },
+    { label: `Hires (${offers?.length || 0})`, href: '/partner/hires' },
+  ];
   const tabItems = user?.role === 'pro' ? tabItemsPro : tabItemsPartner;
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>

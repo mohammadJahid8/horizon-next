@@ -9,7 +9,7 @@ const Remove = ({ handleRemove }: { handleRemove: () => void }) => {
       <div className='bg-[#FCE7E5] rounded-full w-8 h-8 flex items-center justify-center '>
         <Trash2Icon className='w-4 h-4 ' />
       </div>
-      Remove
+      <span className='md:block hidden'>Remove</span>
     </button>
   );
 };

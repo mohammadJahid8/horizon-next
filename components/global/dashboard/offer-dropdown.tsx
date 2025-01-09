@@ -8,7 +8,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function OfferDropdown() {
+export function OfferDropdown({
+  offer,
+  handleRemove,
+}: {
+  offer: any;
+  handleRemove: (id: string) => void;
+}) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -20,7 +26,10 @@ export function OfferDropdown() {
             <RotateCw />
             <span>Request more requirements</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className='cursor-pointer'>
+          <DropdownMenuItem
+            className='cursor-pointer'
+            onClick={() => handleRemove(offer._id)}
+          >
             <Trash2 />
             <span>Remove</span>
           </DropdownMenuItem>

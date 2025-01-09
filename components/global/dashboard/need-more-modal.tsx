@@ -1,14 +1,11 @@
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { PartnerRequestModal } from './partner-request-modal';
 import { useAppContext } from '@/lib/context';
@@ -32,17 +29,20 @@ export function NeedMoreModal() {
           <PartnerRequestModal />
 
           <Button
+            type='button'
             onClick={async () => {
               await closeNeedMore();
-              openPartner();
+              openPartner(true);
             }}
             className='w-full md:h-[60px] rounded-[12px]'
           >
             Yes
           </Button>
           <Button
-            onClick={() => {
-              closeNeedMore();
+            type='button'
+            onClick={async () => {
+              await closeNeedMore();
+              openPartner(false);
             }}
             variant='outline'
             className='w-full md:h-[60px] rounded-[12px]'

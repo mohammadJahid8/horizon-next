@@ -47,13 +47,13 @@ const PartnerPros = async () => {
                   View Profile
                   <MoveUpRight className='size-4 ml-2' />
                 </Button>
-                <Button
+                {/* <Button
                   variant='ghost'
                   size='icon'
                   className='h-10 md:h-12 rounded-[8px] p-3 w-fit text-xs md:text-base bg-accent'
                 >
                   <Heart className='size-6 text-secondary fill-secondary' />
-                </Button>
+                </Button> */}
               </div>
             </div>
 

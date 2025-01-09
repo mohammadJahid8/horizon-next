@@ -34,13 +34,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Back />
 
           <div className='flex items-center gap-4'>
-            <Button
+            {/* <Button
               variant='ghost'
               size='icon'
               className='h-10 md:h-12 rounded-[8px] p-3 w-fit text-xs md:text-base bg-accent'
             >
               <Heart className='size-6 md:size-8 text-[#DFE2E0] fill-[#DFE2E0]' />
-            </Button>
+            </Button> */}
             <Button
               className='h-12 md:h-14 rounded-[12px] text-sm md:text-lg px-12'
               onClick={openNeedMore}
