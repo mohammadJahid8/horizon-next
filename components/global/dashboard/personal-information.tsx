@@ -6,9 +6,13 @@ import { cn } from '@/lib/utils';
 import { useAppContext } from '@/lib/context';
 import moment from 'moment';
 import NoData from '../no-data';
+import { useParams, usePathname } from 'next/navigation';
 
 const PersonalInformation = ({ proUser }: { proUser?: any }) => {
   const { user } = useAppContext();
+  const { id } = useParams();
+  const pathname = usePathname();
+  const isPublicProPage = pathname.includes('pro/') && id ? true : false;
 
   const userData = proUser ? proUser : user;
 
@@ -52,7 +56,12 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
               <SectionDescription text={gender} />
             </div>
           </div>
-          <div className='border-b pb-6 flex flex-col gap-5'>
+          <div
+            className={cn(
+              'border-b pb-6 flex flex-col gap-5',
+              isPublicProPage && !user && 'blur-sm'
+            )}
+          >
             <SectionTitle
               text='Contact Details'
               className='uppercase text-[#9E9E9E]'
@@ -68,7 +77,12 @@ const PersonalInformation = ({ proUser }: { proUser?: any }) => {
               </div>
             </div>
           </div>
-          <div className='flex flex-col gap-5'>
+          <div
+            className={cn(
+              'flex flex-col gap-5',
+              isPublicProPage && !user && 'blur-sm'
+            )}
+          >
             <SectionTitle text='Address' className='uppercase text-[#9E9E9E]' />
             <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
               <div className='flex flex-col gap-1.5 md:gap-2.5'>

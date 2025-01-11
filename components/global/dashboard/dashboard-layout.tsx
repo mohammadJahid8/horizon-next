@@ -15,23 +15,26 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { openNeedMore } = useAppContext();
+  const { openNeedMore, user } = useAppContext();
   const pathname = usePathname();
   const { id } = useParams();
 
   const isProProfileFromPartner =
     pathname.includes('partner/pros/') && id ? true : false;
 
+  const isPublicProPage = pathname.includes('pro/') && id ? true : false;
+
   return (
     <div
       className={cn(
         'flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] pb-8 md:pb-16 px-0 md:px-8 xl:px-0',
-        isProProfileFromPartner && 'pt-[90px] md:pt-[120px] lg:pt-[150px]'
+        (isProProfileFromPartner || isPublicProPage) &&
+          'pt-[90px] md:pt-[120px] lg:pt-[150px]'
       )}
     >
-      {isProProfileFromPartner && (
+      {(isProProfileFromPartner || isPublicProPage) && (
         <div className='flex items-center justify-between px-4 md:px-0'>
-          <Back />
+          {!isPublicProPage ? <Back disabled={isPublicProPage} /> : <div />}
 
           <div className='flex items-center gap-4'>
             {/* <Button
@@ -41,21 +44,25 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             >
               <Heart className='size-6 md:size-8 text-[#DFE2E0] fill-[#DFE2E0]' />
             </Button> */}
-            <Button
-              className='h-12 md:h-14 rounded-[12px] text-sm md:text-lg px-12'
-              onClick={openNeedMore}
-            >
-              Send
-            </Button>
+            {user?.role !== 'pro' && (
+              <Button
+                className='h-12 md:h-14 rounded-[12px] text-sm md:text-lg px-12'
+                onClick={openNeedMore}
+                disabled={isPublicProPage}
+              >
+                Send Offer
+              </Button>
+            )}
           </div>
         </div>
       )}
 
       <ProfileInfo
         isProProfileFromPartner={isProProfileFromPartner}
+        isPublicProPage={isPublicProPage}
         id={id as string}
       />
-      {!isProProfileFromPartner && <Tabs />}
+      {!isProProfileFromPartner && !isPublicProPage && <Tabs />}
       <div>{children}</div>
 
       <PartnerRequestModal />

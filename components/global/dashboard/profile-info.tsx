@@ -11,9 +11,11 @@ import { getUserById } from '@/app/actions';
 const ProfileInfo = ({
   isProProfileFromPartner,
   id,
+  isPublicProPage,
 }: {
   isProProfileFromPartner: boolean;
   id: string;
+  isPublicProPage: boolean;
 }) => {
   const { user } = useAppContext();
 
@@ -34,26 +36,31 @@ const ProfileInfo = ({
     ? userById?.coverImage
     : user?.coverImage;
 
-  const userData = isProProfileFromPartner ? userById : user;
+  const userData = isProProfileFromPartner || isPublicProPage ? userById : user;
 
   return (
     <div className=''>
       <Cover
         isProProfileFromPartner={isProProfileFromPartner}
+        isPublicProPage={isPublicProPage}
         userCoverImage={userCoverImage}
       />
       <div className='bg-white md:rounded-b-[16px] p-4 md:p-8 pt-6 flex gap-3 md:gap-6 sm:flex-row flex-col'>
         <div className='-mt-16 sm:-mt-[90px]'>
           <ProfileImage
             isProProfileFromPartner={isProProfileFromPartner}
+            isPublicProPage={isPublicProPage}
             userProfileImage={userProfileImage}
           />
         </div>
 
-        {(user?.role === 'pro' || isProProfileFromPartner) && (
+        {(user?.role === 'pro' ||
+          isProProfileFromPartner ||
+          isPublicProPage) && (
           <ProInfo
             user={userData}
             isProProfileFromPartner={isProProfileFromPartner}
+            isPublicProPage={isPublicProPage}
           />
         )}
         {user?.role === 'partner' && !isProProfileFromPartner && (

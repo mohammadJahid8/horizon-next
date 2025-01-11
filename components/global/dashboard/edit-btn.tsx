@@ -17,8 +17,9 @@ const EditBtn = ({
 
   const isProProfileFromPartner =
     pathname.includes('partner/pros/') && params.id ? true : false;
+  const isPublicProPage = pathname.includes('pro/') && params.id ? true : false;
 
-  if (isProProfileFromPartner) return null;
+  if (isProProfileFromPartner || isPublicProPage) return null;
 
   return (
     <Button

@@ -3,9 +3,9 @@ import { Copy } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 import ProfileName from './profile-name';
-import { useAppContext } from '@/lib/context';
+import { proLinkGenerator } from '@/utils/proLinkGenerator';
 
-const ProInfo = ({ user, isProProfileFromPartner }: any) => {
+const ProInfo = ({ user, isProProfileFromPartner, isPublicProPage }: any) => {
   const personalInfo = user?.personalInfo;
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
   return (
@@ -17,7 +17,7 @@ const ProInfo = ({ user, isProProfileFromPartner }: any) => {
             {/* {name} */}
           </p>
 
-          {!isProProfileFromPartner && (
+          {!isProProfileFromPartner && !isPublicProPage && (
             <div className='flex items-start sm:items-center sm:flex-row flex-col'>
               <span className='text-sm text-[#6d6d6d] mr-6'>
                 Profile Completion
@@ -40,19 +40,21 @@ const ProInfo = ({ user, isProProfileFromPartner }: any) => {
             </div>
           )}
         </div>
-        {!isProProfileFromPartner && (
-          <div className='flex flex-col gap-3 flex-1 xl:-mt-5'>
+        {!isProProfileFromPartner && !isPublicProPage && (
+          <div className='flex flex-col gap-3 flex-1 xl:-mt-10'>
             <p className='text-sm sm:text-base font-semibold text-[#1C1C1C]'>
               Copy Link for Applying the Job
             </p>
-            <div className='flex items-center justify-between bg-[#FAFAFA] pl-4 pr-2 sm:h-[52px] h-10 rounded-lg '>
-              <span className='text-sm sm:text-lg text-[#1C1C1C] mr-4'>
-                healthcare/rahat9873
+            <div className='flex items-center justify-between bg-[#FAFAFA] pl-4 pr-2 sm:h-[52px] h-10 rounded-lg max-w-[480px] relative'>
+              <span className='text-sm sm:text-lg text-[#1C1C1C] mr-4 truncate max-w-[250px] sm:max-w-[300px]'>
+                {proLinkGenerator(user?.personalInfo?.firstName, user?._id)}
               </span>
               <Button
-                className='bg-primary h-9 text-white sm:px-4 px-2 rounded-[7px] flex items-center text-sm font-medium'
+                className='absolute right-2 bg-primary h-9 text-white sm:px-4 px-2 rounded-[7px] flex items-center text-sm font-medium'
                 onClick={() => {
-                  navigator.clipboard.writeText('healthcare/rahat9873');
+                  navigator.clipboard.writeText(
+                    proLinkGenerator(user?.personalInfo?.firstName, user?._id)
+                  );
                   toast.success('Link copied to clipboard!', {
                     position: 'top-center',
                   });

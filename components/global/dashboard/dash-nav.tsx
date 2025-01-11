@@ -13,14 +13,17 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import Logo from '../logo';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useAppContext } from '@/lib/context';
 
 export default function DashboardNav() {
+  const { id } = useParams();
   const { user } = useAppContext();
   const [isOpen, setIsOpen] = React.useState(false);
   const path = user?.role === 'pro' ? '/pro' : '/partner';
   const pathName = usePathname();
+
+  const isPublicProPage = pathName.includes('pro/') && id ? true : false;
 
   const items = [
     {
@@ -52,54 +55,8 @@ export default function DashboardNav() {
           <div className='hidden md:block'>{/* <UpgradeButton /> */}</div>
         </div>
         <div className='hidden md:flex items-center gap-2 lg:gap-8'>
-          {items.map((item) => (
-            <NavItem
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              pathName={pathName}
-            >
-              {item.label}
-            </NavItem>
-          ))}
-
-          <Button
-            href={`${path}/profile`}
-            variant='ghost'
-            size='icon'
-            className='rounded-full w-10 h-10 lg:w-16 lg:h-16'
-          >
-            <img
-              src='/user.png'
-              alt='User'
-              className='rounded-full w-full h-full object-cover'
-            />
-          </Button>
-        </div>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button variant='outline' size='icon' className='md:hidden w-8 h-8'>
-              <Menu className='h-5 w-5' />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side='left' className='max-w-[300px]'>
-            <SheetTitle />
-            <nav className='flex flex-col space-y-4 mt-10'>
-              <Button
-                href={`${path}/profile`}
-                variant='ghost'
-                size='icon'
-                className='rounded-full w-20 h-20 mx-auto'
-              >
-                <img
-                  src='/user.png'
-                  alt='User'
-                  className='rounded-full w-full h-full object-cover'
-                />
-              </Button>
-
-              {/* <UpgradeButton /> */}
-
+          {!isPublicProPage || user?.role ? (
+            <>
               {items.map((item) => (
                 <NavItem
                   key={item.href}
@@ -110,6 +67,76 @@ export default function DashboardNav() {
                   {item.label}
                 </NavItem>
               ))}
+
+              <Button
+                href={`${path}/profile`}
+                variant='ghost'
+                size='icon'
+                className='rounded-full w-10 h-10 lg:w-16 lg:h-16'
+              >
+                <img
+                  src='/user.png'
+                  alt='User'
+                  className='rounded-full w-full h-full object-cover'
+                />
+              </Button>
+            </>
+          ) : (
+            <NavItem
+              href={`/partner/signup`}
+              pathName={pathName}
+              className='bg-primary text-white !px-10'
+            >
+              Signup Now!
+            </NavItem>
+          )}
+        </div>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant='outline' size='icon' className='md:hidden w-8 h-8'>
+              <Menu className='h-5 w-5' />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side='left' className='max-w-[300px]'>
+            <SheetTitle />
+            <nav className='flex flex-col space-y-4 mt-10'>
+              {!isPublicProPage ? (
+                <>
+                  <Button
+                    href={`${path}/profile`}
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-full w-20 h-20 mx-auto'
+                  >
+                    <img
+                      src='/user.png'
+                      alt='User'
+                      className='rounded-full w-full h-full object-cover'
+                    />
+                  </Button>
+
+                  {/* <UpgradeButton /> */}
+
+                  {items.map((item) => (
+                    <NavItem
+                      key={item.href}
+                      href={item.href}
+                      icon={item.icon}
+                      pathName={pathName}
+                    >
+                      {item.label}
+                    </NavItem>
+                  ))}
+                </>
+              ) : (
+                <NavItem
+                  href={`/partner/signup`}
+                  pathName={pathName}
+                  className='bg-primary text-white !px-10'
+                >
+                  Signup Now!
+                </NavItem>
+              )}
             </nav>
           </SheetContent>
         </Sheet>
@@ -123,18 +150,21 @@ function NavItem({
   icon,
   children,
   pathName,
+  className,
 }: {
   href: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   children: React.ReactNode;
   pathName: string;
+  className?: string;
 }) {
   return (
     <Button
       href={href}
       className={cn(
         'h-[45px] md:h-[50px] lg:h-[55px] 2xl:h-[65px] rounded-[12px] p-5 flex justify-start md:justify-center items-center gap-2 bg-accent text-[#6C6C6C] hover:text-white transition-colors duration-200 px-3 lg:px-4 text-base md:text-sm lg:text-lg font-medium',
-        pathName === href && 'text-primary'
+        pathName === href && 'text-primary',
+        className
       )}
     >
       {icon}
