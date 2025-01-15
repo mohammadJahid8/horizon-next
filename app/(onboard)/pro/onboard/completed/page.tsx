@@ -15,7 +15,7 @@ const Completed = () => {
             Congratulations!
           </h1>
           <p className='text-[32px] leading-9 font-semibold tracking-[0.5px]'>
-            You’ve complete the process
+            You’ve completed the process
           </p>
         </div>
         <OnboardButton text='View Job Prospects' href='/pro/profile' />

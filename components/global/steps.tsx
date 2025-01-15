@@ -157,7 +157,7 @@ const Steps = ({
                     <p className='text-lg font-medium'>{step.name}</p>
                     {isActive && (
                       <span className='text-sm font-medium text-[#33B55B]'>
-                        In progress
+                        {step.completed ? 'Completed' : 'In progress'}
                       </span>
                     )}
                   </div>

@@ -12,9 +12,13 @@ const PartnerPersonalInformation = () => {
 
   const firstName = user?.personalInfo?.firstName;
   const lastName = user?.personalInfo?.lastName;
-  const dateOfBirth = user?.personalInfo?.dateOfBirth;
+  // const dateOfBirth = user?.personalInfo?.dateOfBirth;
+  const dateEstablished = user?.personalInfo?.dateEstablished;
   const address = user?.personalInfo?.address;
+  const bio = user?.personalInfo?.bio;
   const noData = !user?.personalInfo;
+
+  console.log('user?.personalInfo', user?.personalInfo);
 
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
@@ -27,15 +31,19 @@ const PartnerPersonalInformation = () => {
       </div>
       {!noData ? (
         <div className='space-y-6'>
+          <div className='border-b pb-6 flex flex-col gap-1.5 md:gap-2.5'>
+            <SectionTitle text='Bio' />
+            <SectionDescription text={bio} />
+          </div>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 border-b pb-6'>
             <div className='flex flex-col gap-1.5 md:gap-2.5'>
               <SectionTitle text='Name' />
               <SectionDescription text={`${firstName} ${lastName}`} />
             </div>
             <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Date of Birth' />
+              <SectionTitle text='Date of establishment' />
               <SectionDescription
-                text={moment(dateOfBirth).format('MMMM Do YYYY')}
+                text={moment(dateEstablished).format('MMMM Do YYYY')}
               />
             </div>
             <div className='flex flex-col gap-1.5 md:gap-2.5'>

@@ -310,6 +310,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               placeholder='DD/MM/YYYY'
               name='dateEstablished'
               isError={!!errors.dateEstablished}
+              max={new Date().toISOString().split('T')[0]}
             />
             {errors.dateEstablished &&
               renderError(errors.dateEstablished.message as string)}

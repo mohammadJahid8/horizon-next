@@ -197,7 +197,7 @@ const OnboardProfessionalInfo = () => {
   const watchCertificationFileData: any = watch('certifications');
   const watchSkills: any = watch('skills');
 
-  // console.log(watchCertificationFileData[0]?.certificateFile[0].name);
+  // console.log({ errors });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -464,6 +464,7 @@ const OnboardProfessionalInfo = () => {
                       required: 'Issue Date is required',
                     })}
                     isError={!!errors.certifications?.[index]?.issueDate}
+                    max={new Date().toISOString().split('T')[0]}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
@@ -546,7 +547,21 @@ const OnboardProfessionalInfo = () => {
                     type='file'
                     className='hidden'
                     id={`licenseFile-${index}`}
-                    {...register(`certifications.${index}.certificateFile`)}
+                    accept='image/*,application/pdf'
+                    // {...register(`certifications.${index}.certificateFile`)}
+                    {...register(`certifications.${index}.certificateFile`, {
+                      validate: {
+                        fileSize: (value) => {
+                          // Check if a file exists and validate its size
+                          const file = value?.[0];
+                          return (
+                            !file ||
+                            file.size <= 500 * 1024 ||
+                            'File size should be less than 500KB'
+                          );
+                        },
+                      },
+                    })}
                     // onChange={(e) => {
                     //   setValue(
                     //     `certifications.${index}.certificateFile`,
@@ -555,6 +570,12 @@ const OnboardProfessionalInfo = () => {
                     //   );
                     // }}
                   />
+                  {errors.certifications &&
+                    errors.certifications[index] &&
+                    errors.certifications[index].certificateFile &&
+                    renderError(
+                      errors.certifications[index].certificateFile.message!
+                    )}
                   {watchCertificationFileData[index]?.certificateFile &&
                     watchCertificationFileData[index]?.certificateFile?.[0]
                       ?.name && (

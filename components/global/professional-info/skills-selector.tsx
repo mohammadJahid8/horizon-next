@@ -52,6 +52,7 @@ const SkillsSelector = ({ errors, setValue, watchSkills }: any) => {
               placeholder='Type and press Enter to add the value or select from below'
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.currentTarget.value) {
+                  e.preventDefault();
                   handleSkillAdd(e.currentTarget.value);
                   e.currentTarget.value = '';
                 }
