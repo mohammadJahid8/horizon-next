@@ -22,10 +22,6 @@ export function OfferDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem className='cursor-pointer'>
-            <RotateCw />
-            <span>Request more requirements</span>
-          </DropdownMenuItem>
           <DropdownMenuItem
             className='cursor-pointer'
             onClick={() => handleRemove(offer._id)}

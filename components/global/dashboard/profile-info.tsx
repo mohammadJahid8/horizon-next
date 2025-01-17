@@ -28,13 +28,15 @@ const ProfileInfo = ({
     return <div>Loading...</div>;
   }
 
-  const userProfileImage = isProProfileFromPartner
-    ? userById?.personalInfo?.image
-    : user?.personalInfo?.image;
+  const userProfileImage =
+    isProProfileFromPartner || isPublicProPage
+      ? userById?.personalInfo?.image
+      : user?.personalInfo?.image;
 
-  const userCoverImage = isProProfileFromPartner
-    ? userById?.coverImage
-    : user?.coverImage;
+  const userCoverImage =
+    isProProfileFromPartner || isPublicProPage
+      ? userById?.coverImage
+      : user?.coverImage;
 
   const userData = isProProfileFromPartner || isPublicProPage ? userById : user;
 

@@ -89,6 +89,7 @@ export default function AuthForm({
     try {
       await onSubmit(data, source || locationSource);
     } catch (error) {
+      setIsLoading(false);
       console.error('Submission error:', error);
     } finally {
       setIsLoading(false);

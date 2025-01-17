@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+'use client';
+
+import React, { ReactNode, useEffect, useRef } from 'react';
 import ProfileInfo from './profile-info';
 import Tabs from './tabs';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import Back from '../back';
 import { Button } from '@/components/ui/button';
-import { Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NeedMoreModal } from './need-more-modal';
 import { PartnerRequestModal } from './partner-request-modal';
@@ -15,9 +16,44 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { openNeedMore, user } = useAppContext();
+  const { openPartner, user } = useAppContext();
   const pathname = usePathname();
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const shouldStorePro = searchParams.get('s') === 'true';
+  const effectRan = useRef(false);
+  useEffect(() => {
+    if (effectRan.current === false) {
+      if (shouldStorePro && id) {
+        const storePro = async () => {
+          try {
+            const response = await fetch('/api/user/store-pro', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ pro: id }),
+            });
+
+            const responseData: any = await response.json();
+
+            if (responseData.status === 200) {
+              console.log('Pro stored successfully!');
+            } else if (
+              responseData.status === 500 ||
+              responseData.status === 400
+            ) {
+              console.log('Pro store failed!');
+            }
+          } catch (error) {
+            console.error('Error storing Pro:', error);
+          }
+        };
+
+        storePro();
+      }
+
+      effectRan.current = true; // Mark effect as executed
+    }
+  }, [shouldStorePro, id]);
 
   const isProProfileFromPartner =
     pathname.includes('partner/pros/') && id ? true : false;
@@ -37,17 +73,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           {!isPublicProPage ? <Back disabled={isPublicProPage} /> : <div />}
 
           <div className='flex items-center gap-4'>
-            {/* <Button
-              variant='ghost'
-              size='icon'
-              className='h-10 md:h-12 rounded-[8px] p-3 w-fit text-xs md:text-base bg-accent'
-            >
-              <Heart className='size-6 md:size-8 text-[#DFE2E0] fill-[#DFE2E0]' />
-            </Button> */}
             {user?.role !== 'pro' && (
               <Button
                 className='h-12 md:h-14 rounded-[12px] text-sm md:text-lg px-12'
-                onClick={openNeedMore}
+                onClick={openPartner}
                 disabled={isPublicProPage}
               >
                 Send Offer

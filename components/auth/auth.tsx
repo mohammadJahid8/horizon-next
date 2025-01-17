@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Averia_Serif_Libre } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { useAppContext } from '@/lib/context';
 
 const averia = Averia_Serif_Libre({
   subsets: ['latin'],
@@ -22,6 +23,8 @@ export default function Auth({
   resendOTP,
   isResendOTPLoading,
 }: any) {
+  const { querySuffix } = useAppContext();
+
   return (
     <div className='relative min-h-screen flex flex-col lg:flex-row'>
       <div
@@ -77,7 +80,7 @@ export default function Auth({
                     <p className='text-base'>
                       New to Horizzon?{' '}
                       <Link
-                        href={`/${source}/signup`}
+                        href={`/${source}/signup${querySuffix}`}
                         className='text-primary font-semibold underline underline-offset-4'
                       >
                         Create an account
@@ -87,7 +90,7 @@ export default function Auth({
                     <p className='text-base'>
                       {alreadyHaveAccount}{' '}
                       <Link
-                        href={`/${source}/login`}
+                        href={`/${source}/login${querySuffix}`}
                         className='text-primary font-semibold underline underline-offset-4'
                       >
                         Login

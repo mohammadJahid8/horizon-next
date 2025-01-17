@@ -24,7 +24,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
-  const { refetchUser, user } = useAppContext();
+  const { refetchUser, user, querySuffix, id } = useAppContext();
   const {
     image,
     bio,
@@ -92,7 +92,9 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
       const path =
         source === 'pro'
           ? '/pro/onboard/professional-info'
-          : '/partner/profile';
+          : querySuffix
+            ? `/partner/pros/${id}?s=true`
+            : '/partner/profile';
       if (!isDirty && !isEdit) {
         return router.push(path);
       }

@@ -2,24 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
+import { useAppContext } from '@/lib/context';
 
 const Back: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
   const router = useRouter();
-
-  const [previousRoute, setPreviousRoute] = useState('');
-  console.log({ previousRoute });
-
-  useEffect(() => {
-    // Check the document referrer on page load
-    const previousUrl = document.referrer;
-    if (previousUrl) {
-      const { pathname } = new URL(previousUrl);
-      setPreviousRoute(pathname);
-    }
-  }, []);
+  const { shouldStorePro } = useAppContext();
 
   const handleBack = () => {
-    if (previousRoute.includes('pro/') && previousRoute.split('/').length > 2) {
+    if (shouldStorePro) {
       router.push('/partner/pros');
     } else {
       router.back();

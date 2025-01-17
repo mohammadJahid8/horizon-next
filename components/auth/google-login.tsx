@@ -1,17 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { useContext } from 'react';
-
 import { toast } from 'sonner';
 import { useAppContext } from '@/lib/context';
-import { useRouter } from 'next/navigation';
 
 interface GoogleLoginProps {
   source: string;
 }
 
 export default function GoogleLogin({ source }: GoogleLoginProps) {
-  const { logInWithGoogle, isLoading, setIsLoading } = useAppContext();
-  const router = useRouter();
+  const { logInWithGoogle, isLoading, setIsLoading, querySuffix, id } =
+    useAppContext();
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -44,10 +41,23 @@ export default function GoogleLogin({ source }: GoogleLoginProps) {
       console.log('responseData', responseData);
 
       if (responseData.status === 200) {
-        setIsLoading(false);
+        const completionPercentage = responseData.completionPercentage;
+
+        const proPath =
+          completionPercentage > 50
+            ? '/pro/profile'
+            : '/pro/onboard/personal-info';
+
+        const partnerPath =
+          completionPercentage > 50
+            ? querySuffix
+              ? `/partner/pros/${id}?s=true`
+              : '/partner/profile'
+            : `/partner/onboard/personal-info${querySuffix}`;
+
         source === 'pro'
-          ? (window.location.href = '/pro/onboard/personal-info')
-          : (window.location.href = `/partner/pros`);
+          ? (window.location.href = proPath)
+          : (window.location.href = partnerPath);
         return toast.success(responseData.message || `Login successful`, {
           position: 'top-center',
         });

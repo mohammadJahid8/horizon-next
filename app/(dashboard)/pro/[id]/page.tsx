@@ -17,7 +17,7 @@ const ProPage = async ({ params }: { params: { id: string } }) => {
   }
 
   if (user?.role === 'partner') {
-    return redirect(`/partner/pros/${id}`);
+    return redirect(`/partner/pros/${id}?s=true`);
   }
   return (
     <div className='relative flex flex-col gap-8 min-h-screen'>
@@ -34,7 +34,7 @@ const ProPage = async ({ params }: { params: { id: string } }) => {
         <div className='absolute top-40 lg:top-20 5xl:bottom-80 inset-0 flex items-center justify-center'>
           <div className='p-6 bg-opacity-50 max-w-lg w-full text-center'>
             <Button
-              href='/partner/signup'
+              href={`/partner/signup?id=${id}&s=true`}
               className='h-14 px-8 rounded-lg text-base md:text-lg font-semibold'
             >
               Sign up now!

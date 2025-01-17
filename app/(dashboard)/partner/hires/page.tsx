@@ -47,7 +47,6 @@ const actionColors = {
 const PartnerOffers = () => {
   const { openPartner, offers, isOffersLoading, refetchOffers } =
     useAppContext();
-  console.log({ offers });
 
   if (isOffersLoading) {
     return <OffersSkeleton />;
@@ -205,7 +204,7 @@ const PartnerOffers = () => {
                   ))}
                   <div className='flex gap-2 max-w-[500px] w-full'>
                     <Button
-                      onClick={() => openPartner()}
+                      onClick={() => openPartner(offer)}
                       variant='outline'
                       className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
                     >

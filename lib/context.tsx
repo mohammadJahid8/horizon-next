@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
@@ -25,15 +25,21 @@ const ContextProvider = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpResend, setIsOtpResend] = useState(false);
   const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
-  const [isNeedMore, setIsNeedMore] = useState<string | null>(null);
+  const [offerData, setOfferData] = useState<any>(null);
+
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  const shouldStorePro = searchParams.get('s') === 'true';
+  const queryString = searchParams.toString();
+  const querySuffix = queryString ? `?${queryString}` : '';
 
   const openNeedMore = () => {
     setIsOpenNeedMore(true);
   };
 
-  const openPartner = (type: string) => {
-    setIsNeedMore(type);
+  const openPartner = (data: any) => {
     setIsPartnerOpen(true);
+    setOfferData(data);
   };
 
   const closeNeedMore = () => {
@@ -115,10 +121,10 @@ const ContextProvider = ({ children }: any) => {
 
       const partnerPath =
         completionPercentage > 50
-          ? '/partner/profile'
-          : '/partner/onboard/personal-info';
-
-      console.log({ partnerPath, completionPercentage });
+          ? querySuffix
+            ? `/partner/pros/${id}?s=true`
+            : '/partner/profile'
+          : `/partner/onboard/personal-info${querySuffix}`;
 
       source === 'pro' && router.push(proPath);
       source === 'partner' && router.push(partnerPath);
@@ -151,7 +157,7 @@ const ContextProvider = ({ children }: any) => {
     if (responseData.status === 200) {
       source === 'pro'
         ? router.push('/pro/login')
-        : router.push('/partner/login');
+        : router.push(`/partner/login${querySuffix}`);
       return toast.success(responseData.message || `Signup successful`, {
         position: 'top-center',
       });
@@ -322,11 +328,14 @@ const ContextProvider = ({ children }: any) => {
         isResendOTPLoading,
         setIsResendOTPLoading,
         handleResetPassword,
-        isNeedMore,
-        setIsNeedMore,
         offers,
         refetchOffers,
         isOffersLoading,
+        offerData,
+        setOfferData,
+        querySuffix,
+        shouldStorePro,
+        id,
       }}
     >
       {children}
