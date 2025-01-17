@@ -94,7 +94,7 @@ export function PartnerRequestModal() {
     <Dialog open={isPartnerOpen} onOpenChange={closePartner}>
       <DialogContent className='sm:max-w-[800px] bg-accent gap-6 '>
         <DialogHeader className='font-semibold text-base md:text-lg text-start'>
-          The below requirements will be requested from the candidate'
+          The below requirements will be requested from the candidatecandidate
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}

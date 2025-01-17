@@ -66,7 +66,7 @@ const ProfileInfo = ({
           />
         )}
         {user?.role === 'partner' && !isProProfileFromPartner && (
-          <PartnerInfo user={userData} />
+          <PartnerInfo />
         )}
       </div>
     </div>

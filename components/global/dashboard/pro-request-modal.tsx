@@ -16,12 +16,12 @@ export function ProRequestModal({ offer }: { offer: any }) {
     <Dialog>
       <DialogTrigger asChild>
         <ul className='cursor-pointer flex flex-wrap justify-between text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] py-2 sm:px-4 sm:p-3 rounded-[12px] w-auto sm:w-max'>
-          {offer.requests.map((request: string, idx: number) => (
+          {offer?.documentsNeeded?.map((document: any, idx: number) => (
             <li
               key={idx}
               className='text-start sm:text-center px-6 list-disc list-inside w-max'
             >
-              {request}
+              {document?.title}
             </li>
           ))}
         </ul>
@@ -50,29 +50,34 @@ export function ProRequestModal({ offer }: { offer: any }) {
             <FileClock className='md:w-6 md:h-6 w-4 h-4 text-[#6C6C6C]' />
             The client is requesting:
           </p>
-          <div className='bg-white rounded-[12px] py-5 px-3 flex items-center gap-4'>
-            <div className='flex flex-col sm:flex-row gap-4 justify-between w-full'>
-              <div className='flex items-center gap-4'>
-                <Check className='md:size-6 size-4 text-[#D2D2D2]' />
-                <div>
-                  <h2 className='md:text-base text-sm text-[#1C1C1C]'>
-                    Proof letter of a certain experience
-                  </h2>
-                  <span className='text-[10px] text-[#6C6C6C]'>
-                    doc or pdf formats, up to 5mb.
-                  </span>
+          {offer?.documentsNeeded?.map((document: any, idx: number) => (
+            <div
+              key={idx}
+              className='bg-white rounded-[12px] py-5 px-3 flex items-center gap-4'
+            >
+              <div className='flex flex-col sm:flex-row gap-4 justify-between w-full'>
+                <div className='flex items-center gap-4'>
+                  <Check className='md:size-6 size-4 text-[#D2D2D2]' />
+                  <div>
+                    <h2 className='md:text-base text-sm text-[#1C1C1C]'>
+                      {document?.title}
+                    </h2>
+                    <span className='text-[10px] text-[#6C6C6C]'>
+                      doc or pdf formats, up to 5mb.
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <Button
-                variant='outline'
-                className='rounded-[12px] text-sm text-primary'
-              >
-                <CloudUploadIcon className='w-6 h-6 mr-2' />
-                Upload
-              </Button>
+                <Button
+                  variant='outline'
+                  className='rounded-[12px] text-sm text-primary'
+                >
+                  <CloudUploadIcon className='w-6 h-6 mr-2' />
+                  Upload
+                </Button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
         <DialogFooter className='flex flex-row gap-4 '>
           <DialogClose asChild>

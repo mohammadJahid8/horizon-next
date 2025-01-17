@@ -18,7 +18,7 @@ export function useAppContext() {
 
 const ContextProvider = ({ children }: any) => {
   const router = useRouter();
-  const [isOpenNeedMore, setIsOpenNeedMore] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
   const [isRefreshed, setIsRefreshed] = useState(false);
   const [cookies, setCookies] = useState<any>(null);
@@ -33,8 +33,8 @@ const ContextProvider = ({ children }: any) => {
   const queryString = searchParams.toString();
   const querySuffix = queryString ? `?${queryString}` : '';
 
-  const openNeedMore = () => {
-    setIsOpenNeedMore(true);
+  const openAlert = () => {
+    setIsOpenAlert(true);
   };
 
   const openPartner = (data: any) => {
@@ -42,8 +42,8 @@ const ContextProvider = ({ children }: any) => {
     setOfferData(data);
   };
 
-  const closeNeedMore = () => {
-    setIsOpenNeedMore(false);
+  const closeAlert = () => {
+    setIsOpenAlert(false);
   };
 
   const closePartner = () => {
@@ -306,11 +306,11 @@ const ContextProvider = ({ children }: any) => {
         isProfessionalInfoCompleted,
         isDocumentUploadCompleted,
         refetchUser,
-        openNeedMore,
+        openAlert,
         openPartner,
-        closeNeedMore,
+        closeAlert,
         closePartner,
-        isOpenNeedMore,
+        isOpenAlert,
         isPartnerOpen,
         cookies,
         isRefreshed,

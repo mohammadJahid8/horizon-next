@@ -1,10 +1,13 @@
 import React from 'react';
 import ProfileName from './profile-name';
 import { CircleHelp, Star } from 'lucide-react';
+import { useAppContext } from '@/lib/context';
 
-const PartnerInfo = ({ user }: any) => {
+const PartnerInfo = () => {
+  const { user, offers } = useAppContext();
   const personalInfo = user?.personalInfo;
 
+  const offersSent = offers?.length || 0;
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
   const companyName = personalInfo?.companyName;
   return (
@@ -38,7 +41,7 @@ const PartnerInfo = ({ user }: any) => {
             </div>
           )}
         </div>
-        <Tracks />
+        <Tracks offersSent={offersSent} />
       </div>
     </div>
   );
@@ -46,7 +49,7 @@ const PartnerInfo = ({ user }: any) => {
 
 export default PartnerInfo;
 
-const Tracks = () => {
+const Tracks = ({ offersSent }: { offersSent: number }) => {
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
       <div className='flex flex-col gap-1'>
@@ -54,7 +57,9 @@ const Tracks = () => {
           Offers Sent{' '}
           <Star className='size-5 fill-[#FAB607] stroke-[#FAB607]' />
         </p>
-        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>12</p>
+        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>
+          {offersSent}
+        </p>
       </div>
       <div className='flex flex-col gap-1'>
         <p className='text-[#6C6C6C] text-sm md:text-base flex items-center gap-2'>

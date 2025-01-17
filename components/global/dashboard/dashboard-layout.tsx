@@ -7,7 +7,6 @@ import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import Back from '../back';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { NeedMoreModal } from './need-more-modal';
 import { PartnerRequestModal } from './partner-request-modal';
 import { useAppContext } from '@/lib/context';
 
@@ -95,7 +94,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <div>{children}</div>
 
       <PartnerRequestModal />
-      <NeedMoreModal />
     </div>
   );
 };
