@@ -1,7 +1,14 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Copy, FileCheck, FileClock, MoreHorizontal } from 'lucide-react';
+import {
+  Check,
+  Copy,
+  FileCheck,
+  FileClock,
+  Link2,
+  MoreHorizontal,
+} from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { ProRequestModal } from './pro-request-modal';
@@ -13,7 +20,7 @@ import { toast } from 'sonner';
 import NotesPopup from '../note-popup';
 
 const OfferLists = () => {
-  const { openAlert, offers, isOffersLoading } = useAppContext();
+  const { openAlert, offers, isOffersLoading, refetchOffers } = useAppContext();
   const [type, setType] = useState<'accept' | 'reject'>('accept');
   const handleRespond = () => {
     setType('accept');
@@ -118,7 +125,7 @@ const OfferLists = () => {
               </div>
             </div>
 
-            <div className='grid grid-cols-1 sm:grid-cols-4 gap-2 w-auto xl:w-max'>
+            <div className='grid grid-cols-1 sm:grid-cols-4 gap-2 w-auto'>
               <div className='flex flex-col gap-1'>
                 <p className='text-[#6C6C6C] text-sm'>Company Industry:</p>
                 <p className='text-[#1C1C1C] font-medium text-sm'>
@@ -163,14 +170,18 @@ const OfferLists = () => {
               </div>
             </div>
             <div className='flex justify-between mt-4 gap-3'>
-              <Button
-                className={cn(
-                  'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
-                )}
-                onClick={handleRespond}
-              >
-                Respond
-              </Button>
+              {offer.documentsNeeded.length === 0 ? (
+                <Button
+                  className={cn(
+                    'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
+                  )}
+                  onClick={handleRespond}
+                >
+                  Accept
+                </Button>
+              ) : (
+                <ProRequestModal offer={offer} refetchOffers={refetchOffers} />
+              )}
               <Button
                 className={cn(
                   'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold',
@@ -189,16 +200,48 @@ const OfferLists = () => {
                   <p className='text-base'>
                     All good! No need for any more requirements.
                   </p>
-                  {offer.notes && <NotesPopup notes={offer.notes} />}
+                  {offer.partnerNotes && (
+                    <NotesPopup notes={offer.partnerNotes} />
+                  )}
                 </div>
               </div>
             ) : (
               <div className='mt-3 flex flex-col gap-3'>
-                <p className='text-base text-[#1C1C1C] flex items-center gap-2'>
+                <div className='text-base text-[#1C1C1C] flex items-center gap-2'>
                   <FileClock className='w-6 h-6 text-[#6C6C6C]' />
-                  The client is requesting:
-                </p>
-                <ProRequestModal offer={offer} />
+                  <div className='flex gap-4 items-center'>
+                    <p>The client is requesting:</p>
+                    {offer.partnerNotes && (
+                      <NotesPopup notes={offer.partnerNotes} />
+                    )}
+                  </div>
+                </div>
+
+                {offer?.documentsNeeded?.map((document: any, idx: any) => (
+                  <li
+                    key={idx}
+                    className='flex items-center gap-2 list-disc list-inside'
+                  >
+                    <Check
+                      className={cn(
+                        'size-4 text-[#DFE2E0]',
+                        document?.status === 'uploaded' && 'text-primary'
+                      )}
+                    />
+                    <span className='inline-flex items-center gap-2'>
+                      {document.title}
+                      {document.url && (
+                        <Link
+                          href={document.url || ''}
+                          target='_blank'
+                          className='text-primary'
+                        >
+                          <Link2 className='size-4' />
+                        </Link>
+                      )}
+                    </span>
+                  </li>
+                ))}
               </div>
             )}
           </div>

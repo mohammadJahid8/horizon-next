@@ -4,7 +4,8 @@ import {
   Download,
   FileText,
   Hourglass,
-  Link,
+  Link as LinkIcon,
+  Link2,
   MapPin,
   MoveUpRight,
   RotateCw,
@@ -12,7 +13,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
-
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/lib/context';
@@ -22,6 +24,7 @@ import moment from 'moment';
 
 import { toast } from 'sonner';
 import NotesPopup from '@/components/global/note-popup';
+import Link from 'next/link';
 
 const statusColors = {
   pending: 'text-[#FF9500]',
@@ -62,6 +65,42 @@ const PartnerOffers = () => {
       },
       error: 'Failed to delete offer',
     });
+  };
+
+  const handleDownloadAll = async (id: string) => {
+    const offer = offers.find((offer: any) => offer._id === id);
+    const documentsNeeded = offer?.documentsNeeded;
+    const urls = documentsNeeded
+      .map((document: any) => document.url)
+      .filter(Boolean);
+    console.log({ urls });
+
+    if (urls.length === 0) {
+      alert('No downloadable files available.');
+      return;
+    }
+
+    console.log({ urls });
+
+    if (urls.length === 1) {
+      // Download a single file directly
+      const item = urls[0];
+
+      const response = await fetch(item);
+      const blob = await response.blob();
+
+      saveAs(blob, 'document');
+    } else {
+      for (const item of urls) {
+        try {
+          const response = await fetch(item);
+          const blob = await response.blob();
+          saveAs(blob, 'document');
+        } catch (error) {
+          console.error(`Failed to download file:`, error);
+        }
+      }
+    }
   };
 
   return (
@@ -168,11 +207,11 @@ const PartnerOffers = () => {
                     <FileText className='w-6 h-6 text-[#6C6C6C]' />
                     Requirements:
                   </p>
-                  {offer.notes && <NotesPopup notes={offer.notes} />}
+                  {offer.proNotes && <NotesPopup notes={offer.proNotes} />}
                 </div>
                 <ul className='flex flex-col gap-2 text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] p-4 rounded-[12px] w-full'>
                   <p className='flex items-center gap-2 text-xs'>
-                    <Link className='text-gray-500 size-5' /> Job link
+                    <LinkIcon className='text-gray-500 size-5' /> Job link
                   </p>
                   <Button
                     href={offer.jobLink}
@@ -189,39 +228,50 @@ const PartnerOffers = () => {
                     >
                       <Check
                         className={cn(
-                          'size-4',
-                          actionColors[
-                            offer.status as keyof typeof actionColors
-                          ]
+                          'size-4 text-[#DFE2E0]',
+                          requirement?.status === 'uploaded' && 'text-primary'
                         )}
                       />
                       {requirement.title}
+                      {requirement.url && (
+                        <Link
+                          href={requirement.url || ''}
+                          target='_blank'
+                          className='text-primary'
+                        >
+                          <Link2 className='size-4' />
+                        </Link>
+                      )}
                     </li>
                   ))}
-                  <div className='flex gap-2 max-w-[500px] w-full'>
-                    <Button
-                      onClick={() => openPartner(offer)}
-                      variant='outline'
-                      className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
-                    >
-                      <RotateCw className='size-3 md:size-4 mr-1' />
-                      Update Requirements
-                    </Button>
-                    <Button
-                      // onClick={() => openPartner()}
-                      variant='outline'
-                      className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
-                    >
-                      <Download className='size-3 md:size-4 mr-1' />
-                      Download All
-                    </Button>
-                    <Button
-                      // onClick={() => openPartner()}
-                      className='py-2 px-4 rounded-[12px] w-full h-9'
-                    >
-                      Confirm
-                    </Button>
-                  </div>
+                  {Object.keys(offer.documentsNeeded).some(
+                    (key) => offer.documentsNeeded[key].status === 'uploaded'
+                  ) && (
+                    <div className='flex gap-2 max-w-[500px] w-full'>
+                      <Button
+                        onClick={() => openPartner(offer)}
+                        variant='outline'
+                        className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
+                      >
+                        <RotateCw className='size-3 md:size-4 mr-1' />
+                        Update Requirements
+                      </Button>
+                      <Button
+                        onClick={() => handleDownloadAll(offer._id)}
+                        variant='outline'
+                        className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
+                      >
+                        <Download className='size-3 md:size-4 mr-1' />
+                        Download All
+                      </Button>
+                      <Button
+                        // onClick={() => openPartner()}
+                        className='py-2 px-4 rounded-[12px] w-full h-9'
+                      >
+                        Confirm
+                      </Button>
+                    </div>
+                  )}
                 </ul>
               </div>
             )}

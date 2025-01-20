@@ -28,7 +28,7 @@ export function PartnerRequestModal() {
     defaultValues: {
       jobLink: offerData?.jobLink || '',
       documentsNeeded: offerData?.documentsNeeded || [{ title: '' }],
-      notes: offerData?.notes || '',
+      partnerNotes: offerData?.partnerNotes || '',
     },
   });
 
@@ -38,7 +38,7 @@ export function PartnerRequestModal() {
       reset({
         jobLink: offerData?.jobLink || '',
         documentsNeeded: offerData?.documentsNeeded || [{ title: '' }],
-        notes: offerData?.notes || '',
+        partnerNotes: offerData?.partnerNotes || '',
       });
     }
   }, [offerData]);
@@ -92,13 +92,13 @@ export function PartnerRequestModal() {
 
   return (
     <Dialog open={isPartnerOpen} onOpenChange={closePartner}>
-      <DialogContent className='sm:max-w-[800px] bg-accent gap-6 '>
+      <DialogContent className='sm:max-w-[800px] bg-accent gap-6 overflow-y-auto max-h-[80vh]'>
         <DialogHeader className='font-semibold text-base md:text-lg text-start'>
           The below requirements will be requested from the candidatecandidate
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className='flex flex-col gap-8 h-full overflow-y-auto max-h-[80vh]'
+          className='flex flex-col gap-8 h-full '
         >
           <div className='flex flex-col gap-4 bg-white py-3 px-4 rounded-sm'>
             <p className='text-base font-medium'>Job link</p>
@@ -192,7 +192,7 @@ export function PartnerRequestModal() {
           <div className='flex flex-col gap-2 bg-white py-3 px-4 rounded-sm'>
             <p className='text-base font-medium'>Notes</p>
             <Controller
-              name='notes'
+              name='partnerNotes'
               control={control}
               render={({ field }) => (
                 <Textarea
