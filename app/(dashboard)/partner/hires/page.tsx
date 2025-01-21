@@ -38,11 +38,6 @@ const statusIcons = {
   rejected: <X className='size-4' />,
 };
 
-const actionColors = {
-  accepted: 'text-primary',
-  pending: 'text-[#DFE2E0]',
-};
-
 const PartnerOffers = () => {
   const { openPartner, offers, isOffersLoading, refetchOffers } =
     useAppContext();
@@ -73,17 +68,13 @@ const PartnerOffers = () => {
     const urls = documentsNeeded
       .map((document: any) => document.url)
       .filter(Boolean);
-    console.log({ urls });
 
     if (urls.length === 0) {
       alert('No downloadable files available.');
       return;
     }
 
-    console.log({ urls });
-
     if (urls.length === 1) {
-      // Download a single file directly
       const item = urls[0];
 
       const response = await fetch(item);

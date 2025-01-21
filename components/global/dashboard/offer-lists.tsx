@@ -18,20 +18,44 @@ import moment from 'moment';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import NotesPopup from '../note-popup';
+import { OfferDropdown } from './offer-dropdown';
+import OfferActionModal from './offer-action-modal';
 
 const OfferLists = () => {
-  const { openAlert, offers, isOffersLoading, refetchOffers } = useAppContext();
-  const [type, setType] = useState<'accept' | 'reject'>('accept');
-  const handleRespond = () => {
-    setType('accept');
+  const {
+    openAlert,
+    isOffersLoading,
+    refetchOffers,
+    setActionData,
+    pendingOffers,
+  } = useAppContext();
+
+  const handleRespond = (id: string) => {
+    setActionData({ id, type: 'accept' });
     openAlert();
   };
-  const handleReject = () => {
-    setType('reject');
+  const handleReject = (id: string) => {
+    setActionData({ id, type: 'reject' });
     openAlert();
   };
 
-  console.log({ offers });
+  console.log({ pendingOffers });
+
+  const handleRemove = async (id: string) => {
+    const response = fetch(`/api/user/offer/update`, {
+      method: 'PATCH',
+      body: JSON.stringify({ id, status: 'rejected', isRemovedByPro: true }),
+    });
+    toast.promise(response, {
+      loading: 'Removing offer...',
+      success: async (data: any) => {
+        refetchOffers();
+        await data.json();
+        return 'Offer removed successfully!';
+      },
+      error: 'Failed to remove offer',
+    });
+  };
 
   if (isOffersLoading) {
     return (
@@ -92,14 +116,14 @@ const OfferLists = () => {
 
   return (
     <div className='flex flex-col gap-8'>
-      {offers?.map((offer: any, index: any) => (
+      {pendingOffers?.map((offer: any, index: any) => (
         <div key={index} className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
           <div className='flex flex-col gap-2 w-full'>
             <div className='flex justify-between items-center'>
               <span className='text-[#6C6C6C80] text-sm'>
                 {moment(offer.createdAt).format('DD MMM YYYY - hh:mm A')}
               </span>
-              <MoreHorizontal className='w-6 h-6' />
+              <OfferDropdown offer={offer} handleRemove={handleRemove} />
             </div>
 
             <div className='flex items-center gap-3'>
@@ -175,7 +199,7 @@ const OfferLists = () => {
                   className={cn(
                     'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
                   )}
-                  onClick={handleRespond}
+                  onClick={() => handleRespond(offer._id)}
                 >
                   Accept
                 </Button>
@@ -187,7 +211,7 @@ const OfferLists = () => {
                   'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold',
                   'bg-accent text-[#1C1C1C] hover:bg-accent/80'
                 )}
-                onClick={handleReject}
+                onClick={() => handleReject(offer._id)}
               >
                 Reject
               </Button>
@@ -247,7 +271,8 @@ const OfferLists = () => {
           </div>
         </div>
       ))}
-      <AlertModal type={type} />
+      <AlertModal />
+      <OfferActionModal />
     </div>
   );
 };

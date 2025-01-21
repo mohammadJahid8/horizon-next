@@ -4,15 +4,15 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppContext } from '@/lib/context';
 
-const tabItemsPro = [
-  { label: 'Profile', href: '/pro/profile' },
-  { label: 'Offers (3)', href: '/pro/offers' },
-  { label: 'Jobs (1)', href: '/pro/jobs' },
-];
-
 const Tabs: React.FC = () => {
   const pathname = usePathname();
-  const { user, offers } = useAppContext();
+  const { user, offers, pendingOffers } = useAppContext();
+
+  const tabItemsPro = [
+    { label: 'Profile', href: '/pro/profile' },
+    { label: `Offers (${pendingOffers?.length || 0})`, href: '/pro/offers' },
+    { label: 'Jobs (1)', href: '/pro/jobs' },
+  ];
 
   const tabItemsPartner = [
     { label: 'Profile', href: '/partner/profile' },

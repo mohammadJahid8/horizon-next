@@ -11,15 +11,23 @@ import { PartnerRequestModal } from './partner-request-modal';
 import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
 
-export function AlertModal({ type }: { type: 'accept' | 'reject' }) {
-  const { isOpenAlert, closeAlert } = useAppContext();
+export function AlertModal() {
+  const { isOpenAlert, closeAlert, actionData, openOfferAction } =
+    useAppContext();
 
   const title =
-    type === 'accept' ? 'Accepting the Offer?' : 'Rejecting the Offer?';
+    actionData?.type === 'accept'
+      ? 'Accepting the Offer?'
+      : 'Rejecting the Offer?';
   const description =
-    type === 'accept'
+    actionData?.type === 'accept'
       ? 'You are about to accept this job offer. The company will be notified by your response. Would your like to proceed?'
       : 'You are about to reject this job offer. The company will be notified by your response. Would your like to proceed?';
+
+  const handleAccept = () => {
+    closeAlert();
+    openOfferAction();
+  };
 
   return (
     <AlertDialog open={isOpenAlert} onOpenChange={closeAlert}>
@@ -36,16 +44,16 @@ export function AlertModal({ type }: { type: 'accept' | 'reject' }) {
           <PartnerRequestModal />
 
           <Button
-            variant={type === 'reject' ? 'outline' : 'default'}
+            variant={actionData?.type === 'reject' ? 'outline' : 'default'}
             type='button'
             className={cn('w-full md:h-[60px] rounded-[12px]')}
-            onClick={closeAlert}
+            onClick={handleAccept}
           >
             Yes
           </Button>
           <Button
             type='button'
-            variant={type === 'accept' ? 'outline' : 'destructive'}
+            variant={actionData?.type === 'accept' ? 'outline' : 'destructive'}
             className={cn('w-full md:h-[60px] rounded-[12px]')}
             onClick={closeAlert}
           >

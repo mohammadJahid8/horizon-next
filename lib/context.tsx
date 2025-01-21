@@ -26,12 +26,22 @@ const ContextProvider = ({ children }: any) => {
   const [isOtpResend, setIsOtpResend] = useState(false);
   const [isResendOTPLoading, setIsResendOTPLoading] = useState(false);
   const [offerData, setOfferData] = useState<any>(null);
+  const [actionData, setActionData] = useState<any>(null);
+  const [isOpenOfferAction, setIsOpenOfferAction] = useState(false);
 
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const shouldStorePro = searchParams.get('s') === 'true';
   const queryString = searchParams.toString();
   const querySuffix = queryString ? `?${queryString}` : '';
+
+  const openOfferAction = () => {
+    setIsOpenOfferAction(true);
+  };
+
+  const closeOfferAction = () => {
+    setIsOpenOfferAction(false);
+  };
 
   const openAlert = () => {
     setIsOpenAlert(true);
@@ -62,6 +72,10 @@ const ContextProvider = ({ children }: any) => {
     queryKey: [`offers`, user?._id],
     queryFn: async () => await getOffers(),
   });
+
+  const pendingOffers = offers?.filter(
+    (offer: any) => offer.status === 'pending'
+  );
 
   // console.log({ user });
 
@@ -336,6 +350,12 @@ const ContextProvider = ({ children }: any) => {
         querySuffix,
         shouldStorePro,
         id,
+        actionData,
+        setActionData,
+        pendingOffers,
+        isOpenOfferAction,
+        openOfferAction,
+        closeOfferAction,
       }}
     >
       {children}
