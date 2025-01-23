@@ -19,35 +19,39 @@ export default function OfferActionModal() {
 
   const [notes, setNotes] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  console.log({ actionData });
 
-  const handleReject = async () => {
+  const handleAction = async (status: string) => {
     setIsLoading(true);
-    const response = fetch(`/api/user/offer/update`, {
+
+    const response = await fetch(`/api/user/offer/update`, {
       method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: actionData?.id,
-        status: 'rejected',
-        proNotes: notes,
+        status,
+        notes: [
+          ...actionData?.notes,
+          {
+            note: notes,
+            role: 'pro',
+          },
+        ],
       }),
     });
-    toast.promise(response, {
-      loading: 'Rejecting offer...',
-      success: async (data: any) => {
-        refetchOffers();
-        closeOfferAction();
-        await data.json();
-        return 'Offer rejected successfully!';
-      },
-      error: 'Failed to reject offer',
-    });
+
+    const responseData = await response.json();
+    if (responseData.status === 200) {
+      refetchOffers();
+      closeOfferAction();
+      toast.success(`Offer ${status} successfully!`);
+    } else {
+      toast.error(`Failed to ${status} offer`);
+    }
+
     setIsLoading(false);
   };
 
-  const handleAccept = () => {
-    closeOfferAction();
-    // openOfferAction();
-  };
+  console.log({ isLoading });
 
   return (
     <Dialog open={isOpenOfferAction} onOpenChange={closeOfferAction}>
@@ -59,19 +63,21 @@ export default function OfferActionModal() {
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <Textarea
-            className='min-h-[150px] resize-none rounded-lg p-4'
+            className='min-h-[150px] resize-none p-4 h-40 rounded-[12px]'
             placeholder='Enter your notes here...'
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
           <Button
-            onClick={
-              actionData?.type === 'accept' ? handleAccept : handleReject
+            onClick={() =>
+              handleAction(
+                actionData?.type === 'accept' ? 'accepted' : 'rejected'
+              )
             }
-            className='w-full bg-primary text-white font-medium py-6'
+            className='w-full bg-primary text-white font-medium py-6 rounded-[12px] h-[50px]'
             disabled={isLoading}
           >
-            Ok!
+            {isLoading ? 'Processing...' : 'Ok!'}
           </Button>
         </div>
       </DialogContent>

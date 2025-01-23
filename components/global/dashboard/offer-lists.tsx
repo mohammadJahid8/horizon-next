@@ -8,6 +8,7 @@ import {
   FileClock,
   Link2,
   MoreHorizontal,
+  RotateCw,
 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -20,26 +21,23 @@ import { toast } from 'sonner';
 import NotesPopup from '../note-popup';
 import { OfferDropdown } from './offer-dropdown';
 import OfferActionModal from './offer-action-modal';
+import { statusIcons, statusTexts } from '@/utils/status';
+import { statusColors } from '@/utils/status';
 
-const OfferLists = () => {
-  const {
-    openAlert,
-    isOffersLoading,
-    refetchOffers,
-    setActionData,
-    pendingOffers,
-  } = useAppContext();
+const OfferLists = ({ offers, source }: any) => {
+  const { openAlert, isOffersLoading, refetchOffers, setActionData } =
+    useAppContext();
 
-  const handleRespond = (id: string) => {
-    setActionData({ id, type: 'accept' });
+  const handleRespond = (offer: any) => {
+    setActionData({ id: offer._id, type: 'accept', notes: offer.notes });
     openAlert();
   };
-  const handleReject = (id: string) => {
-    setActionData({ id, type: 'reject' });
+  const handleReject = (offer: any) => {
+    setActionData({ id: offer._id, type: 'reject', notes: offer.notes });
     openAlert();
   };
 
-  console.log({ pendingOffers });
+  console.log({ offers });
 
   const handleRemove = async (id: string) => {
     const response = fetch(`/api/user/offer/update`, {
@@ -116,14 +114,26 @@ const OfferLists = () => {
 
   return (
     <div className='flex flex-col gap-8'>
-      {pendingOffers?.map((offer: any, index: any) => (
+      {offers?.map((offer: any, index: any) => (
         <div key={index} className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
           <div className='flex flex-col gap-2 w-full'>
-            <div className='flex justify-between items-center'>
+            <div className='flex flex-col gap-4'>
+              <div className='flex justify-between items-center'>
+                <span
+                  className={cn(
+                    'text-[#6C6C6C80] text-sm flex items-center gap-2 uppercase',
+                    statusColors[offer.status as keyof typeof statusColors]
+                  )}
+                >
+                  {statusIcons[offer.status as keyof typeof statusIcons]}
+                  {statusTexts[offer.status as keyof typeof statusTexts]}
+                </span>
+
+                <OfferDropdown offer={offer} handleRemove={handleRemove} />
+              </div>
               <span className='text-[#6C6C6C80] text-sm'>
                 {moment(offer.createdAt).format('DD MMM YYYY - hh:mm A')}
               </span>
-              <OfferDropdown offer={offer} handleRemove={handleRemove} />
             </div>
 
             <div className='flex items-center gap-3'>
@@ -193,29 +203,40 @@ const OfferLists = () => {
                 </div>
               </div>
             </div>
-            <div className='flex justify-between mt-4 gap-3'>
-              {offer.documentsNeeded.length === 0 ? (
+            {source === 'offers' && (
+              <div className='flex justify-between mt-4 gap-3'>
+                {offer.documentsNeeded.length === 0 ? (
+                  <Button
+                    className={cn(
+                      'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
+                    )}
+                    onClick={() => handleRespond(offer)}
+                  >
+                    Accept
+                  </Button>
+                ) : (
+                  <ProRequestModal offer={offer} refetchOffers={refetchOffers}>
+                    <Button
+                      className={cn(
+                        'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
+                      )}
+                      // onClick={handleRespond}
+                    >
+                      Respond
+                    </Button>
+                  </ProRequestModal>
+                )}
                 <Button
                   className={cn(
-                    'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
+                    'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold',
+                    'bg-accent text-[#1C1C1C] hover:bg-accent/80'
                   )}
-                  onClick={() => handleRespond(offer._id)}
+                  onClick={() => handleReject(offer)}
                 >
-                  Accept
+                  Reject
                 </Button>
-              ) : (
-                <ProRequestModal offer={offer} refetchOffers={refetchOffers} />
-              )}
-              <Button
-                className={cn(
-                  'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold',
-                  'bg-accent text-[#1C1C1C] hover:bg-accent/80'
-                )}
-                onClick={() => handleReject(offer._id)}
-              >
-                Reject
-              </Button>
-            </div>
+              </div>
+            )}
 
             {offer.documentsNeeded.length === 0 ? (
               <div className='mt-3 flex items-center gap-2 text-[#6C6C6C80]'>
@@ -266,6 +287,22 @@ const OfferLists = () => {
                     </span>
                   </li>
                 ))}
+                {source === 'jobs' &&
+                  offer.status !== 'rejected' &&
+                  offer.status !== 'accepted' && (
+                    <ProRequestModal
+                      offer={offer}
+                      refetchOffers={refetchOffers}
+                    >
+                      <Button
+                        variant='outline'
+                        className='border border-primary py-2 px-4 rounded-[12px] h-9 w-max'
+                      >
+                        <RotateCw className='size-3 md:size-4 mr-1' />
+                        Update Requirements
+                      </Button>
+                    </ProRequestModal>
+                  )}
               </div>
             )}
           </div>

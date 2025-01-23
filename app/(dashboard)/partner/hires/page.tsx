@@ -10,10 +10,11 @@ import {
   MoveUpRight,
   RotateCw,
   X,
+  Clock,
 } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
-import JSZip from 'jszip';
+import React, { useState } from 'react';
+
 import { saveAs } from 'file-saver';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,22 +26,13 @@ import moment from 'moment';
 import { toast } from 'sonner';
 import NotesPopup from '@/components/global/note-popup';
 import Link from 'next/link';
-
-const statusColors = {
-  pending: 'text-[#FF9500]',
-  accepted: 'text-[#33B55B]',
-  rejected: 'text-[#FF5652]',
-};
-
-const statusIcons = {
-  pending: <Hourglass className='size-4' />,
-  accepted: <Check className='size-4' />,
-  rejected: <X className='size-4' />,
-};
+import { statusColors, statusIcons, statusTexts } from '@/utils/status';
 
 const PartnerOffers = () => {
   const { openPartner, offers, isOffersLoading, refetchOffers } =
     useAppContext();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   if (isOffersLoading) {
     return <OffersSkeleton />;
@@ -94,6 +86,26 @@ const PartnerOffers = () => {
     }
   };
 
+  const handleConfirm = async (offer: any) => {
+    setIsLoading(true);
+    const response = await fetch(`/api/user/offer/update`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        id: offer._id,
+        status: 'accepted',
+      }),
+    });
+    const responseData: any = await response.json();
+
+    if (responseData.status === 200) {
+      refetchOffers();
+      toast.success('Offer confirmed successfully!');
+    } else {
+      toast.error('Failed to confirm offer');
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className='flex flex-col gap-8'>
       {offers?.map((offer: any, index: any) => (
@@ -108,7 +120,7 @@ const PartnerOffers = () => {
                   )}
                 >
                   {statusIcons[offer.status as keyof typeof statusIcons]}
-                  {offer.status}
+                  {statusTexts[offer.status as keyof typeof statusTexts]}
                 </span>
                 <span className='text-[#6C6C6C80] text-sm'>
                   {moment(offer.createdAt).format('hh:mmA, DD MMM, YYYY')}
@@ -239,14 +251,17 @@ const PartnerOffers = () => {
                   ))}
                   {offer.documentsNeeded.length > 0 && (
                     <div className='flex gap-2 max-w-[500px] w-full'>
-                      <Button
-                        onClick={() => openPartner(offer)}
-                        variant='outline'
-                        className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
-                      >
-                        <RotateCw className='size-3 md:size-4 mr-1' />
-                        Update Requirements
-                      </Button>
+                      {offer.status !== 'rejected' &&
+                        offer.status !== 'accepted' && (
+                          <Button
+                            onClick={() => openPartner(offer)}
+                            variant='outline'
+                            className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
+                          >
+                            <RotateCw className='size-3 md:size-4 mr-1' />
+                            Update Requirements
+                          </Button>
+                        )}
                       {Object.keys(offer.documentsNeeded).some(
                         (key) =>
                           offer.documentsNeeded[key].status === 'uploaded'
@@ -260,12 +275,19 @@ const PartnerOffers = () => {
                           Download All
                         </Button>
                       )}
-                      <Button
-                        // onClick={() => openPartner()}
-                        className='py-2 px-4 rounded-[12px] w-full h-9'
-                      >
-                        Confirm
-                      </Button>
+                      {offer.status !== 'rejected' && (
+                        <Button
+                          onClick={() => handleConfirm(offer)}
+                          className='py-2 px-4 rounded-[12px] w-full h-9'
+                          disabled={isLoading || offer.status === 'accepted'}
+                        >
+                          {isLoading
+                            ? 'Confirming...'
+                            : offer.status === 'accepted'
+                              ? 'Confirmed'
+                              : 'Confirm'}
+                        </Button>
+                      )}
                     </div>
                   )}
                 </ul>

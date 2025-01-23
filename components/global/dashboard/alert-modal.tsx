@@ -41,7 +41,7 @@ export function AlertModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className='flex flex-row gap-4 w-full'>
-          <PartnerRequestModal />
+          {/* <PartnerRequestModal /> */}
 
           <Button
             variant={actionData?.type === 'reject' ? 'outline' : 'default'}

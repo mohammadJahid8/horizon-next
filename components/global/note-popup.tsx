@@ -62,7 +62,7 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
             Important Notes
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className='h-[300px] w-full pr-4'>
+        <ScrollArea className='h-[300px] w-full'>
           <div className='flex flex-col gap-2'>
             {notes.map((note) => (
               <div
@@ -79,11 +79,11 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
                 >
                   {note.note}
                 </p>
-                {/* <p
-                  className={`text-xs mt-1 text-gray-500 ${note.role === user.role ? 'text-right' : 'text-left'}`}
+                <p
+                  className={`text-xs mt-1 text-gray-500 ${note.role === user.role ? 'text-right' : 'text-left'} uppercase text-gray-500`}
                 >
-                  {note.role === 'pro' ? 'Professional' : 'Partner'}
-                </p> */}
+                  {note.role === user.role ? 'You' : note.role}
+                </p>
               </div>
             ))}
           </div>
@@ -91,13 +91,14 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
         <div className='mt-4'>
           <Textarea
             placeholder='Type your response here..'
+            className='resize-none bg-[#f9f9f9] h-[100px] text-[#5E6864] rounded-[12px]'
             value={newNote.note}
             onChange={(e) => setNewNote({ ...newNote, note: e.target.value })}
           />
         </div>
-        <div className='flex justify-end gap-2 mt-4'>
+        <div className='flex justify-end gap-2'>
           <Button
-            className='h-12 px-12'
+            className='h-12 px-12 rounded-[12px]'
             onClick={handleSendNote}
             disabled={isLoading}
           >
