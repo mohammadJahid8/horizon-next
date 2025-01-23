@@ -198,7 +198,9 @@ const PartnerOffers = () => {
                     <FileText className='w-6 h-6 text-[#6C6C6C]' />
                     Requirements:
                   </p>
-                  {offer.proNotes && <NotesPopup notes={offer.proNotes} />}
+                  {offer.notes && (
+                    <NotesPopup notes={offer.notes} id={offer._id} />
+                  )}
                 </div>
                 <ul className='flex flex-col gap-2 text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] p-4 rounded-[12px] w-full'>
                   <p className='flex items-center gap-2 text-xs'>
@@ -235,9 +237,7 @@ const PartnerOffers = () => {
                       )}
                     </li>
                   ))}
-                  {Object.keys(offer.documentsNeeded).some(
-                    (key) => offer.documentsNeeded[key].status === 'uploaded'
-                  ) && (
+                  {offer.documentsNeeded.length > 0 && (
                     <div className='flex gap-2 max-w-[500px] w-full'>
                       <Button
                         onClick={() => openPartner(offer)}
@@ -247,14 +247,19 @@ const PartnerOffers = () => {
                         <RotateCw className='size-3 md:size-4 mr-1' />
                         Update Requirements
                       </Button>
-                      <Button
-                        onClick={() => handleDownloadAll(offer._id)}
-                        variant='outline'
-                        className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
-                      >
-                        <Download className='size-3 md:size-4 mr-1' />
-                        Download All
-                      </Button>
+                      {Object.keys(offer.documentsNeeded).some(
+                        (key) =>
+                          offer.documentsNeeded[key].status === 'uploaded'
+                      ) && (
+                        <Button
+                          onClick={() => handleDownloadAll(offer._id)}
+                          variant='outline'
+                          className='border border-primary py-2 px-4 rounded-[12px] w-full h-9'
+                        >
+                          <Download className='size-3 md:size-4 mr-1' />
+                          Download All
+                        </Button>
+                      )}
                       <Button
                         // onClick={() => openPartner()}
                         className='py-2 px-4 rounded-[12px] w-full h-9'

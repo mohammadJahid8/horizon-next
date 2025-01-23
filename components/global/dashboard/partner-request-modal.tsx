@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import Remove from '../professional-info/remove';
 import { toast } from 'sonner';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,7 @@ export function PartnerRequestModal() {
   const { isPartnerOpen, closePartner, refetchOffers, offerData } =
     useAppContext();
   const { id } = useParams();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isDocumentsChecked, setIsDocumentsChecked] = useState(false);
   const { control, handleSubmit, reset } = useForm({
@@ -43,7 +44,7 @@ export function PartnerRequestModal() {
     }
   }, [offerData]);
 
-  console.log({ offerData });
+  // console.log({ offerData });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -54,11 +55,27 @@ export function PartnerRequestModal() {
     if (!isDocumentsChecked) {
       delete data.documentsNeeded;
     }
+    if (!offerData?._id) {
+      data.notes = [{ note: data.partnerNotes, role: 'partner' }];
+      delete data.partnerNotes;
+    }
     setIsLoading(true);
+
+    const payload = {
+      ...data,
+      pro: id,
+    };
+
+    if (offerData?._id) {
+      payload.offer = offerData?._id;
+    }
+
+    console.log({ payload });
+
     const response = await fetch('/api/user/offer', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...data, pro: id, offer: offerData?._id }),
+      body: JSON.stringify(payload),
     });
 
     const responseData: any = await response.json();
@@ -67,6 +84,7 @@ export function PartnerRequestModal() {
       reset();
       refetchOffers();
       closePartner();
+      router.push(`/partner/hires`);
       setIsLoading(false);
       return toast.success(responseData.message || `Offer sent successfully!`, {
         position: 'top-center',
@@ -189,20 +207,22 @@ export function PartnerRequestModal() {
             </div>
           </div>
 
-          <div className='flex flex-col gap-2 bg-white py-3 px-4 rounded-sm'>
-            <p className='text-base font-medium'>Notes</p>
-            <Controller
-              name='partnerNotes'
-              control={control}
-              render={({ field }) => (
-                <Textarea
-                  {...field}
-                  placeholder='Write your message and more details for the pro..'
-                  className='rounded-[12px] h-40'
-                />
-              )}
-            />
-          </div>
+          {!offerData?._id && (
+            <div className='flex flex-col gap-2 bg-white py-3 px-4 rounded-sm'>
+              <p className='text-base font-medium'>Notes</p>
+              <Controller
+                name='partnerNotes'
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    placeholder='Write your message and more details for the pro..'
+                    className='rounded-[12px] h-40'
+                  />
+                )}
+              />
+            </div>
+          )}
           <DialogFooter className='flex flex-row gap-4 '>
             <DialogClose asChild>
               <Button

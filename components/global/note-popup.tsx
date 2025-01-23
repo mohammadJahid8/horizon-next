@@ -1,27 +1,111 @@
-import { Button } from '../ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { PopoverClose } from '@radix-ui/react-popover';
+'use client';
 
-const NotesPopup = ({ notes }: { notes: string }) => {
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { useAppContext } from '@/lib/context';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+
+interface Note {
+  role: 'partner' | 'pro';
+  note: string;
+  _id: string;
+}
+
+const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
+  const { user, refetchOffers } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log({ id });
+
+  const [newNote, setNewNote] = useState({
+    role: user.role,
+    note: '',
+  });
+
+  const handleSendNote = async () => {
+    setIsLoading(true);
+    const response = await fetch(`/api/user/offer/reply`, {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...newNote }),
+    });
+    const responseData: any = await response.json();
+    if (responseData.status === 200) {
+      refetchOffers();
+      setNewNote({ role: user.role, note: '' });
+      toast.success('Note sent successfully!');
+    } else {
+      toast.error('Failed to send note');
+    }
+    setIsLoading(false);
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button className='text-primary underline'>View notes</button>
-      </PopoverTrigger>
-      <PopoverContent className='w-full max-w-md min-w-[300px] p-6 bg-white rounded-[12px] shadow-lg'>
-        <div className='flex flex-col items-center gap-4'>
-          <h2 className='text-lg font-semibold'>Important Notes</h2>
-          <div className='w-full p-4 border border-[#DFE2E0] rounded-[12px] text-sm text-[#1C1C1C]'>
-            <p>{notes}</p>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='link' className='text-primary underline p-0 h-auto'>
+          View notes
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='sm:max-w-md'>
+        <DialogHeader>
+          <DialogTitle className='text-lg font-semibold'>
+            Important Notes
+          </DialogTitle>
+        </DialogHeader>
+        <ScrollArea className='h-[300px] w-full pr-4'>
+          <div className='flex flex-col gap-2'>
+            {notes.map((note) => (
+              <div
+                key={note._id}
+                className={cn(
+                  'w-full p-4 border border-input rounded-lg text-sm bg-[#F9F9FA]',
+                  note.role === user.role ? 'bg-[#fffbfb]' : 'bg-accent'
+                )}
+              >
+                <p
+                  className={
+                    note.role === user.role ? 'text-right' : 'text-left'
+                  }
+                >
+                  {note.note}
+                </p>
+                {/* <p
+                  className={`text-xs mt-1 text-gray-500 ${note.role === user.role ? 'text-right' : 'text-left'}`}
+                >
+                  {note.role === 'pro' ? 'Professional' : 'Partner'}
+                </p> */}
+              </div>
+            ))}
           </div>
-          <PopoverClose className='max-w-40 w-full'>
-            <Button className='w-full text-white py-6 px-6 rounded-[12px]'>
-              Ok!
-            </Button>
-          </PopoverClose>
+        </ScrollArea>
+        <div className='mt-4'>
+          <Textarea
+            placeholder='Type your response here..'
+            value={newNote.note}
+            onChange={(e) => setNewNote({ ...newNote, note: e.target.value })}
+          />
         </div>
-      </PopoverContent>
-    </Popover>
+        <div className='flex justify-end gap-2 mt-4'>
+          <Button
+            className='h-12 px-12'
+            onClick={handleSendNote}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Sending...' : 'Submit'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

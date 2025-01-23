@@ -224,8 +224,8 @@ const OfferLists = () => {
                   <p className='text-base'>
                     All good! No need for any more requirements.
                   </p>
-                  {offer.partnerNotes && (
-                    <NotesPopup notes={offer.partnerNotes} />
+                  {offer.notes && (
+                    <NotesPopup notes={offer.notes} id={offer._id} />
                   )}
                 </div>
               </div>
@@ -235,8 +235,8 @@ const OfferLists = () => {
                   <FileClock className='w-6 h-6 text-[#6C6C6C]' />
                   <div className='flex gap-4 items-center'>
                     <p>The client is requesting:</p>
-                    {offer.partnerNotes && (
-                      <NotesPopup notes={offer.partnerNotes} />
+                    {offer.notes && (
+                      <NotesPopup notes={offer.notes} id={offer._id} />
                     )}
                   </div>
                 </div>

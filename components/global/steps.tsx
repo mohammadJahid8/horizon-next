@@ -14,7 +14,14 @@ const Steps = ({
   isEdit?: boolean;
 }) => {
   const pathname = usePathname();
-  const { user } = useAppContext();
+  const {
+    user,
+    isPersonalInfoCompleted,
+    isProfessionalInfoCompleted,
+    isDocumentUploadCompleted,
+  } = useAppContext();
+
+  console.log({ user });
 
   const isEditPersonalInfo = pathname.includes('edit/personal-information');
   const isEditProfessionalInfo = pathname.includes(
@@ -29,12 +36,6 @@ const Steps = ({
       : isEditDocumentUpload
         ? user?.documents?.updatedAt
         : null;
-
-  const {
-    isPersonalInfoCompleted,
-    isProfessionalInfoCompleted,
-    isDocumentUploadCompleted,
-  } = useAppContext();
 
   const proSteps = [
     {
