@@ -56,7 +56,7 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
           View notes
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-md'>
+      <DialogContent className='sm:max-w-md max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
           <DialogTitle className='text-lg font-semibold'>
             Important Notes

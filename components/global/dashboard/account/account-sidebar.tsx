@@ -9,13 +9,15 @@ import PartnerAccountInfo from './partner-account-info';
 
 const AccountSidebar = () => {
   const { user } = useAppContext();
+  const name =
+    user?.personalInfo?.firstName + ' ' + user?.personalInfo?.lastName;
   return (
     <aside className='lg:px-6 2xl:px-10 py-10 2xl:py-20 bg-white flex flex-col gap-[52px] h-screen  overflow-y-auto scrollbar-hide'>
       <div className='flex flex-col gap-8 lg:pt-20'>
         <div className='flex flex-col gap-4'>
           <ProfileImage />
           <div className='flex flex-col gap-1 sm:gap-3 w-full'>
-            <ProfileName name='John Doe' />
+            <ProfileName name={name} />
             <div className='flex justify-between flex-col gap-12'>
               {user?.role === 'pro' && <ProAccountInfo />}
               {user?.role === 'partner' && <PartnerAccountInfo />}

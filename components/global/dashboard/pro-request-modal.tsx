@@ -54,6 +54,10 @@ export function ProRequestModal({
   };
 
   const handleSubmit = async () => {
+    if (files.length === 0) {
+      return toast.error('No files uploaded');
+    }
+
     setIsLoading(true);
     const formData = new FormData();
 
