@@ -62,7 +62,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div
       className={cn(
-        'flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] pb-8 md:pb-16 px-0 md:px-8 xl:px-0',
+        'flex flex-col gap-6 max-w-screen-xl mx-auto pt-[70px] md:pt-[150px] pb-8 md:pb-16 px-0 md:px-8 2xl:px-0',
         (isProProfileFromPartner || isPublicProPage) &&
           'pt-[90px] md:pt-[120px] lg:pt-[150px]'
       )}
