@@ -6,12 +6,12 @@ import { useAppContext } from '@/lib/context';
 
 const Tabs: React.FC = () => {
   const pathname = usePathname();
-  const { user, offers, pendingOffers } = useAppContext();
+  const { user, offers, pendingOffers, jobOffers } = useAppContext();
 
   const tabItemsPro = [
     { label: 'Profile', href: '/pro/profile' },
     { label: `Offers (${pendingOffers?.length || 0})`, href: '/pro/offers' },
-    { label: 'Jobs (1)', href: '/pro/jobs' },
+    { label: `Jobs (${jobOffers?.length || 0})`, href: '/pro/jobs' },
   ];
 
   const tabItemsPartner = [

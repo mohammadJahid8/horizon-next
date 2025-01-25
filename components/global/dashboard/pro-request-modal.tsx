@@ -17,9 +17,11 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function ProRequestModal({
+  children,
   offer,
   refetchOffers,
 }: {
+  children: React.ReactNode;
   offer: any;
   refetchOffers: any;
 }) {
@@ -83,16 +85,7 @@ export function ProRequestModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          className={cn(
-            'h-[40px] sm:h-[50px] 2xl:h-[71px] w-full rounded-[12px] text-xs sm:text-base font-semibold'
-          )}
-          // onClick={handleRespond}
-        >
-          Respond
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[600px] bg-accent'>
         <DialogHeader className='flex flex-row items-center gap-3'>
           <img

@@ -76,6 +76,7 @@ const ContextProvider = ({ children }: any) => {
   const pendingOffers = offers?.filter(
     (offer: any) => offer.status === 'pending'
   );
+  const jobOffers = offers?.filter((offer: any) => offer.status !== 'pending');
 
   // console.log({ user });
 
@@ -356,6 +357,7 @@ const ContextProvider = ({ children }: any) => {
         isOpenOfferAction,
         openOfferAction,
         closeOfferAction,
+        jobOffers,
       }}
     >
       {children}
