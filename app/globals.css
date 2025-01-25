@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+.marquee-content {
+  display: flex;
+  animation: marquee 25s linear infinite;
+  width: max-content; /* Ensures the content takes up only the necessary width */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(
+      -50%
+    ); /* Adjust to half the width because content is duplicated */
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+}
+
+@supports (-webkit-touch-callout: none) and (max-width: 768px) {
+  .input-style {
+    font-size: 16px;
+  }
+}
+
+.testimonial-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 128, 0, 0) 0%,
+    rgba(0, 128, 0, 0.475) 16.67%,
+    rgba(0, 128, 0, 0.76) 33.33%,
+    rgba(0, 128, 0, 0.95) 50%,
+    rgba(0, 128, 0, 0.76) 66.67%,
+    rgba(0, 128, 0, 0.475) 83.33%,
+    rgba(0, 128, 0, 0) 100%
+  );
+  @media (max-width: 768px) {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 128, 0, 0.099) 0%,
+      rgba(0, 128, 0, 0.891) 33.33%,
+      rgba(0, 128, 0, 0.99) 50%,
+      rgba(0, 128, 0, 0.891) 66.67%,
+      rgba(0, 128, 0, 0.099) 100%
+    ) !important;
+  }
+}
+
+.pro-banner-bg {
+  background-image: url('/pro-bg-new.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 850px;
+  background-position: 100% 5rem;
+  @media (min-width: 2200px) {
+    background-size: 100% 1000px;
+    background-position: 100% -5rem;
+  }
+
+  @media (max-width: 900px) {
+    background-size: 900px 100%;
+    background-position: center;
+  }
+  @media (min-width: 900px) and (max-width: 1200px) {
+    background-size: 100% 100%;
+    background-position: center;
+  }
+}
+.partner-banner-bg {
+  background-image: url('/partner-bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 80% -10rem;
+
+  @media (min-width: 1950px) {
+    background-position: 20% -15rem;
+  }
+  @media (min-width: 2300px) {
+    background-position: 20% -25rem;
+  }
+  @media (min-width: 2600px) {
+    background-position: 100% -40rem;
+  }
+  @media (max-width: 1200px) {
+    background-position: center -20rem;
+  }
+  @media (max-width: 1100px) {
+    background-image: url('/partner-bg-mobile.svg');
+    background-size: contain;
+    background-position: center -20rem;
+  }
+  @media (max-width: 1000px) {
+    background-position: center -12rem;
+  }
+  @media (max-width: 900px) {
+    background-position: center 2rem;
+  }
+  @media (max-width: 800px) {
+    background-position: center -4rem;
+  }
+  @media (max-width: 700px) {
+    background-position: center 0rem;
+  }
+  @media (max-width: 500px) {
+    background-position: center 10rem;
+  }
+  @media (max-width: 400px) {
+    background-position: center 16rem;
+  }
+}

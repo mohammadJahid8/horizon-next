@@ -1,0 +1,91 @@
+'use server';
+import api from '@/lib/axiosInterceptor';
+import { client } from '@/sanity/lib/client';
+import { cookies } from 'next/headers';
+export async function getUser() {
+  try {
+    const response = await api.get(`/user/profile`);
+    // console.log('response', response.data);
+    return response.data.data;
+  } catch (error) {
+    // console.error('Error fetching user profile:', error);
+    return null;
+  }
+}
+
+export async function getUserById(id: string) {
+  try {
+    const response = await api.get(`/user/profile/${id}`);
+    return response.data.data;
+  } catch (error) {
+    return null;
+  }
+}
+export async function getOffers() {
+  try {
+    const response = await api.get(`/user/offer`);
+    return response.data.data;
+  } catch (error) {
+    return null;
+  }
+}
+export async function getPros() {
+  try {
+    const response = await api.get(`/user/pros`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching pros:', error);
+    return null;
+  }
+}
+
+export async function getTokens() {
+  const accessToken = cookies().get('accessToken')?.value;
+  const refreshToken = cookies().get('refreshToken')?.value;
+  const tokenRefreshIn = cookies().get('tokenRefreshIn')?.value;
+  return { accessToken, refreshToken, tokenRefreshIn };
+}
+
+export async function logout() {
+  cookies().delete('accessToken');
+  cookies().delete('refreshToken');
+  cookies().delete('tokenRefreshIn');
+}
+
+export async function getEnvironment() {
+  const response = await client.fetch(`*[_type == "environment"][0]`);
+  return response;
+}
+export async function getHomeData() {
+  const response = await client.fetch(`*[_type == "home"][0]`);
+  return response;
+}
+export async function getProData() {
+  const response = await client.fetch(`*[_type == "pro"][0]`);
+  return response;
+}
+export async function getPartnerData() {
+  const response = await client.fetch(`*[_type == "partner"][0]`);
+  return response;
+}
+export async function getProLoginData() {
+  const response = await client.fetch(`*[_type == "proLogin"][0]`);
+  return response;
+}
+export async function getProSignupData() {
+  const response = await client.fetch(`*[_type == "proRegister"][0]`);
+  return response;
+}
+export async function getPartnerLoginData() {
+  const response = await client.fetch(`*[_type == "partnerLogin"][0]`);
+  return response;
+}
+export async function getPartnerSignupData() {
+  const response = await client.fetch(`*[_type == "partnerRegister"][0]`);
+  return response;
+}
+
+export async function getFooterData() {
+  const response = await client.fetch(`*[_type == "footer"][0]`);
+  return response;
+}

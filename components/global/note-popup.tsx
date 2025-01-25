@@ -1,0 +1,112 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { useAppContext } from '@/lib/context';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+
+interface Note {
+  role: 'partner' | 'pro';
+  note: string;
+  _id: string;
+}
+
+const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
+  const { user, refetchOffers } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log({ id });
+
+  const [newNote, setNewNote] = useState({
+    role: user.role,
+    note: '',
+  });
+
+  const handleSendNote = async () => {
+    setIsLoading(true);
+    const response = await fetch(`/api/user/offer/reply`, {
+      method: 'PATCH',
+      body: JSON.stringify({ id, ...newNote }),
+    });
+    const responseData: any = await response.json();
+    if (responseData.status === 200) {
+      refetchOffers();
+      setNewNote({ role: user.role, note: '' });
+      toast.success('Note sent successfully!');
+    } else {
+      toast.error('Failed to send note');
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='link' className='text-primary underline p-0 h-auto'>
+          View notes
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='sm:max-w-md'>
+        <DialogHeader>
+          <DialogTitle className='text-lg font-semibold'>
+            Important Notes
+          </DialogTitle>
+        </DialogHeader>
+        <ScrollArea className='h-[300px] w-full pr-4'>
+          <div className='flex flex-col gap-2'>
+            {notes.map((note) => (
+              <div
+                key={note._id}
+                className={cn(
+                  'w-full p-4 border border-input rounded-lg text-sm bg-[#F9F9FA]',
+                  note.role === user.role ? 'bg-[#fffbfb]' : 'bg-accent'
+                )}
+              >
+                <p
+                  className={
+                    note.role === user.role ? 'text-right' : 'text-left'
+                  }
+                >
+                  {note.note}
+                </p>
+                {/* <p
+                  className={`text-xs mt-1 text-gray-500 ${note.role === user.role ? 'text-right' : 'text-left'}`}
+                >
+                  {note.role === 'pro' ? 'Professional' : 'Partner'}
+                </p> */}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+        <div className='mt-4'>
+          <Textarea
+            placeholder='Type your response here..'
+            value={newNote.note}
+            onChange={(e) => setNewNote({ ...newNote, note: e.target.value })}
+          />
+        </div>
+        <div className='flex justify-end gap-2 mt-4'>
+          <Button
+            className='h-12 px-12'
+            onClick={handleSendNote}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Sending...' : 'Submit'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default NotesPopup;
