@@ -15,9 +15,7 @@ const Skills: React.FC = () => {
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
         <Title text='Skills' className='mb-0 !text-lg md:!text-2xl' />
-        <EditBtn
-          href={`/pro/edit/professional-information/${user?.professionalInfo?._id}`}
-        />
+        <EditBtn href={`/pro/edit/professional-information?edit=true#skills`} />
       </div>
       {skills ? (
         <div className='flex flex-wrap gap-3'>

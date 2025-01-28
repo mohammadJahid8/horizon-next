@@ -1,6 +1,6 @@
 // @ts-nocheck
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Title from '@/components/global/title';
 import { Input } from '@/components/ui/input';
 import OnboardButton from '@/components/global/onboard-button';
@@ -36,6 +36,7 @@ const OnboardProfessionalInfo = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
 
@@ -106,6 +107,17 @@ const OnboardProfessionalInfo = () => {
     control,
     name: 'certifications',
   });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const targetElement = document.querySelector(window.location.hash);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      setIsMounted(true);
+    }
+  }, [isMounted]);
 
   const onSubmit = async (data: any) => {
     try {

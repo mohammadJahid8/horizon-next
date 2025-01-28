@@ -31,15 +31,7 @@ export default function DashboardNav() {
       icon: <Bell className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
       label: 'Notifications',
     },
-    ...(user?.role === 'pro'
-      ? [
-          {
-            href: `/pro/onboard/document-upload`,
-            icon: <FileText className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,
-            label: 'Documents',
-          },
-        ]
-      : []),
+
     {
       href: `${path}/settings`,
       icon: <Settings className='h-5 w-5 md:h-4 md:w-4 lg:h-6 lg:w-6' />,

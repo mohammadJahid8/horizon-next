@@ -20,7 +20,7 @@ const SkillsSelector = ({ errors, setValue, watchSkills }: any) => {
   const handleSkillAdd = (skill: string) => {
     if (!selectedSkills.includes(skill)) {
       setSelectedSkills([...selectedSkills, skill]);
-      setValue('skills', [...selectedSkills, skill]);
+      setValue('skills', [...selectedSkills, skill], { shouldDirty: true });
       errors.skills = {};
     }
   };
@@ -29,7 +29,8 @@ const SkillsSelector = ({ errors, setValue, watchSkills }: any) => {
     setSelectedSkills(selectedSkills.filter((s) => s !== skill));
     setValue(
       'skills',
-      selectedSkills.filter((s) => s !== skill)
+      selectedSkills.filter((s) => s !== skill),
+      { shouldDirty: true }
     );
   };
 
