@@ -12,7 +12,7 @@ const ProfileImage = ({
   isPublicProPage?: boolean;
   userProfileImage?: string;
 }) => {
-  const { user, refetchUser } = useAppContext();
+  const { refetchUser } = useAppContext();
 
   const [profileImage, setProfileImage] = useState(
     userProfileImage || '/dummy-profile-pic.jpg'

@@ -1,6 +1,12 @@
 /* eslint-disable react/prop-types */
 
-import { getOffers, getTokens, getUser, logout } from '@/app/actions';
+import {
+  getNotifications,
+  getOffers,
+  getTokens,
+  getUser,
+  logout,
+} from '@/app/actions';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
@@ -60,10 +66,20 @@ const ContextProvider = ({ children }: any) => {
     setIsPartnerOpen(false);
   };
 
-  const { refetch: refetchUser, data: user } = useQuery({
+  const {
+    refetch: refetchUser,
+    data: user,
+    isLoading: isUserLoading,
+  } = useQuery({
     queryKey: [`user`],
     queryFn: async () => await getUser(),
   });
+
+  const { refetch: refetchNotifications, data: notifications } = useQuery({
+    queryKey: [`notifications`],
+    queryFn: async () => await getNotifications(),
+  });
+
   const {
     refetch: refetchOffers,
     data: offers,
@@ -113,6 +129,10 @@ const ContextProvider = ({ children }: any) => {
     Object.keys(user?.professionalInfo || {}).length > 0;
   const isDocumentUploadCompleted =
     Object.keys(user?.documents || {}).length > 0;
+
+  const isUndreadNotification = notifications?.filter(
+    (noti: any) => !noti.isRead
+  );
 
   const handleLogin = async (data: any, source: string) => {
     const response = await fetch('/api/auth/login', {
@@ -358,6 +378,10 @@ const ContextProvider = ({ children }: any) => {
         openOfferAction,
         closeOfferAction,
         jobOffers,
+        notifications,
+        refetchNotifications,
+        isUserLoading,
+        isUndreadNotification,
       }}
     >
       {children}

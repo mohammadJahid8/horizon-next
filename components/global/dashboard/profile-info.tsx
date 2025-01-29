@@ -10,19 +10,16 @@ import { getUserById } from '@/app/actions';
 
 const ProfileInfo = ({
   isProProfileFromPartner,
-  id,
+  userById,
   isPublicProPage,
+  isLoading,
 }: {
   isProProfileFromPartner: boolean;
-  id: string;
+  userById: any;
   isPublicProPage: boolean;
+  isLoading: boolean;
 }) => {
   const { user } = useAppContext();
-
-  const { data: userById, isLoading } = useQuery({
-    queryKey: [`userById`, id],
-    queryFn: async () => await getUserById(id),
-  });
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { PartnerRequestModal } from './partner-request-modal';
 import { useAppContext } from '@/lib/context';
+import { useQuery } from '@tanstack/react-query';
+import { getUserById } from '@/app/actions';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -59,6 +61,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const isPublicProPage = pathname.includes('pro/') && id ? true : false;
 
+  const { data: userById, isLoading } = useQuery({
+    queryKey: [`userById`, id],
+    queryFn: async () => await getUserById(id as string),
+  });
   return (
     <div
       className={cn(
@@ -88,12 +94,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <ProfileInfo
         isProProfileFromPartner={isProProfileFromPartner}
         isPublicProPage={isPublicProPage}
-        id={id as string}
+        userById={userById}
+        isLoading={isLoading}
       />
       {!isProProfileFromPartner && !isPublicProPage && <Tabs />}
       <div>{children}</div>
 
-      <PartnerRequestModal />
+      <PartnerRequestModal proUser={userById} />
     </div>
   );
 };

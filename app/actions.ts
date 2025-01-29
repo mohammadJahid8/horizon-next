@@ -38,6 +38,15 @@ export async function getPros() {
     return null;
   }
 }
+export async function getNotifications() {
+  try {
+    const response = await api.get(`/user/notification`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    return null;
+  }
+}
 
 export async function getTokens() {
   const accessToken = cookies().get('accessToken')?.value;

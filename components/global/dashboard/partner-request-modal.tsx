@@ -18,8 +18,8 @@ import { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
-export function PartnerRequestModal() {
-  const { isPartnerOpen, closePartner, refetchOffers, offerData } =
+export function PartnerRequestModal({ proUser }: { proUser: any }) {
+  const { isPartnerOpen, closePartner, refetchOffers, offerData, user } =
     useAppContext();
   const { id } = useParams();
   const router = useRouter();
@@ -44,7 +44,7 @@ export function PartnerRequestModal() {
     }
   }, [offerData]);
 
-  // console.log({ offerData });
+  console.log({ proUser });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -86,8 +86,17 @@ export function PartnerRequestModal() {
       closePartner();
       router.push(`/partner/hires`);
       setIsLoading(false);
-      return toast.success(responseData.message || `Offer sent successfully!`, {
+      toast.success(responseData.message || `Offer sent successfully!`, {
         position: 'top-center',
+      });
+
+      await fetch('/api/user/notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `<p>You have a new offer from <span style="font-weight: 600; color: #008000;">${user?.personalInfo?.companyName}</span></p>`,
+          user: proUser?._id,
+        }),
       });
     }
 
