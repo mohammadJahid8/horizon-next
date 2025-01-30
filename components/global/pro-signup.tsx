@@ -17,16 +17,16 @@ const signupFields = [
       .min(1, { message: 'Email has to be filled.' })
       .email({ message: 'Enter a valid email address' }),
   },
-  {
-    name: 'phone',
-    label: 'Phone Number',
-    type: 'number',
-    placeholder: 'Enter your phone number...',
-    validation: z
-      .string()
-      .min(10, { message: 'Phone number must be at least 10 digits long' })
-      .regex(/^\d+$/, { message: 'Enter a valid phone number' }),
-  },
+  // {
+  //   name: 'phone',
+  //   label: 'Phone Number',
+  //   type: 'number',
+  //   placeholder: 'Enter your phone number...',
+  //   validation: z
+  //     .string()
+  //     .min(10, { message: 'Phone number must be at least 10 digits long' })
+  //     .regex(/^\d+$/, { message: 'Enter a valid phone number' }),
+  // },
   {
     name: 'password',
     label: 'Password',

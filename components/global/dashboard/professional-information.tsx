@@ -4,7 +4,14 @@ import Title from '@/components/global/title';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
-import { MoveUpRight } from 'lucide-react';
+import {
+  BriefcaseBusiness,
+  GraduationCap,
+  IdCard,
+  Link,
+  Link2,
+  MoveUpRight,
+} from 'lucide-react';
 import moment from 'moment';
 import NoData from '../no-data';
 
@@ -28,7 +35,7 @@ export default function ProfessionalInformation() {
       </div>
       {!noData ? (
         <div className='space-y-6'>
-          {education && (
+          {education?.length > 0 && education[0]?.institution && (
             <div className='border-b pb-6 flex flex-col gap-5 w-full'>
               <SectionTitle
                 text='Education'
@@ -39,7 +46,7 @@ export default function ProfessionalInformation() {
               ))}
             </div>
           )}
-          {experience && (
+          {experience?.length > 0 && experience[0]?.jobTitle && (
             <div className='border-b pb-6 flex flex-col gap-5'>
               <SectionTitle
                 text='Experience'
@@ -84,44 +91,55 @@ const EducationItem = ({
 }) => {
   return (
     <div className='flex items-start gap-4 md:gap-6'>
-      <img
+      <GraduationCap className='w-12 h-12 md:w-14 md:h-14 text-gray-700' />
+      {/* <img
         src='/education.svg'
         alt='Education'
         className='size-16 md:size-20'
-      />
+      /> */}
       <div className='flex flex-col gap-3 md:gap-6 w-full'>
         <div className='flex flex-col gap-1 md:gap-2'>
-          <SectionTitle
-            className='font-semibold !text-base md:!text-2xl'
-            text={degree}
-          />
-          <SectionDescription
-            text={institution}
-            className='!text-sm md:!text-lg'
-          />
+          {degree && (
+            <SectionTitle
+              className='font-semibold !text-base md:!text-2xl'
+              text={degree}
+            />
+          )}
+          {institution && (
+            <SectionDescription
+              text={institution}
+              className='!text-sm md:!text-lg'
+            />
+          )}
         </div>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 w-full'>
-          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-            <SectionTitle
-              text='Year of Graduation'
-              className='text-sm md:!text-base font-medium'
-            />
-            <SectionDescription text={yearOfGraduation} />
-          </div>
-          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-            <SectionTitle
-              text='Field of Study'
-              className='text-sm md:!text-base font-medium'
-            />
-            <SectionDescription text={fieldOfStudy} />
-          </div>
-          <div className='flex flex-col  gap-1.5 md:gap-2.5'>
-            <SectionTitle
-              text='Grade'
-              className='text-sm md:!text-base font-medium'
-            />
-            <SectionDescription text={grade} />
-          </div>
+          {yearOfGraduation && (
+            <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+              <SectionTitle
+                text='Year of Graduation'
+                className='text-sm md:!text-base font-medium'
+              />
+              <SectionDescription text={yearOfGraduation} />
+            </div>
+          )}
+          {fieldOfStudy && (
+            <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+              <SectionTitle
+                text='Field of Study'
+                className='text-sm md:!text-base font-medium'
+              />
+              <SectionDescription text={fieldOfStudy} />
+            </div>
+          )}
+          {grade && (
+            <div className='flex flex-col  gap-1.5 md:gap-2.5'>
+              <SectionTitle
+                text='Grade'
+                className='text-sm md:!text-base font-medium'
+              />
+              <SectionDescription text={grade} />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -138,16 +156,20 @@ const CertificationItem = ({
 }: any) => {
   return (
     <div className='flex items-start gap-4 md:gap-6'>
-      <img
-        src={certificateFile}
-        alt='License'
-        className='size-16 md:size-20 object-cover rounded-full'
-      />
+      <IdCard className='w-12 h-12 md:w-14 md:h-14 text-gray-700' />
+
       <div className='flex flex-col gap-1 md:gap-2'>
-        <SectionTitle
-          className='font-semibold !text-base md:!text-2xl'
-          text={title}
-        />
+        <div className='flex items-center gap-2'>
+          <SectionTitle
+            className='font-semibold !text-base md:!text-2xl'
+            text={title}
+          />
+          {credentialUrl && (
+            <Button target='_blank' href={credentialUrl} variant='special'>
+              <Link className='size-4 mr-2' />
+            </Button>
+          )}
+        </div>
         <SectionDescription
           text={institution}
           className='!text-sm md:!text-lg font-medium'
@@ -168,14 +190,16 @@ const CertificationItem = ({
           text={`Credential ID: ${credentialId}`}
           className='!text-sm md:!text-base text-[#595959] font-normal'
         />
-        <Button
-          onClick={() => window.open(credentialUrl, '_blank')}
-          variant='outline'
-          className='h-10 md:h-12 rounded-[12px] w-fit mt-4 text-xs md:text-base'
-        >
-          View Credential
-          <MoveUpRight className='size-4 ml-2' />
-        </Button>
+        {certificateFile && (
+          <Button
+            onClick={() => window.open(certificateFile, '_blank')}
+            variant='outline'
+            className='h-10 md:h-12 rounded-[12px] w-fit mt-4 text-xs md:text-base'
+          >
+            View Credential
+            <MoveUpRight className='size-4 ml-2' />
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -224,25 +248,30 @@ const ExperienceItem = ({
 }: any) => {
   return (
     <div className='flex items-start gap-4 md:gap-6'>
-      <img src={image} alt={jobTitle} className='size-16 md:size-20' />
+      <BriefcaseBusiness className='w-10 h-10 md:w-12 md:h-12 text-gray-700' />
+      {/* <img src={image} alt={jobTitle} className='size-16 md:size-20' /> */}
       <div className='flex flex-col gap-1 md:gap-2'>
-        <SectionTitle
-          text={jobTitle}
-          className='font-semibold !text-base md:!text-2xl'
-        />
-        <SectionDescription
-          text={companyName}
-          className='!text-sm md:!text-lg font-medium'
-        />
-        <SectionDescription
-          text={duration}
-          className='!text-sm md:!text-base text-[#595959] font-normal'
-        />
-        {/* <SectionDescription
-          text={'yrdydhfghfghjh'}
-          className='!text-sm md:!text-base text-[#595959] font-normal'
-        /> */}
-        <SectionDescription text={responsibilities} className='mt-4' />
+        {jobTitle && (
+          <SectionTitle
+            text={jobTitle}
+            className='font-semibold !text-base md:!text-2xl'
+          />
+        )}
+        {companyName && (
+          <SectionDescription
+            text={companyName}
+            className='!text-sm md:!text-lg font-medium'
+          />
+        )}
+        {duration && (
+          <SectionDescription
+            text={duration}
+            className='!text-sm md:!text-base text-[#595959] font-normal'
+          />
+        )}
+        {responsibilities && (
+          <SectionDescription text={responsibilities} className='mt-4' />
+        )}
       </div>
     </div>
   );

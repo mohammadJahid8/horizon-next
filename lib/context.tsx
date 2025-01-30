@@ -182,7 +182,7 @@ const ContextProvider = ({ children }: any) => {
       body: JSON.stringify({
         email: data.email,
         password: data.password,
-        phone: data.phone,
+        // phone: data.phone,
         role: source,
       }),
     });

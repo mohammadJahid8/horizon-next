@@ -31,29 +31,39 @@ const PartnerPersonalInformation = () => {
       </div>
       {!noData ? (
         <div className='space-y-6'>
-          <div className='border-b pb-6 flex flex-col gap-1.5 md:gap-2.5'>
-            <SectionTitle text='Bio' />
-            <SectionDescription text={bio} />
-          </div>
+          {bio && (
+            <div className='border-b pb-6 flex flex-col gap-1.5 md:gap-2.5'>
+              <SectionTitle text='Bio' />
+              <SectionDescription text={bio} />
+            </div>
+          )}
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 border-b pb-6'>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Name' />
-              <SectionDescription text={`${firstName} ${lastName}`} />
-            </div>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Date of establishment' />
-              <SectionDescription
-                text={moment(dateEstablished).format('MMMM Do YYYY')}
-              />
-            </div>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Company Name' />
-              <SectionDescription text={user?.personalInfo?.companyName} />
-            </div>
-            <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Industry' />
-              <SectionDescription text={user?.personalInfo?.industry} />
-            </div>
+            {user?.personalInfo?.firstName && (
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Name' />
+                <SectionDescription text={`${firstName} ${lastName}`} />
+              </div>
+            )}
+            {user?.personalInfo?.dateEstablished && (
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Date of establishment' />
+                <SectionDescription
+                  text={moment(dateEstablished).format('MMMM Do YYYY')}
+                />
+              </div>
+            )}
+            {user?.personalInfo?.companyName && (
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Company Name' />
+                <SectionDescription text={user?.personalInfo?.companyName} />
+              </div>
+            )}
+            {user?.personalInfo?.industry && (
+              <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                <SectionTitle text='Industry' />
+                <SectionDescription text={user?.personalInfo?.industry} />
+              </div>
+            )}
           </div>
           <div className='border-b pb-6 flex flex-col gap-5'>
             <SectionTitle
@@ -61,14 +71,18 @@ const PartnerPersonalInformation = () => {
               className='uppercase text-[#9E9E9E]'
             />
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <div className='flex flex-col gap-1.5 md:gap-2.5'>
-                <SectionTitle text='Email address' />
-                <SectionDescription text={user?.email} />
-              </div>
-              {/* <div className='flex flex-col gap-1.5 md:gap-2.5'>
-              <SectionTitle text='Phone Number' />
-              <SectionDescription text={user?.phone} />
-            </div> */}
+              {user?.email && (
+                <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                  <SectionTitle text='Email address' />
+                  <SectionDescription text={user?.email} />
+                </div>
+              )}
+              {user?.personalInfo?.phone && (
+                <div className='flex flex-col gap-1.5 md:gap-2.5'>
+                  <SectionTitle text='Phone Number' />
+                  <SectionDescription text={user?.personalInfo?.phone} />
+                </div>
+              )}
             </div>
           </div>
 

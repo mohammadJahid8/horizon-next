@@ -565,11 +565,13 @@ const OnboardProfessionalInfo = () => {
                       validate: {
                         fileSize: (value) => {
                           // Check if a file exists and validate its size
-                          const file = value?.[0];
+                          const file =
+                            typeof value === 'object' ? value?.[0] : null;
+                          console.log({ value });
                           return (
                             !file ||
-                            file.size <= 500 * 1024 ||
-                            'File size should be less than 500KB'
+                            file.size <= 1024 * 1024 ||
+                            'File size should be less than 1MB'
                           );
                         },
                       },

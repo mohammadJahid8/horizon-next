@@ -20,7 +20,7 @@ export default function GoogleLogin({ source }: GoogleLoginProps) {
       });
     }
 
-    console.log(result, error);
+    console.log({ result });
 
     if (result?.user?.email) {
       const payload = {
@@ -42,6 +42,8 @@ export default function GoogleLogin({ source }: GoogleLoginProps) {
 
       if (responseData.status === 200) {
         const completionPercentage = responseData.completionPercentage;
+
+        console.log({ completionPercentage });
 
         const proPath =
           completionPercentage > 50

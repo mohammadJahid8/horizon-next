@@ -196,7 +196,7 @@ const PartnerOffers = () => {
               <div className='flex flex-col gap-2'>
                 <p className='text-[#6C6C6C] text-sm'>Phone number</p>
                 <p className='text-[#1C1C1C] font-medium text-sm md:text-base'>
-                  {offer.pro.phone}
+                  {offer.pro.personalInfo.phone || 'N/A'}
                 </p>
               </div>
             </div>

@@ -35,8 +35,8 @@ export function ProRequestModal({
   const [open, setOpen] = useState(false);
 
   const handleFileChange = (id: number, file: any) => {
-    if (file.size > 1000 * 1024) {
-      return toast.error('File size should not exceed 1024kb', {
+    if (file.size > 1024 * 1024) {
+      return toast.error('File size should not exceed 1MB', {
         position: 'top-center',
       });
     }
@@ -139,7 +139,7 @@ export function ProRequestModal({
                           files.find((f) => f.id === document?._id)?.file
                             ?.size / 1024
                         ).toFixed(2)}{' '}
-                        kb)
+                        MB)
                       </span>
                     ) : document?.status === 'uploaded' ? (
                       <Link
@@ -151,7 +151,7 @@ export function ProRequestModal({
                       </Link>
                     ) : (
                       <span className='text-[10px] text-[#6C6C6C]'>
-                        image or pdf formats, up to 1024kb.
+                        image or pdf formats, up to 1MB.
                       </span>
                     )}
                   </div>
