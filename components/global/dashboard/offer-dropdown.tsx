@@ -13,7 +13,7 @@ export function OfferDropdown({
   handleRemove,
 }: {
   offer: any;
-  handleRemove: (id: string) => void;
+  handleRemove: (id: string, partnerId: string) => void;
 }) {
   return (
     <DropdownMenu modal={false}>
@@ -24,7 +24,7 @@ export function OfferDropdown({
         <DropdownMenuGroup>
           <DropdownMenuItem
             className='cursor-pointer'
-            onClick={() => handleRemove(offer._id)}
+            onClick={() => handleRemove(offer._id, offer.partner._id)}
           >
             <Trash2 />
             <span>Remove</span>

@@ -21,9 +21,20 @@ interface Note {
   _id: string;
 }
 
-const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
-  const { user, refetchOffers } = useAppContext();
+const NotesPopup = ({
+  notes,
+  id,
+  proId,
+  partnerId,
+}: {
+  notes: Note[];
+  id: string;
+  proId: string;
+  partnerId: string;
+}) => {
+  const { user, refetchOffers, sendNotification } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   console.log({ id });
 
@@ -41,8 +52,24 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
     const responseData: any = await response.json();
     if (responseData.status === 200) {
       refetchOffers();
+      const notificationPayload = {
+        message: '',
+        user: '',
+      };
       setNewNote({ role: user.role, note: '' });
       toast.success('Note sent successfully!');
+      setOpen(false);
+      if (user.role === 'partner') {
+        notificationPayload.message = `<p><span style="font-weight: 600; color: #008000;">${user?.personalInfo?.companyName}</span> has added a note to your offer.</p>`;
+        notificationPayload.user = proId;
+      } else {
+        notificationPayload.message = `<p><span style="font-weight: 600; color: #008000;">${user?.personalInfo?.firstName} ${user?.personalInfo?.lastName}</span> has added a note to your offer.</p>`;
+        notificationPayload.user = partnerId;
+      }
+      await sendNotification(
+        notificationPayload.message,
+        notificationPayload.user
+      );
     } else {
       toast.error('Failed to send note');
     }
@@ -50,7 +77,7 @@ const NotesPopup = ({ notes, id }: { notes: Note[]; id: string }) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='link' className='text-primary underline p-0 h-auto'>
           View notes

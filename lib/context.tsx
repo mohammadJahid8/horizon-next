@@ -76,7 +76,7 @@ const ContextProvider = ({ children }: any) => {
   });
 
   const { refetch: refetchNotifications, data: notifications } = useQuery({
-    queryKey: [`notifications`],
+    queryKey: [`notifications`, user?._id],
     queryFn: async () => await getNotifications(),
   });
 
@@ -333,6 +333,17 @@ const ContextProvider = ({ children }: any) => {
     }
   };
 
+  const sendNotification = async (message: string, user: string) => {
+    await fetch('/api/user/notification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        user,
+      }),
+    });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -382,6 +393,7 @@ const ContextProvider = ({ children }: any) => {
         refetchNotifications,
         isUserLoading,
         isUndreadNotification,
+        sendNotification,
       }}
     >
       {children}

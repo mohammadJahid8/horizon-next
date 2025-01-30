@@ -1,10 +1,10 @@
 import { Check, X, Clock, Hourglass } from 'lucide-react';
 
 export const statusColors = {
-  pending: 'text-[#FF9500]',
-  responded: 'text-[#FF9500]',
-  accepted: 'text-[#33B55B]',
-  rejected: 'text-[#FF5652]',
+  pending: '#FF9500',
+  responded: '#FF9500',
+  accepted: '#33B55B',
+  rejected: '#FF5652',
 };
 
 export const statusTexts = {

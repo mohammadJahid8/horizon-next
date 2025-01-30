@@ -29,8 +29,14 @@ import Link from 'next/link';
 import { statusColors, statusIcons, statusTexts } from '@/utils/status';
 
 const PartnerOffers = () => {
-  const { openPartner, offers, isOffersLoading, refetchOffers } =
-    useAppContext();
+  const {
+    openPartner,
+    offers,
+    isOffersLoading,
+    refetchOffers,
+    sendNotification,
+    user,
+  } = useAppContext();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -100,10 +106,15 @@ const PartnerOffers = () => {
     if (responseData.status === 200) {
       refetchOffers();
       toast.success('Offer confirmed successfully!');
+      setIsLoading(false);
+      await sendNotification(
+        `<p>Your response has been confirmed by <span style="font-weight: 600; color: #008000;">${user?.personalInfo?.companyName}</span></p>`,
+        offer.pro._id
+      );
     } else {
+      setIsLoading(false);
       toast.error('Failed to confirm offer');
     }
-    setIsLoading(false);
   };
 
   return (
@@ -115,9 +126,13 @@ const PartnerOffers = () => {
               <div className='flex flex-col gap-4'>
                 <span
                   className={cn(
-                    'text-[#6C6C6C80] text-sm flex items-center gap-2 uppercase',
-                    statusColors[offer.status as keyof typeof statusColors]
+                    'text-[#6C6C6C80] text-sm flex items-center gap-2 uppercase'
+                    // statusColors[offer.status as keyof typeof statusColors]
                   )}
+                  style={{
+                    color:
+                      statusColors[offer.status as keyof typeof statusColors],
+                  }}
                 >
                   {statusIcons[offer.status as keyof typeof statusIcons]}
                   {statusTexts[offer.status as keyof typeof statusTexts]}
@@ -163,9 +178,11 @@ const PartnerOffers = () => {
               </div>
             </div>
 
-            <p className='text-sm md:text-base text-[#6C6C6C] truncate'>
-              {offer.pro.personalInfo.bio}
-            </p>
+            {offer.pro.personalInfo.bio && (
+              <p className='text-sm md:text-base text-[#6C6C6C] truncate'>
+                {offer.pro.personalInfo.bio}
+              </p>
+            )}
 
             <div className='flex flex-wrap gap-3 items-center'>
               {offer.pro.professionalInfo.skills
@@ -211,7 +228,12 @@ const PartnerOffers = () => {
                     Requirements:
                   </p>
                   {offer.notes && (
-                    <NotesPopup notes={offer.notes} id={offer._id} />
+                    <NotesPopup
+                      notes={offer.notes}
+                      id={offer._id}
+                      proId={offer.pro._id}
+                      partnerId={offer.partner._id}
+                    />
                   )}
                 </div>
                 <ul className='flex flex-col gap-2 text-xs sm:text-sm text-[#1C1C1C] font-medium border border-[#DFE2E0] p-4 rounded-[12px] w-full'>

@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
 import { Check, CloudUpload, FileClock, Link2 } from 'lucide-react';
 import moment from 'moment';
@@ -25,6 +26,7 @@ export function ProRequestModal({
   offer: any;
   refetchOffers: any;
 }) {
+  const { user, sendNotification } = useAppContext();
   const image = offer?.partner?.personalInfo?.image;
   const companyName = offer?.partner?.personalInfo?.companyName;
   const companyIndustry = offer?.partner?.personalInfo?.industry;
@@ -78,6 +80,10 @@ export function ProRequestModal({
     if (responseData.status === 200) {
       toast.success(
         responseData.message || 'Documents submitted successfully!'
+      );
+      await sendNotification(
+        `<p><span style="font-weight: 600; color: #008000;">${user?.personalInfo?.firstName} ${user?.personalInfo?.lastName}</span> has responded to your offer.</p>`,
+        offer?.partner?._id
       );
       refetchOffers();
       setOpen(false);
@@ -139,7 +145,7 @@ export function ProRequestModal({
                           files.find((f) => f.id === document?._id)?.file
                             ?.size / 1024
                         ).toFixed(2)}{' '}
-                        MB)
+                        kb)
                       </span>
                     ) : document?.status === 'uploaded' ? (
                       <Link
