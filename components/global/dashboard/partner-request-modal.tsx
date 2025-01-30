@@ -50,8 +50,6 @@ export function PartnerRequestModal({ proUser }: { proUser: any }) {
     }
   }, [offerData]);
 
-  console.log({ offerData });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'documentsNeeded',

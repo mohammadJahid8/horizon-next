@@ -33,7 +33,6 @@ export default async function RootLayout({
     locale: string;
   };
 }>) {
-  const user = await getUser();
   const footerData = await getFooterData();
   const environment = await getEnvironment();
   const environmentType = transformEnvironment(environment?.environmentType);
@@ -43,7 +42,7 @@ export default async function RootLayout({
       <body className={`${poppins.className}`}>
         <Provider>
           <Refresh />
-          <CommonNavbar user={user} environmentType={environmentType} />
+          <CommonNavbar environmentType={environmentType} />
           <main>{children}</main>
           <CommonFooter footerData={footerData} />
           <Toaster />

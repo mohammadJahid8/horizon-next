@@ -7,6 +7,7 @@ import ProInfo from './pro-info';
 import PartnerInfo from './partner-info';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '@/app/actions';
+import ProfileSkeleton from './profile-skeleton';
 
 const ProfileInfo = ({
   isProProfileFromPartner,
@@ -22,7 +23,7 @@ const ProfileInfo = ({
   const { user } = useAppContext();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ProfileSkeleton />;
   }
 
   const userProfileImage =

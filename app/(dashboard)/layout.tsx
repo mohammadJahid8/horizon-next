@@ -2,8 +2,9 @@
 import Account from '@/components/global/dashboard/account/account';
 import DashboardNav from '@/components/global/dashboard/dashboard-nav';
 import DashboardLayout from '@/components/global/dashboard/dashboard-layout';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode } from 'react';
+import { useAppContext } from '@/lib/context';
 
 interface DashboardProps {
   children: ReactNode;

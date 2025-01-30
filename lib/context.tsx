@@ -11,7 +11,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
@@ -92,8 +92,13 @@ const ContextProvider = ({ children }: any) => {
   const pendingOffers = offers?.filter(
     (offer: any) => offer.status === 'pending'
   );
+  const acceptedOffers = offers?.filter(
+    (offer: any) => offer.status === 'accepted'
+  );
   const jobOffers = offers?.filter((offer: any) => offer.status !== 'pending');
-
+  const offersSent = offers?.length || 0;
+  const jobConversion = (acceptedOffers?.length / offersSent) * 100 || 0;
+  const jobConversionPercentage = jobConversion.toFixed(2);
   // console.log({ user });
 
   useEffect(() => {
@@ -121,6 +126,13 @@ const ContextProvider = ({ children }: any) => {
   const logOut = async () => {
     await logout();
     router.push('/');
+  };
+  const deleteAccount = async () => {
+    await fetch('/api/user/delete-account', {
+      method: 'DELETE',
+    });
+
+    router.push('/logout');
   };
 
   const isPersonalInfoCompleted =
@@ -394,6 +406,9 @@ const ContextProvider = ({ children }: any) => {
         isUserLoading,
         isUndreadNotification,
         sendNotification,
+        offersSent,
+        jobConversionPercentage,
+        deleteAccount,
       }}
     >
       {children}

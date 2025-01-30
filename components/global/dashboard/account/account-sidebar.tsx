@@ -8,11 +8,9 @@ import { useAppContext } from '@/lib/context';
 import PartnerAccountInfo from './partner-account-info';
 
 const AccountSidebar = () => {
-  const { user, isUserLoading } = useAppContext();
+  const { user, isUserLoading, deleteAccount } = useAppContext();
   const name =
     user?.personalInfo?.firstName + ' ' + user?.personalInfo?.lastName;
-
-  console.log({ isUserLoading });
 
   if (isUserLoading) {
     return (
@@ -47,6 +45,7 @@ const AccountSidebar = () => {
               <Button
                 variant='ghost'
                 className='text-start text-red-500 font-medium w-max'
+                onClick={deleteAccount}
               >
                 <Trash2 className='h-4 w-4 mr-2' />
                 Delete Account
