@@ -209,7 +209,13 @@ const OnboardProfessionalInfo = () => {
   const watchCertificationFileData: any = watch('certifications');
   const watchSkills: any = watch('skills');
 
-  // console.log({ errors });
+  const getIssueDate = (index: number) => {
+    const watchIssueDate = watchCertificationFileData[index]?.issueDate;
+    if (watchIssueDate) {
+      return new Date(watchIssueDate).toISOString().split('T')[0];
+    }
+    return '';
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -497,6 +503,7 @@ const OnboardProfessionalInfo = () => {
                       required: 'Expire Date is required',
                     })}
                     isError={!!errors.certifications?.[index]?.expireDate}
+                    min={getIssueDate(index)}
                   />
                   {errors.certifications &&
                     errors.certifications[index] &&
