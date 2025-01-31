@@ -25,21 +25,37 @@ import { statusIcons, statusTexts } from '@/utils/status';
 import { statusColors } from '@/utils/status';
 
 const OfferLists = ({ offers, source }: any) => {
-  const { openAlert, isOffersLoading, refetchOffers, setActionData } =
-    useAppContext();
+  const {
+    openAlert,
+    isOffersLoading,
+    refetchOffers,
+    setActionData,
+    sendNotification,
+    user,
+  } = useAppContext();
 
   const handleRespond = (offer: any) => {
-    setActionData({ id: offer._id, type: 'accept', notes: offer.notes });
+    setActionData({
+      id: offer._id,
+      type: 'accept',
+      notes: offer.notes,
+      partnerId: offer.partner._id,
+    });
     openAlert();
   };
   const handleReject = (offer: any) => {
-    setActionData({ id: offer._id, type: 'reject', notes: offer.notes });
+    setActionData({
+      id: offer._id,
+      type: 'reject',
+      notes: offer.notes,
+      partnerId: offer.partner._id,
+    });
     openAlert();
   };
 
   console.log({ offers });
 
-  const handleRemove = async (id: string) => {
+  const handleRemove = async (id: string, partnerId: string) => {
     const response = fetch(`/api/user/offer/update`, {
       method: 'PATCH',
       body: JSON.stringify({ id, status: 'rejected', isRemovedByPro: true }),
@@ -49,6 +65,10 @@ const OfferLists = ({ offers, source }: any) => {
       success: async (data: any) => {
         refetchOffers();
         await data.json();
+        await sendNotification(
+          `<p>Your offer has been rejected by <span style="font-weight: 600; color: #008000;">${user?.personalInfo?.firstName} ${user?.personalInfo?.lastName}</span></p>`,
+          partnerId
+        );
         return 'Offer removed successfully!';
       },
       error: 'Failed to remove offer',
@@ -118,12 +138,18 @@ const OfferLists = ({ offers, source }: any) => {
         <div key={index} className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
           <div className='flex flex-col gap-2 w-full'>
             <div className='flex flex-col gap-4'>
-              <div className='flex justify-between items-center'>
+              <div
+                className='flex justify-between items-center'
+                key={offer._id}
+              >
                 <span
                   className={cn(
-                    'text-[#6C6C6C80] text-sm flex items-center gap-2 uppercase',
-                    statusColors[offer.status as keyof typeof statusColors]
+                    'text-[#6C6C6C80] text-sm flex items-center gap-2 uppercase'
                   )}
+                  style={{
+                    color:
+                      statusColors[offer.status as keyof typeof statusColors],
+                  }}
                 >
                   {statusIcons[offer.status as keyof typeof statusIcons]}
                   {statusTexts[offer.status as keyof typeof statusTexts]}
@@ -246,7 +272,12 @@ const OfferLists = ({ offers, source }: any) => {
                     All good! No need for any more requirements.
                   </p>
                   {offer.notes && (
-                    <NotesPopup notes={offer.notes} id={offer._id} />
+                    <NotesPopup
+                      notes={offer.notes}
+                      id={offer._id}
+                      proId={offer.pro._id}
+                      partnerId={offer.partner._id}
+                    />
                   )}
                 </div>
               </div>
@@ -257,7 +288,12 @@ const OfferLists = ({ offers, source }: any) => {
                   <div className='flex gap-4 items-center'>
                     <p>The client is requesting:</p>
                     {offer.notes && (
-                      <NotesPopup notes={offer.notes} id={offer._id} />
+                      <NotesPopup
+                        notes={offer.notes}
+                        id={offer._id}
+                        proId={offer.pro._id}
+                        partnerId={offer.partner._id}
+                      />
                     )}
                   </div>
                 </div>

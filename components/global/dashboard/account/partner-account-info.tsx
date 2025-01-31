@@ -3,8 +3,8 @@ import React from 'react';
 import { useAppContext } from '@/lib/context';
 
 const PartnerAccountInfo = () => {
-  const { offers } = useAppContext();
-  const offersSent = offers?.length || 0;
+  const { offersSent, jobConversionPercentage } = useAppContext();
+
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
       <div className='flex flex-col gap-1'>
@@ -20,7 +20,9 @@ const PartnerAccountInfo = () => {
         <p className='text-[#6C6C6C] text-sm md:text-base flex items-center gap-2'>
           Jobs Conversion <CircleHelp className='size-5' />
         </p>
-        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>0.18%</p>
+        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>
+          {jobConversionPercentage}%
+        </p>
       </div>
     </div>
   );

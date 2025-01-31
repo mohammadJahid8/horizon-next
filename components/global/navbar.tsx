@@ -9,14 +9,14 @@ import Logo from './logo';
 import Container from './container';
 import { SelectAuthPath } from './landing/select-auth-path';
 import { scrollToSection } from '@/lib/utils';
+import { useAppContext } from '@/lib/context';
 
 export default function Navbar({
-  user,
   environmentType,
 }: {
-  user: any;
   environmentType: string;
 }) {
+  const { user } = useAppContext();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

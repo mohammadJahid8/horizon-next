@@ -235,6 +235,7 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               </div>
             </>
           )}
+
           {source === 'partner' && (
             <>
               <div className='flex flex-col gap-3'>
@@ -318,6 +319,23 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
               renderError(errors.dateEstablished.message as string)}
           </div>
         )}
+        <div className='flex flex-col gap-3'>
+          <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
+            Phone Number <span className='text-red-500'>*</span>
+          </label>
+          <Input
+            {...register('phone', {
+              required: 'Phone number is required',
+            })}
+            className='rounded-[12px] h-14 bg-[#f9f9f9]'
+            type='number'
+            placeholder='Enter your phone number'
+            name='phone'
+            isError={!!errors.phone}
+            max={new Date().toISOString().split('T')[0]}
+          />
+          {errors.phone && renderError(errors.phone.message as string)}
+        </div>
         <div className='flex flex-col gap-3'>
           <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
             About/Bio

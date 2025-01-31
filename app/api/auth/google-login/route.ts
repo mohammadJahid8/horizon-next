@@ -14,11 +14,13 @@ export async function POST(req: Request) {
     });
 
     if (response.status === 200) {
-      const { accessToken, refreshToken } = response.data?.data;
+      const { accessToken, refreshToken, completionPercentage } =
+        response.data?.data;
 
       const res = NextResponse.json({
         status: 200,
         message: 'Login successful',
+        completionPercentage,
       });
 
       res.cookies.set('accessToken', accessToken, {

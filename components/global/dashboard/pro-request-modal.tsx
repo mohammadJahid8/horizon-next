@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useAppContext } from '@/lib/context';
 import { cn } from '@/lib/utils';
 import { Check, CloudUpload, FileClock, Link2 } from 'lucide-react';
 import moment from 'moment';
@@ -25,6 +26,7 @@ export function ProRequestModal({
   offer: any;
   refetchOffers: any;
 }) {
+  const { user, sendNotification } = useAppContext();
   const image = offer?.partner?.personalInfo?.image;
   const companyName = offer?.partner?.personalInfo?.companyName;
   const companyIndustry = offer?.partner?.personalInfo?.industry;
@@ -35,8 +37,8 @@ export function ProRequestModal({
   const [open, setOpen] = useState(false);
 
   const handleFileChange = (id: number, file: any) => {
-    if (file.size > 1000 * 1024) {
-      return toast.error('File size should not exceed 1024kb', {
+    if (file.size > 1024 * 1024) {
+      return toast.error('File size should not exceed 1MB', {
         position: 'top-center',
       });
     }
@@ -78,6 +80,10 @@ export function ProRequestModal({
     if (responseData.status === 200) {
       toast.success(
         responseData.message || 'Documents submitted successfully!'
+      );
+      await sendNotification(
+        `<p><span style="font-weight: 600; color: #008000;">${user?.personalInfo?.firstName} ${user?.personalInfo?.lastName}</span> has responded to your offer.</p>`,
+        offer?.partner?._id
       );
       refetchOffers();
       setOpen(false);
@@ -151,7 +157,7 @@ export function ProRequestModal({
                       </Link>
                     ) : (
                       <span className='text-[10px] text-[#6C6C6C]'>
-                        image or pdf formats, up to 1024kb.
+                        image or pdf formats, up to 1MB.
                       </span>
                     )}
                   </div>

@@ -18,9 +18,15 @@ import { useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
-export function PartnerRequestModal() {
-  const { isPartnerOpen, closePartner, refetchOffers, offerData } =
-    useAppContext();
+export function PartnerRequestModal({ proUser }: { proUser: any }) {
+  const {
+    isPartnerOpen,
+    closePartner,
+    refetchOffers,
+    offerData,
+    user,
+    sendNotification,
+  } = useAppContext();
   const { id } = useParams();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +49,6 @@ export function PartnerRequestModal() {
       });
     }
   }, [offerData]);
-
-  // console.log({ offerData });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -86,9 +90,25 @@ export function PartnerRequestModal() {
       closePartner();
       router.push(`/partner/hires`);
       setIsLoading(false);
-      return toast.success(responseData.message || `Offer sent successfully!`, {
-        position: 'top-center',
-      });
+      toast.success(
+        offerData?._id
+          ? `Offer updated successfully!`
+          : `Offer sent successfully!`,
+        {
+          position: 'top-center',
+        }
+      );
+
+      console.log(responseData, proUser?._id || id);
+
+      const message = offerData?._id
+        ? `<p><span style="font-weight: 600; color: #008000;">${user?.personalInfo?.companyName}</span> has made some updates to their offer requirements. Please review the changes at your earliest convenience.</p>`
+        : `<p>Great news! You have received a new offer from <span style="font-weight: 600; color: #008000;">${user?.personalInfo?.companyName}</span>. Check it out and respond promptly.</p>`;
+
+      await sendNotification(
+        message,
+        proUser?._id || id || offerData?.pro?._id
+      );
     }
 
     if (responseData.status === 500) {

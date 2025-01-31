@@ -15,8 +15,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function OfferActionModal() {
-  const { isOpenOfferAction, closeOfferAction, actionData, refetchOffers } =
-    useAppContext();
+  const {
+    isOpenOfferAction,
+    closeOfferAction,
+    actionData,
+    refetchOffers,
+    sendNotification,
+    user,
+  } = useAppContext();
   const router = useRouter();
 
   const [notes, setNotes] = useState('');
@@ -47,6 +53,11 @@ export default function OfferActionModal() {
       closeOfferAction();
       router.push(`/pro/jobs`);
       toast.success(`Offer ${status} successfully!`);
+
+      await sendNotification(
+        `<p>Your offer has been <strong>${status}</strong> by <span style="font-weight: 600; color: #008000;">${user?.personalInfo?.firstName} ${user?.personalInfo?.lastName}</span>.</p><p><strong>Pro's note:</strong> ${notes}</p>`,
+        actionData?.partnerId
+      );
     } else {
       toast.error(`Failed to ${status} offer`);
     }

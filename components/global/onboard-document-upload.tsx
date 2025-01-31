@@ -52,6 +52,12 @@ const OnboardDocumentUpload = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 1024 * 1024) {
+      return toast.error('File size should not exceed 1MB', {
+        position: 'top-center',
+      });
+    }
+
     const fizeSizeLimit =
       type === 'certificate'
         ? 5
@@ -185,15 +191,17 @@ const OnboardDocumentUpload = () => {
                       </p>
                       <p className='text-xs text-[#5E6864]'>
                         {type === 'certificate' &&
-                          'doc or pdf formats, up to 5mb.'}
-                        {type === 'resume' && 'doc or pdf formats, up to 5mb.'}
+                          'image or pdf formats, up to 1MB.'}
+                        {type === 'resume' &&
+                          'image or pdf formats, up to 1MB.'}
                         {type === 'governmentId' &&
-                          'jpeg, png, pdf formats, up to 2MB.'}
+                          'image or pdf formats, up to 1MB.'}
                       </p>
                     </div>
                   </div>
                   <label className='cursor-pointer text-[#455468] font-medium text-sm border border-[#AFBACA] h-10 flex items-center justify-center gap-2 rounded-lg px-4'>
                     <input
+                      accept='application/pdf, image/*'
                       type='file'
                       className='hidden'
                       onChange={(e) => handleFileChange(e, type)}

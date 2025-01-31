@@ -1,11 +1,17 @@
 /* eslint-disable react/prop-types */
 
-import { getOffers, getTokens, getUser, logout } from '@/app/actions';
+import {
+  getNotifications,
+  getOffers,
+  getTokens,
+  getUser,
+  logout,
+} from '@/app/actions';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 const auth = getAuth(app);
@@ -60,10 +66,20 @@ const ContextProvider = ({ children }: any) => {
     setIsPartnerOpen(false);
   };
 
-  const { refetch: refetchUser, data: user } = useQuery({
+  const {
+    refetch: refetchUser,
+    data: user,
+    isLoading: isUserLoading,
+  } = useQuery({
     queryKey: [`user`],
     queryFn: async () => await getUser(),
   });
+
+  const { refetch: refetchNotifications, data: notifications } = useQuery({
+    queryKey: [`notifications`, user?._id],
+    queryFn: async () => await getNotifications(),
+  });
+
   const {
     refetch: refetchOffers,
     data: offers,
@@ -76,8 +92,13 @@ const ContextProvider = ({ children }: any) => {
   const pendingOffers = offers?.filter(
     (offer: any) => offer.status === 'pending'
   );
+  const acceptedOffers = offers?.filter(
+    (offer: any) => offer.status === 'accepted'
+  );
   const jobOffers = offers?.filter((offer: any) => offer.status !== 'pending');
-
+  const offersSent = offers?.length || 0;
+  const jobConversion = (acceptedOffers?.length / offersSent) * 100 || 0;
+  const jobConversionPercentage = jobConversion.toFixed(2);
   // console.log({ user });
 
   useEffect(() => {
@@ -106,6 +127,13 @@ const ContextProvider = ({ children }: any) => {
     await logout();
     router.push('/');
   };
+  const deleteAccount = async () => {
+    await fetch('/api/user/delete-account', {
+      method: 'DELETE',
+    });
+
+    router.push('/logout');
+  };
 
   const isPersonalInfoCompleted =
     Object.keys(user?.personalInfo || {}).length > 0;
@@ -113,6 +141,10 @@ const ContextProvider = ({ children }: any) => {
     Object.keys(user?.professionalInfo || {}).length > 0;
   const isDocumentUploadCompleted =
     Object.keys(user?.documents || {}).length > 0;
+
+  const isUndreadNotification = notifications?.filter(
+    (noti: any) => !noti.isRead
+  );
 
   const handleLogin = async (data: any, source: string) => {
     const response = await fetch('/api/auth/login', {
@@ -162,7 +194,7 @@ const ContextProvider = ({ children }: any) => {
       body: JSON.stringify({
         email: data.email,
         password: data.password,
-        phone: data.phone,
+        // phone: data.phone,
         role: source,
       }),
     });
@@ -313,6 +345,17 @@ const ContextProvider = ({ children }: any) => {
     }
   };
 
+  const sendNotification = async (message: string, user: string) => {
+    await fetch('/api/user/notification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        user,
+      }),
+    });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -358,6 +401,14 @@ const ContextProvider = ({ children }: any) => {
         openOfferAction,
         closeOfferAction,
         jobOffers,
+        notifications,
+        refetchNotifications,
+        isUserLoading,
+        isUndreadNotification,
+        sendNotification,
+        offersSent,
+        jobConversionPercentage,
+        deleteAccount,
       }}
     >
       {children}

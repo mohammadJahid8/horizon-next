@@ -4,10 +4,9 @@ import { CircleHelp, Star } from 'lucide-react';
 import { useAppContext } from '@/lib/context';
 
 const PartnerInfo = () => {
-  const { user, offers } = useAppContext();
+  const { user, offersSent, jobConversionPercentage } = useAppContext();
   const personalInfo = user?.personalInfo;
 
-  const offersSent = offers?.length || 0;
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
   const companyName = personalInfo?.companyName;
   return (
@@ -41,7 +40,10 @@ const PartnerInfo = () => {
             </div>
           )}
         </div>
-        <Tracks offersSent={offersSent} />
+        <Tracks
+          offersSent={offersSent}
+          jobConversionPercentage={jobConversionPercentage}
+        />
       </div>
     </div>
   );
@@ -49,7 +51,13 @@ const PartnerInfo = () => {
 
 export default PartnerInfo;
 
-const Tracks = ({ offersSent }: { offersSent: number }) => {
+const Tracks = ({
+  offersSent,
+  jobConversionPercentage,
+}: {
+  offersSent: number;
+  jobConversionPercentage: number;
+}) => {
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
       <div className='flex flex-col gap-1'>
@@ -65,7 +73,9 @@ const Tracks = ({ offersSent }: { offersSent: number }) => {
         <p className='text-[#6C6C6C] text-sm md:text-base flex items-center gap-2'>
           Jobs Conversion <CircleHelp className='size-5' />
         </p>
-        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>0.18%</p>
+        <p className='text-[#1C1C1C] font-medium text-lg md:text-2xl'>
+          {jobConversionPercentage}%
+        </p>
       </div>
     </div>
   );

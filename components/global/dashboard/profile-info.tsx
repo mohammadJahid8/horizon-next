@@ -7,25 +7,23 @@ import ProInfo from './pro-info';
 import PartnerInfo from './partner-info';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '@/app/actions';
+import ProfileSkeleton from './profile-skeleton';
 
 const ProfileInfo = ({
   isProProfileFromPartner,
-  id,
+  userById,
   isPublicProPage,
+  isLoading,
 }: {
   isProProfileFromPartner: boolean;
-  id: string;
+  userById: any;
   isPublicProPage: boolean;
+  isLoading: boolean;
 }) => {
   const { user } = useAppContext();
 
-  const { data: userById, isLoading } = useQuery({
-    queryKey: [`userById`, id],
-    queryFn: async () => await getUserById(id),
-  });
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ProfileSkeleton />;
   }
 
   const userProfileImage =
