@@ -1,33 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/lib/context';
-import { MoveUpRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
-// const notis = [
-//   {
-//     message: 'You have a new Offer from',
-//     companyName: 'Company Name',
-//     time: '10:37AM, 12 Sep, 2024',
-//   },
-//   {
-//     message: 'You have a new Offer from',
-//     companyName: 'Company Name',
-//     time: '10:37AM, 12 Sep, 2024',
-//   },
-//   {
-//     message: 'You have a new Offer from',
-//     companyName: 'Company Name',
-//     time: '10:37AM, 12 Sep, 2024',
-//   },
-//   {
-//     message: 'You have a new Offer from',
-//     companyName: 'Company Name',
-//     time: '10:37AM, 12 Sep, 2024',
-//   },
-// ];
 
 const Notifications = () => {
   const {

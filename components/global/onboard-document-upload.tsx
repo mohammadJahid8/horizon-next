@@ -24,7 +24,7 @@ interface UploadProgressState {
   governmentId: number;
 }
 
-const OnboardDocumentUpload = () => {
+const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
@@ -241,19 +241,21 @@ const OnboardDocumentUpload = () => {
           )}
         </div>
 
-        <div className='flex gap-5'>
-          <OnboardButton
-            text={!isEdit ? 'Skip for now' : 'Cancel'}
-            className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
-            href='/pro/profile'
-          />
-          <OnboardButton
-            text={isEdit ? 'Save & Exit' : 'Submit'}
-            className='w-full'
-            type='submit'
-            disabled={isNoFile}
-          />
-        </div>
+        {from !== 'admin' && (
+          <div className='flex gap-5'>
+            <OnboardButton
+              text={!isEdit ? 'Skip for now' : 'Cancel'}
+              className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+              href='/pro/profile'
+            />
+            <OnboardButton
+              text={isEdit ? 'Save & Exit' : 'Submit'}
+              className='w-full'
+              type='submit'
+              disabled={isNoFile}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

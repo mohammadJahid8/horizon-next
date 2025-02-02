@@ -20,7 +20,13 @@ import LoadingOverlay from '@/components/global/loading-overlay';
 import { useState } from 'react';
 import { useAppContext } from '@/lib/context';
 
-const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
+const OnboardPersonalInfo = ({
+  source,
+  from,
+}: {
+  source?: 'partner' | 'pro';
+  from?: 'admin';
+}) => {
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
@@ -431,21 +437,23 @@ const OnboardPersonalInfo = ({ source }: { source: 'partner' | 'pro' }) => {
           </div>
         </div>
 
-        <div className='flex gap-5'>
-          {isEdit && (
+        {from !== 'admin' && (
+          <div className='flex gap-5'>
+            {isEdit && (
+              <OnboardButton
+                text='Cancel'
+                onClick={() => router.back()}
+                className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+              />
+            )}
             <OnboardButton
-              text='Cancel'
-              onClick={() => router.back()}
-              className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+              text={isEdit ? 'Save & Exit' : 'Next'}
+              type='submit'
+              className='w-full'
+              disabled={!isDirty && isEdit}
             />
-          )}
-          <OnboardButton
-            text={isEdit ? 'Save & Exit' : 'Next'}
-            type='submit'
-            className='w-full'
-            disabled={!isDirty && isEdit}
-          />
-        </div>
+          </div>
+        )}
       </div>
     </form>
   );

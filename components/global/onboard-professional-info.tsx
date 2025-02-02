@@ -15,7 +15,7 @@ import LoadingOverlay from '@/components/global/loading-overlay';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const OnboardProfessionalInfo = () => {
+const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
@@ -666,19 +666,21 @@ const OnboardProfessionalInfo = () => {
             renderError(errors.skills.message)}
         </div>
 
-        <div className='flex gap-5'>
-          <OnboardButton
-            text={isEdit ? 'Cancel' : 'Previous'}
-            className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
-            onClick={() => router.back()}
-          />
-          <OnboardButton
-            text={isEdit ? 'Save & Exit' : 'Next'}
-            className='w-full'
-            type='submit'
-            disabled={!isDirty && isEdit}
-          />
-        </div>
+        {from !== 'admin' && (
+          <div className='flex gap-5'>
+            <OnboardButton
+              text={isEdit ? 'Cancel' : 'Previous'}
+              className='w-full bg-white text-[#1C1C1C] border border-gray-300 hover:text-white'
+              onClick={() => router.back()}
+            />
+            <OnboardButton
+              text={isEdit ? 'Save & Exit' : 'Next'}
+              className='w-full'
+              type='submit'
+              disabled={!isDirty && isEdit}
+            />
+          </div>
+        )}
       </div>
     </form>
   );
