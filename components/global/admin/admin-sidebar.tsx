@@ -41,11 +41,13 @@ const items = [
     title: 'Hires',
     url: '/admin/hires',
     icon: Briefcase,
+    disabled: true,
   },
   {
     title: 'Support',
     url: '/admin/support',
     icon: MessageCircleQuestion,
+    disabled: true,
   },
 ];
 
@@ -73,6 +75,7 @@ export function AdminSidebar() {
                           'text-primary font-bold': isActive,
                           'text-[#1C1C1C] hover:text-primary hover:font-bold':
                             !isActive,
+                          'pointer-events-none opacity-50': item.disabled,
                         }
                       )}
                     >

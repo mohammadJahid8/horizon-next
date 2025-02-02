@@ -11,7 +11,7 @@ import AdminAlertModal from './admin-alert-modal';
 import { MessageModal } from './message-modal';
 import { AdminEditUserModal } from './admin-edit-user-modal';
 
-export const columns: ColumnDef<any>[] = [
+export const proColumns: ColumnDef<any>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -159,6 +159,141 @@ export const columns: ColumnDef<any>[] = [
             </Button>
           </MessageModal>
           <ReviewApplicationModal status={status}>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='text-gray-500 hover:text-gray-600 bg-gray-50'
+            >
+              <Eye className='size-5' />
+            </Button>
+          </ReviewApplicationModal>
+          <TableDropdown />
+        </div>
+      );
+    },
+  },
+];
+export const partnerColumns: ColumnDef<any>[] = [
+  {
+    accessorKey: 'fullName',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const firstName = row.original.firstName || '';
+      const lastName = row.original.lastName || '';
+      const companyName = row.original.companyName || '';
+      return (
+        <div className='flex items-center gap-3'>
+          <Image
+            src={'/dummy-profile-pic.jpg'}
+            alt={`${firstName} ${lastName}`}
+            className='rounded-full'
+            width={40}
+            height={40}
+          />
+          <div>
+            <p className='font-medium'>{`${firstName} ${lastName}`.trim()}</p>
+            <p className='text-sm text-gray-500'>{companyName}</p>
+          </div>
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const nameA =
+        `${rowA.original.firstName || ''} ${rowA.original.lastName || ''}`
+          .trim()
+          .toLowerCase();
+      const nameB =
+        `${rowB.original.firstName || ''} ${rowB.original.lastName || ''}`
+          .trim()
+          .toLowerCase();
+      return nameA.localeCompare(nameB);
+    },
+  },
+  {
+    accessorKey: 'email',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Email
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'phone',
+    header: 'Phone Number',
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Joining Date
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'industry',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Industry
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const industry = row.getValue('industry') as string;
+      return <span>{industry}</span>;
+    },
+  },
+  {
+    header: 'Actions',
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <div className='flex items-center gap-2'>
+          <AdminEditUserModal>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='text-gray-500 hover:text-gray-600 bg-gray-50'
+            >
+              <Pencil className='size-5' />
+            </Button>
+          </AdminEditUserModal>
+          <MessageModal>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='text-gray-500 hover:text-gray-600 bg-gray-50'
+            >
+              <Mail className='size-5' />
+            </Button>
+          </MessageModal>
+          <ReviewApplicationModal status='verified'>
             <Button
               variant='ghost'
               size='icon'

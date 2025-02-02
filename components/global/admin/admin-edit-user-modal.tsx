@@ -23,7 +23,7 @@ export function AdminEditUserModal({ open, onOpenChange, children }: any) {
       <DialogContent className='max-w-[852px] p-0 '>
         <DialogHeader className='p-8 pb-3'>
           <DialogTitle className='text-xl font-semibold'>
-            Application Details
+            User Profile
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className='h-[80vh]'>

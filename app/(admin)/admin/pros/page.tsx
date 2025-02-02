@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { DataTable } from '@/components/global/admin/data-table';
-import { columns } from '@/components/global/admin/columns';
+import { proColumns } from '@/components/global/admin/columns';
 import Title from '@/components/global/title';
 
 const pros = Array.from({ length: 50 }, (_, i) => ({
@@ -64,7 +64,7 @@ export default function ProsPage() {
       </div>
 
       <DataTable
-        columns={columns}
+        columns={proColumns}
         data={pros.filter(
           (pro) =>
             (statusFilter === 'all' || pro.status === statusFilter) &&
