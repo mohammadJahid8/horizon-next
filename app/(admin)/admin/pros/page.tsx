@@ -16,7 +16,8 @@ import Title from '@/components/global/title';
 const pros = Array.from({ length: 50 }, (_, i) => ({
   id: `${i + 1}`,
   avatar: '/placeholder.svg?height=40&width=40',
-  name: `Pro Name ${i + 1}`,
+  firstName: `Pro Name ${i + 1}`,
+  lastName: `Pro Name ${i + 1}`,
   email: `example${i + 1}@email.com`,
   phone: '161616161',
   joiningDate: '4-12-2024',
@@ -69,7 +70,10 @@ export default function ProsPage() {
           (pro) =>
             (statusFilter === 'all' || pro.status === statusFilter) &&
             (globalFilter === '' ||
-              pro.name.toLowerCase().includes(globalFilter.toLowerCase()) ||
+              pro.firstName
+                .toLowerCase()
+                .includes(globalFilter.toLowerCase()) ||
+              pro.lastName.toLowerCase().includes(globalFilter.toLowerCase()) ||
               pro.email.toLowerCase().includes(globalFilter.toLowerCase()))
         )}
       />

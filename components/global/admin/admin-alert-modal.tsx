@@ -51,10 +51,12 @@ export default function AdminAlertModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='sm:max-w-[852px] p-8'>
+      <DialogContent className='max-w-full sm:max-w-[852px] p-4 sm:p-8'>
         <DialogHeader>
-          <DialogTitle className='text-center mb-4'>{title}</DialogTitle>
-          <DialogDescription className='text-base text-center'>
+          <DialogTitle className='text-center mb-2 sm:mb-4 text-lg sm:text-xl'>
+            {title}
+          </DialogTitle>
+          <DialogDescription className='text-sm sm:text-base text-center'>
             {description}
           </DialogDescription>
         </DialogHeader>
@@ -62,20 +64,20 @@ export default function AdminAlertModal({
         {showTextArea && (
           <Textarea
             placeholder={placeholder}
-            className='min-h-[160px] rounded-xl'
+            className='min-h-[120px] sm:min-h-[160px] rounded-lg sm:rounded-xl'
           />
         )}
-        <div className='flex gap-3 mt-2'>
+        <div className='flex flex-row gap-2 sm:gap-3 mt-2'>
           <Button
             variant='outline'
             className={cn(
-              'flex-1 h-[75px] rounded-xl hover:text-black',
+              'flex-1 h-[50px] sm:h-[75px] rounded-lg sm:rounded-xl hover:text-black',
               alertType === 'approve' && 'bg-primary text-white'
             )}
           >
             Yes!
           </Button>
-          <Button className='flex-1 h-[75px] rounded-xl bg-red-600 hover:bg-red-600/90'>
+          <Button className='flex-1 h-[50px] sm:h-[75px] rounded-lg sm:rounded-xl bg-red-600 hover:bg-red-600/90'>
             No
           </Button>
         </div>

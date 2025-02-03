@@ -13,7 +13,7 @@ import { AdminEditUserModal } from './admin-edit-user-modal';
 
 export const proColumns: ColumnDef<any>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: 'fullName',
     header: ({ column }) => {
       return (
         <Button
@@ -26,18 +26,33 @@ export const proColumns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
+      const firstName = row.original.firstName || '';
+      const lastName = row.original.lastName || '';
+      const companyName = row.original.companyName || '';
       return (
         <div className='flex items-center gap-3'>
           <Image
             src={'/dummy-profile-pic.jpg'}
-            alt={row.original.name}
+            alt={`${firstName} ${lastName}`}
             className='rounded-full'
             width={40}
             height={40}
           />
-          <span className='font-medium'>{row.getValue('name')}</span>
+
+          <p className='font-medium'>{`${firstName} ${lastName}`.trim()}</p>
         </div>
       );
+    },
+    sortingFn: (rowA, rowB) => {
+      const nameA =
+        `${rowA.original.firstName || ''} ${rowA.original.lastName || ''}`
+          .trim()
+          .toLowerCase();
+      const nameB =
+        `${rowB.original.firstName || ''} ${rowB.original.lastName || ''}`
+          .trim()
+          .toLowerCase();
+      return nameA.localeCompare(nameB);
     },
   },
   {

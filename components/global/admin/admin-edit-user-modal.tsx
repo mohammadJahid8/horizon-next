@@ -20,16 +20,16 @@ export function AdminEditUserModal({ open, onOpenChange, children }: any) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='max-w-[852px] p-0 '>
-        <DialogHeader className='p-8 pb-3'>
-          <DialogTitle className='text-xl font-semibold'>
+      <DialogContent className='max-w-full sm:max-w-[852px] p-4 sm:p-8'>
+        <DialogHeader className='py-3'>
+          <DialogTitle className='text-start text-xl font-semibold'>
             User Profile
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className='h-[80vh]'>
-          <div className='p-8 pt-0'>
+        <ScrollArea className='h-[70vh] sm:h-[80vh]'>
+          <div>
             <div className='flex flex-col gap-6'>
-              <div className='flex items-start justify-between'>
+              <div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-start justify-between'>
                 <div className='flex gap-3 items-center'>
                   <Image
                     src='/dummy-profile-pic.jpg'

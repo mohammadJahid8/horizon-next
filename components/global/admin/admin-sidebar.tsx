@@ -9,6 +9,7 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   Briefcase,
@@ -53,6 +54,7 @@ const items = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar>
@@ -66,7 +68,10 @@ export function AdminSidebar() {
               {items.map((item) => {
                 const isActive = pathname === item.url;
                 return (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem
+                    key={item.title}
+                    onClick={() => setOpenMobile(false)}
+                  >
                     <Link
                       href={item.url}
                       className={cn(

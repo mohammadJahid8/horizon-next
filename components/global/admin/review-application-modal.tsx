@@ -33,34 +33,36 @@ export function ReviewApplicationModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='max-w-[852px] p-0 '>
-        <DialogHeader className='p-8 pb-3'>
-          <DialogTitle className='text-xl font-semibold'>
+      <DialogContent className='max-w-full sm:max-w-[852px] p-4 sm:p-8'>
+        <DialogHeader className='py-3'>
+          <DialogTitle className='text-start text-xl font-semibold'>
             Application Details
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className='h-[80vh]'>
-          <div className='p-8 pt-0'>
-            <div className='flex flex-col gap-6'>
-              <div className='flex items-start justify-between'>
+        <ScrollArea className='h-[70vh] sm:h-[80vh]'>
+          <div>
+            <div className='flex flex-col gap-4 sm:gap-6'>
+              <div className='flex flex-col sm:flex-row items-start sm:justify-between'>
                 <div className='flex gap-3 items-center'>
                   <Image
                     src='/dummy-profile-pic.jpg'
                     alt='Profile picture'
-                    width={108}
-                    height={108}
+                    width={80}
+                    height={80}
                     className='rounded-full'
                   />
-                  <div className='flex flex-col gap-3'>
-                    <div className='font-semibold text-xl'>Pro Name</div>
+                  <div className='flex flex-col gap-2 sm:gap-3'>
+                    <div className='font-semibold text-lg sm:text-xl'>
+                      Pro Name
+                    </div>
                     <div className='text-muted-foreground'>
                       Latest Job Title
                     </div>
                   </div>
                 </div>
-                <div className='flex flex-col gap-4'>
+                <div className='flex flex-wrap flex-row sm:flex-col gap-2 sm:gap-4 mt-4 sm:mt-0'>
                   {status === 'pending' && (
-                    <div className='flex items-center gap-4'>
+                    <div className='flex flex-row items-center gap-2 sm:gap-4'>
                       <Button
                         variant='default'
                         className='rounded-lg inline-flex items-center gap-2'
@@ -81,7 +83,7 @@ export function ReviewApplicationModal({
                   <MessageModal>
                     <Button
                       variant='outline'
-                      className='w-full rounded-lg inline-flex items-center gap-2'
+                      className='w-max sm:w-full rounded-lg inline-flex items-center gap-2'
                     >
                       Send a message
                       <MoveUpRight className='size-4' />
@@ -91,7 +93,7 @@ export function ReviewApplicationModal({
               </div>
 
               {status === 'verified' && (
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-row items-center gap-2 sm:gap-4'>
                   <AdminEditUserModal>
                     <Button
                       variant='outline'
