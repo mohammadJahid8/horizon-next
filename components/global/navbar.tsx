@@ -45,6 +45,7 @@ export default function Navbar({
   const profilePath =
     user?.role === 'partner' ? '/partner/profile' : '/pro/profile';
 
+  console.log({ user });
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 bg-white border-b py-4 ${
@@ -165,12 +166,12 @@ export default function Navbar({
                   {user?.email && (
                     <div className='flex flex-col gap-12 w-full'>
                       <Button
-                        href={profilePath}
+                        href={user?.role === 'admin' ? '/admin' : profilePath}
                         variant='link'
                         className='text-[#6C6C6C] hover:text-primary text-base font-medium'
                         onClick={() => setIsOpen(false)}
                       >
-                        Profile
+                        {user?.role === 'admin' ? 'Admin' : 'Profile'}
                       </Button>
                       <Button href='/logout'>Logout</Button>
                     </div>
@@ -254,10 +255,10 @@ export default function Navbar({
           {user?.email && (
             <div className='hidden md:flex items-center space-x-6'>
               <Link
-                href={profilePath}
+                href={user?.role === 'admin' ? '/admin' : profilePath}
                 className='text-[#6C6C6C] hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors'
               >
-                Profile
+                {user?.role === 'admin' ? 'Admin' : 'Profile'}
               </Link>
 
               <Button

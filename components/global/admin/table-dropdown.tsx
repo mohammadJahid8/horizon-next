@@ -8,9 +8,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
-import AlertModal from './admin-alert-modal';
+import AdminAlertModal from './admin-alert-modal';
 
-const TableDropdown = () => {
+const TableDropdown = ({ data }: { data: any }) => {
   const [open, setOpen] = useState(false);
   const [alertType, setAlertType] = useState<'block' | 'remove'>('block');
   return (
@@ -32,6 +32,7 @@ const TableDropdown = () => {
               setAlertType('block');
               setOpen(true);
             }}
+            disabled={data.status === 'blocked'}
           >
             <UserRoundX className='size-4' /> Block
           </DropdownMenuItem>
@@ -46,7 +47,12 @@ const TableDropdown = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertModal open={open} setOpen={setOpen} alertType={alertType} />
+      <AdminAlertModal
+        open={open}
+        setOpen={setOpen}
+        alertType={alertType}
+        data={data}
+      />
     </>
   );
 };

@@ -7,13 +7,14 @@ import { useAppContext } from '@/lib/context';
 import moment from 'moment';
 import NoData from '../no-data';
 import { useParams, usePathname } from 'next/navigation';
+import SectionDescription from '../section-description';
 
 const PersonalInformation = ({
   proUser,
-  source,
+  from: from,
 }: {
   proUser?: any;
-  source?: string;
+  from?: string;
 }) => {
   const { user } = useAppContext();
   const { id } = useParams();
@@ -36,7 +37,7 @@ const PersonalInformation = ({
     <div
       className={cn(
         'bg-white md:rounded-[16px]',
-        source === 'admin' ? 'p-0' : 'px-4 p-6 md:p-8 '
+        from === 'admin' ? 'p-0' : 'px-4 p-6 md:p-8 '
       )}
     >
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
@@ -44,7 +45,7 @@ const PersonalInformation = ({
           text='Personal information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        {source !== 'admin' && (
+        {from !== 'admin' && (
           <EditBtn href={`/pro/edit/personal-information?edit=true`} />
         )}
       </div>
@@ -55,7 +56,7 @@ const PersonalInformation = ({
               <SectionTitle text='Bio' />
               <SectionDescription
                 text={bio}
-                source={source}
+                from={from}
                 className='text-sm md:text-base'
               />
             </div>
@@ -66,7 +67,7 @@ const PersonalInformation = ({
                 <SectionTitle text='Name' />
                 <SectionDescription
                   text={`${firstName} ${lastName}`}
-                  source={source}
+                  from={from}
                 />
               </div>
             )}
@@ -75,14 +76,14 @@ const PersonalInformation = ({
                 <SectionTitle text='Date of Birth' />
                 <SectionDescription
                   text={moment(dateOfBirth).format('MMMM Do YYYY')}
-                  source={source}
+                  from={from}
                 />
               </div>
             )}
             {gender && (
               <div className='flex flex-col gap-1.5 md:gap-2.5'>
                 <SectionTitle text='Gender' />
-                <SectionDescription text={gender} source={source} />
+                <SectionDescription text={gender} from={from} />
               </div>
             )}
           </div>
@@ -100,13 +101,13 @@ const PersonalInformation = ({
               {userData?.email && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='Email address' />
-                  <SectionDescription text={userData?.email} source={source} />
+                  <SectionDescription text={userData?.email} from={from} />
                 </div>
               )}
               {phone && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='Phone Number' />
-                  <SectionDescription text={phone || 'N/A'} source={source} />
+                  <SectionDescription text={phone || 'N/A'} from={from} />
                 </div>
               )}
             </div>
@@ -122,31 +123,31 @@ const PersonalInformation = ({
               {address?.street && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='Street Address' />
-                  <SectionDescription text={address?.street} source={source} />
+                  <SectionDescription text={address?.street} from={from} />
                 </div>
               )}
               {address?.city && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='City' />
-                  <SectionDescription text={address?.city} source={source} />
+                  <SectionDescription text={address?.city} from={from} />
                 </div>
               )}
               {address?.state && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='State/Province' />
-                  <SectionDescription text={address?.state} source={source} />
+                  <SectionDescription text={address?.state} from={from} />
                 </div>
               )}
               {address?.zipCode && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='Postal/Zip Code' />
-                  <SectionDescription text={address?.zipCode} source={source} />
+                  <SectionDescription text={address?.zipCode} from={from} />
                 </div>
               )}
               {address?.country && (
                 <div className='flex flex-col gap-1.5 md:gap-2.5'>
                   <SectionTitle text='Country' />
-                  <SectionDescription text={address?.country} source={source} />
+                  <SectionDescription text={address?.country} from={from} />
                 </div>
               )}
             </div>
@@ -177,26 +178,5 @@ const SectionTitle = ({
     >
       {text}
     </h3>
-  );
-};
-const SectionDescription = ({
-  text,
-  className,
-  source,
-}: {
-  text: string;
-  className?: string;
-  source?: string;
-}) => {
-  return (
-    <p
-      className={cn(
-        'text-[#1C1C1C] font-medium',
-        source === 'admin' ? 'text-sm md:text-base' : 'text-sm md:text-xl',
-        className
-      )}
-    >
-      {text}
-    </p>
   );
 };

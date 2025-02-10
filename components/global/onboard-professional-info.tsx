@@ -1,6 +1,11 @@
 // @ts-nocheck
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import Title from '@/components/global/title';
 import { Input } from '@/components/ui/input';
 import OnboardButton from '@/components/global/onboard-button';
@@ -15,13 +20,23 @@ import LoadingOverlay from '@/components/global/loading-overlay';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
+const OnboardProfessionalInfo = forwardRef((props) => {
+  const { from, userFromAdmin, onClose } = props;
+
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
-  const { user, refetchUser } = useAppContext();
-  const { education, experience, certifications, skills } =
-    user?.professionalInfo || {};
+  const { user, refetchUser, professionalInfoRef, refetchUsers } =
+    useAppContext();
+
+  const userData =
+    from && userFromAdmin?.professionalInfo
+      ? userFromAdmin?.professionalInfo
+      : !from && user?.professionalInfo
+        ? user?.professionalInfo
+        : {};
+
+  const { education, experience, certifications, skills } = userData;
 
   const processedCertifications = certifications?.map((certification: any) => {
     return {
@@ -121,7 +136,7 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
 
   const onSubmit = async (data: any) => {
     try {
-      if (!isDirty && !isEdit) {
+      if (!isDirty && !isEdit && !from) {
         return router.push('/pro/onboard/document-upload');
       }
 
@@ -172,6 +187,10 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
 
       formData.append('data', JSON.stringify(data));
 
+      if (from === 'admin') {
+        formData.append('id', userFromAdmin?._id);
+      }
+
       const response = await fetch('/api/user/professional-information', {
         method: 'POST',
         body: formData,
@@ -180,16 +199,22 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        toast.success(
-          isEdit
-            ? 'Professional information updated successfully!'
-            : 'Professional information submitted successfully!'
-        );
+        if (from === 'admin') {
+          refetchUsers();
+          // onClose && onClose();
+        }
         reset();
-        if (isEdit) {
-          router.back();
-        } else {
-          router.push('/pro/onboard/document-upload');
+        if (!from) {
+          toast.success(
+            isEdit
+              ? 'Professional information updated successfully!'
+              : 'Professional information submitted successfully!'
+          );
+          if (isEdit) {
+            router.back();
+          } else {
+            router.push('/pro/onboard/document-upload');
+          }
         }
       } else {
         toast.error(responseData.message || 'Something went wrong!');
@@ -201,6 +226,10 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
       toast.error(error.message || 'Something went wrong!');
     }
   };
+
+  useImperativeHandle(professionalInfoRef, () => ({
+    submitForm: () => handleSubmit(onSubmit)(),
+  }));
 
   const renderError = (message: string) => {
     return <p className='text-red-500 text-sm'>{message}</p>;
@@ -218,7 +247,7 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form ref={professionalInfoRef} onSubmit={handleSubmit(onSubmit)}>
       <Title text='Professional Info' />
 
       {isLoading && <LoadingOverlay />}
@@ -434,13 +463,16 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Title <span className='text-red-500'>*</span>
+                    Title{' '}
+                    {from !== 'admin' && (
+                      <span className='text-red-500'>*</span>
+                    )}
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Ex: Patient Service Fundamentals'
                     {...register(`certifications.${index}.title`, {
-                      required: 'Title is required',
+                      required: from !== 'admin' && 'Title is required',
                     })}
                     isError={!!errors.certifications?.[index]?.title}
                   />
@@ -451,13 +483,17 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Name of Institute <span className='text-red-500'>*</span>
+                    Name of Institute{' '}
+                    {from !== 'admin' && (
+                      <span className='text-red-500'>*</span>
+                    )}
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Ex: Johns Hopkins School of Nursing'
                     {...register(`certifications.${index}.institution`, {
-                      required: 'Name of Institute is required',
+                      required:
+                        from !== 'admin' && 'Name of Institute is required',
                     })}
                     isError={!!errors.certifications?.[index]?.institution}
                   />
@@ -472,14 +508,17 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Issue Date <span className='text-red-500'>*</span>
+                    Issue Date{' '}
+                    {from !== 'admin' && (
+                      <span className='text-red-500'>*</span>
+                    )}
                   </label>
                   <Input
                     type='date'
                     className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                     placeholder='DD/MM/YYYY'
                     {...register(`certifications.${index}.issueDate`, {
-                      required: 'Issue Date is required',
+                      required: from !== 'admin' && 'Issue Date is required',
                     })}
                     isError={!!errors.certifications?.[index]?.issueDate}
                     max={new Date().toISOString().split('T')[0]}
@@ -493,14 +532,17 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Expire Date <span className='text-red-500'>*</span>
+                    Expire Date{' '}
+                    {from !== 'admin' && (
+                      <span className='text-red-500'>*</span>
+                    )}
                   </label>
                   <Input
                     type='date'
                     className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                     placeholder='DD/MM/YYYY'
                     {...register(`certifications.${index}.expireDate`, {
-                      required: 'Expire Date is required',
+                      required: from !== 'admin' && 'Expire Date is required',
                     })}
                     isError={!!errors.certifications?.[index]?.expireDate}
                     min={getIssueDate(index)}
@@ -533,13 +575,16 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
-                    Credential ID <span className='text-red-500'>*</span>
+                    Credential ID{' '}
+                    {from !== 'admin' && (
+                      <span className='text-red-500'>*</span>
+                    )}
                   </label>
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Ex: ABC123'
                     {...register(`certifications.${index}.credentialId`, {
-                      required: 'Credential ID is required',
+                      required: from !== 'admin' && 'Credential ID is required',
                     })}
                     isError={!!errors.certifications?.[index]?.credentialId}
                   />
@@ -653,7 +698,7 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
         </div>
         <div className='flex flex-col gap-5' id='skills'>
           <h2 className='text-2xl font-medium leading-[33.6px] text-gray-800'>
-            Skills <span className='text-red-500'>*</span>
+            Skills {from !== 'admin' && <span className='text-red-500'>*</span>}
           </h2>
 
           <SkillsSelector
@@ -665,7 +710,7 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
             type='hidden'
             value={watch('skills')}
             {...register('skills', {
-              required: 'At least one skill is required',
+              required: from !== 'admin' && 'At least one skill is required',
             })}
           />
           {errors.skills &&
@@ -691,6 +736,7 @@ const OnboardProfessionalInfo = ({ from }: { from?: 'admin' }) => {
       </div>
     </form>
   );
-};
+});
 
+OnboardProfessionalInfo.displayName = 'OnboardProfessionalInfo';
 export default OnboardProfessionalInfo;

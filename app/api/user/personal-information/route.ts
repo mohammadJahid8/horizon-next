@@ -6,16 +6,22 @@ export async function POST(req: Request) {
     const bodyData = await req.formData();
     const entries = Object.fromEntries(bodyData.entries());
 
-    const { data, image } = entries;
+    const { data, image, id } = entries;
 
     const formData = new FormData();
 
     if (image) formData.append('image', image as File);
     if (data) formData.append('data', data);
 
-    const response = await api.patch(`/user/personal-information`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const queryId = id ? `?id=${id}` : '';
+    const response = await api.patch(
+      `/user/personal-information${queryId}`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
     console.log('🚀 ~ POST ~ response:', response.data);
 
     if (response.status === 200) {

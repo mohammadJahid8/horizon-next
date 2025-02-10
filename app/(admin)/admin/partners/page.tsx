@@ -12,24 +12,37 @@ import {
 import { DataTable } from '@/components/global/admin/data-table';
 import { partnerColumns } from '@/components/global/admin/columns';
 import Title from '@/components/global/title';
-
-const partners = Array.from({ length: 50 }, (_, i) => ({
-  id: `${i + 1}`,
-  avatar: '/placeholder.svg?height=40&width=40',
-  firstName: `First Name ${i + 1}`,
-  lastName: `Last Name ${i + 1}`,
-  companyName: `Company Name ${i + 1}`,
-  industry: `Industry ${i + 1}`,
-
-  email: `example${i + 1}@email.com`,
-  phone: '161616161',
-  createdAt: new Date().toISOString() + i,
-  // status: i < 3 ? 'pending' : 'verified',
-}));
+import { useAppContext } from '@/lib/context';
 
 export default function PartnersPage() {
+  const { users, isUsersLoading } = useAppContext();
+  const partners = users?.filter((user: any) => user.role === 'partner') || [];
+
+  console.log({ partners });
+
   const [globalFilter, setGlobalFilter] = useState('');
-  const [industryFilter, setIndustryFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortFilter, setSortFilter] = useState('newest');
+
+  const filteredPartners = partners.filter(
+    (partner: any) =>
+      (statusFilter === 'all' || partner.status === statusFilter) &&
+      (globalFilter === '' ||
+        (partner?.personalInfo?.firstName
+          ? partner?.personalInfo?.firstName
+              .toLowerCase()
+              .includes(globalFilter.toLowerCase())
+          : false) ||
+        (partner?.personalInfo?.lastName
+          ? partner?.personalInfo?.lastName
+              .toLowerCase()
+              .includes(globalFilter.toLowerCase())
+          : false) ||
+        partner?.email?.toLowerCase().includes(globalFilter.toLowerCase()))
+  );
+
+  const sortedPartners =
+    sortFilter === 'newest' ? filteredPartners.reverse() : filteredPartners;
 
   return (
     <div className='space-y-6'>
@@ -37,18 +50,19 @@ export default function PartnersPage() {
 
       <div className='flex flex-col sm:flex-row gap-4'>
         <Input
-          placeholder='Search username or company...'
+          placeholder='Search username or email...'
           className='w-full sm:max-w-[300px] rounded-[12px] h-12 sm:h-14'
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
         />
         <div className='flex gap-4'>
-          <Select value={industryFilter} onValueChange={setIndustryFilter}>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className='w-full sm:w-[180px] rounded-[12px] h-12 sm:h-14'>
-              <SelectValue placeholder='Industry' />
+              <SelectValue placeholder='Status' />
             </SelectTrigger>
 
             <SelectContent>
+              <SelectItem value='all'>All</SelectItem>
               <SelectItem value='Assisted Living'>Assisted Living</SelectItem>
               <SelectItem value='Home care'>Home care</SelectItem>
               <SelectItem value='Home Health'>Home Health</SelectItem>
@@ -56,7 +70,7 @@ export default function PartnersPage() {
               <SelectItem value='Nursing Homes'>Nursing Homes</SelectItem>
             </SelectContent>
           </Select>
-          <Select>
+          <Select value={sortFilter} onValueChange={setSortFilter}>
             <SelectTrigger className='w-full sm:w-[180px] rounded-[12px] h-12 sm:h-14'>
               <SelectValue placeholder='Sort by' />
             </SelectTrigger>
@@ -68,25 +82,7 @@ export default function PartnersPage() {
         </div>
       </div>
 
-      <DataTable
-        columns={partnerColumns}
-        data={partners.filter(
-          (partner) =>
-            (industryFilter === '' || partner.industry === industryFilter) &&
-            (globalFilter === '' ||
-              partner.firstName
-                .toLowerCase()
-
-                .includes(globalFilter.toLowerCase()) ||
-              partner.lastName
-                .toLowerCase()
-                .includes(globalFilter.toLowerCase()) ||
-              partner.companyName
-                .toLowerCase()
-                .includes(globalFilter.toLowerCase()) ||
-              partner.email.toLowerCase().includes(globalFilter.toLowerCase()))
-        )}
-      />
+      <DataTable columns={partnerColumns} data={sortedPartners} />
     </div>
   );
 }

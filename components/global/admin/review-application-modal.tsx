@@ -22,14 +22,21 @@ import {
 import PersonalInformation from '../dashboard/personal-information';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageModal } from './message-modal';
-import { AdminEditUserModal } from './admin-edit-user-modal';
+import { useAppContext } from '@/lib/context';
+import ProfessionalInformation from '../dashboard/professional-information';
+import Documents from '../dashboard/documents';
+import AdminAlertModal from './admin-alert-modal';
+import PartnerPersonalInformation from '../dashboard/partner-personal-information';
 
 export function ReviewApplicationModal({
   open,
   onOpenChange,
   children,
   status,
+  data,
+  from,
 }: any) {
+  const { openEditModal, setAdminEditData } = useAppContext();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -45,42 +52,48 @@ export function ReviewApplicationModal({
               <div className='flex flex-col sm:flex-row items-start sm:justify-between'>
                 <div className='flex gap-3 items-center'>
                   <Image
-                    src='/dummy-profile-pic.jpg'
+                    unoptimized
+                    src={data?.personalInfo?.image || '/dummy-profile-pic.jpg'}
                     alt='Profile picture'
-                    width={80}
-                    height={80}
-                    className='rounded-full'
+                    width={108}
+                    height={108}
+                    className='rounded-full object-cover size-20'
                   />
                   <div className='flex flex-col gap-2 sm:gap-3'>
                     <div className='font-semibold text-lg sm:text-xl'>
-                      Pro Name
+                      {data?.personalInfo?.firstName}{' '}
+                      {data?.personalInfo?.lastName}
                     </div>
-                    <div className='text-muted-foreground'>
+                    {/* <div className='text-muted-foreground'>
                       Latest Job Title
-                    </div>
+
+                    </div> */}
                   </div>
                 </div>
                 <div className='flex flex-wrap flex-row sm:flex-col gap-2 sm:gap-4 mt-4 sm:mt-0'>
                   {status === 'pending' && (
                     <div className='flex flex-row items-center gap-2 sm:gap-4'>
-                      <Button
-                        variant='default'
-                        className='rounded-lg inline-flex items-center gap-2'
-                      >
-                        <Check className='size-4' />
-                        Approve
-                      </Button>
-
-                      <Button
-                        variant='outline'
-                        className='text-red-600 rounded-lg inline-flex items-center gap-2'
-                      >
-                        <X className='size-4' />
-                        Reject
-                      </Button>
+                      <AdminAlertModal alertType='approve' data={data}>
+                        <Button
+                          variant='default'
+                          className='rounded-lg inline-flex items-center gap-2'
+                        >
+                          <Check className='size-4' />
+                          Approve
+                        </Button>
+                      </AdminAlertModal>
+                      <AdminAlertModal alertType='reject' data={data}>
+                        <Button
+                          variant='outline'
+                          className='text-red-600 rounded-lg inline-flex items-center gap-2'
+                        >
+                          <X className='size-4' />
+                          Reject
+                        </Button>
+                      </AdminAlertModal>
                     </div>
                   )}
-                  <MessageModal>
+                  <MessageModal data={data}>
                     <Button
                       variant='outline'
                       className='w-max sm:w-full rounded-lg inline-flex items-center gap-2'
@@ -92,17 +105,19 @@ export function ReviewApplicationModal({
                 </div>
               </div>
 
-              {status === 'verified' && (
+              {status === 'approved' && (
                 <div className='flex flex-row items-center gap-2 sm:gap-4'>
-                  <AdminEditUserModal>
-                    <Button
-                      variant='outline'
-                      className='w-full rounded-lg inline-flex items-center gap-2'
-                    >
-                      <Pencil className='size-4' />
-                      Edit
-                    </Button>
-                  </AdminEditUserModal>
+                  <Button
+                    variant='outline'
+                    className='w-full rounded-lg inline-flex items-center gap-2'
+                    onClick={() => {
+                      setAdminEditData({ data, source: 'pro' });
+                      openEditModal();
+                    }}
+                  >
+                    <Pencil className='size-4' />
+                    Edit
+                  </Button>
 
                   <Button
                     variant='outline'
@@ -122,26 +137,20 @@ export function ReviewApplicationModal({
                 </div>
               )}
 
-              <PersonalInformation
-                source='admin'
-                proUser={{
-                  personalInfo: {
-                    firstName: 'Pro Name',
-                    lastName: 'Last Name',
-                    dateOfBirth: '1990-01-01',
-                    phone: '1234567890',
-                    gender: 'Male',
-                    address: {
-                      country: 'United States',
-                      city: 'New York',
-                      state: 'NY',
-                      street: '123 Main St',
-                      zip: '10001',
-                    },
-                    bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-                  },
-                }}
-              />
+              <div className='flex flex-col gap-4 sm:gap-8 py-10'>
+                {from === 'partner' ? (
+                  <PartnerPersonalInformation from='admin' partnerUser={data} />
+                ) : (
+                  <PersonalInformation from='admin' proUser={data} />
+                )}
+
+                {from !== 'partner' && (
+                  <>
+                    <ProfessionalInformation from='admin' proUser={data} />
+                    <Documents from='admin' proUser={data} />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </ScrollArea>

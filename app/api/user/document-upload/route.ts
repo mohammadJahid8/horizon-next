@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const bodyData = await req.formData();
     const entries = Object.fromEntries(bodyData.entries());
 
-    const { certificate, resume, governmentId , data } = entries;  
+    const { certificate, resume, governmentId, data, id } = entries;
 
     const formData = new FormData();
 
@@ -15,7 +15,11 @@ export async function POST(req: Request) {
     if (governmentId) formData.append('governmentId', governmentId as File);
     if (data) formData.append('data', data);
 
-    const response = await api.patch(`/user/documents`, formData, {
+    const queryId = id ? `?id=${id}` : '';
+
+    console.log('🚀 ~ POST ~ queryId  from document upload:', queryId);
+
+    const response = await api.patch(`/user/documents${queryId}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     console.log('🚀 ~ POST ~ response:', response.data);

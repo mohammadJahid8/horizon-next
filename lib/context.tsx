@@ -5,9 +5,10 @@ import {
   getOffers,
   getTokens,
   getUser,
+  getUsers,
   logout,
 } from '@/app/actions';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import app from '@/app/firebase/firebase.init';
 import { toast } from 'sonner';
@@ -34,12 +35,31 @@ const ContextProvider = ({ children }: any) => {
   const [offerData, setOfferData] = useState<any>(null);
   const [actionData, setActionData] = useState<any>(null);
   const [isOpenOfferAction, setIsOpenOfferAction] = useState(false);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [adminEditData, setAdminEditData] = useState<any>({
+    data: null,
+    source: null,
+  });
+
+  // refs
+  const personalInfoRef = useRef<HTMLFormElement>(null);
+  const professionalInfoRef = useRef<HTMLFormElement>(null);
+
+  const documentUploadRef = useRef<HTMLFormElement>(null);
 
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const shouldStorePro = searchParams.get('s') === 'true';
   const queryString = searchParams.toString();
   const querySuffix = queryString ? `?${queryString}` : '';
+
+  const openEditModal = (data: any, source: string) => {
+    setIsOpenEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setIsOpenEditModal(false);
+  };
 
   const openOfferAction = () => {
     setIsOpenOfferAction(true);
@@ -73,6 +93,15 @@ const ContextProvider = ({ children }: any) => {
   } = useQuery({
     queryKey: [`user`],
     queryFn: async () => await getUser(),
+  });
+
+  const {
+    refetch: refetchUsers,
+    data: users,
+    isLoading: isUsersLoading,
+  } = useQuery({
+    queryKey: [`users`],
+    queryFn: async () => await getUsers(),
   });
 
   const { refetch: refetchNotifications, data: notifications } = useQuery({
@@ -161,23 +190,27 @@ const ContextProvider = ({ children }: any) => {
     refetchUser();
     if (responseData.status === 200) {
       const completionPercentage = responseData.completionPercentage;
-      const proPath =
-        completionPercentage > 50
-          ? '/pro/profile'
-          : '/pro/onboard/personal-info';
+      if (source === 'admin') {
+        router.push('/admin');
+      } else {
+        const proPath =
+          completionPercentage > 50
+            ? '/pro/profile'
+            : '/pro/onboard/personal-info';
 
-      const partnerPath =
-        completionPercentage > 50
-          ? querySuffix
-            ? `/partner/pros/${id}?s=true`
-            : '/partner/profile'
-          : `/partner/onboard/personal-info${querySuffix}`;
+        const partnerPath =
+          completionPercentage > 50
+            ? querySuffix
+              ? `/partner/pros/${id}?s=true`
+              : '/partner/profile'
+            : `/partner/onboard/personal-info${querySuffix}`;
 
-      source === 'pro' && router.push(proPath);
-      source === 'partner' && router.push(partnerPath);
-      return toast.success(responseData.message || `Login successful`, {
-        position: 'top-center',
-      });
+        source === 'pro' && router.push(proPath);
+        source === 'partner' && router.push(partnerPath);
+        return toast.success(responseData.message || `Login successful`, {
+          position: 'top-center',
+        });
+      }
     }
 
     if (responseData.status === 500) {
@@ -345,15 +378,59 @@ const ContextProvider = ({ children }: any) => {
     }
   };
 
-  const sendNotification = async (message: string, user: string) => {
+  const sendNotification = async (
+    message: string,
+    user: string,
+    email?: string
+  ) => {
     await fetch('/api/user/notification', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message,
         user,
+        email,
       }),
     });
+  };
+
+  // const handleSavePersonalInfo = async (source: string) => {
+  //   if (personalInfoRef.current) {
+  //     console.log('personalInfoRef.current');
+  //     personalInfoRef.current.dispatchEvent(
+  //       new Event('submit', { bubbles: true, cancelable: true })
+  //     );
+  //   }
+
+  //   if (source === 'pro') {
+  //     if (professionalInfoRef.current) {
+  //       console.log('professionalInfoRef.current');
+  //       setTimeout(() => {
+  //         professionalInfoRef.current?.dispatchEvent(
+  //           new Event('submit', { bubbles: true, cancelable: true })
+  //         );
+  //       }, 0);
+  //     }
+  //   }
+  // };
+  const handleSavePersonalInfo = async (source: string) => {
+    try {
+      if (personalInfoRef.current) {
+        console.log('insidee', personalInfoRef.current);
+        await personalInfoRef.current.submitForm(); // ✅ Correct: Calls submit function
+      }
+
+      if (source === 'pro' && professionalInfoRef.current) {
+        await professionalInfoRef.current.submitForm(); // ✅ Correct: Calls submit function
+      }
+      if (source === 'pro' && documentUploadRef.current) {
+        console.log('documentUploadRef.current', documentUploadRef.current);
+        await documentUploadRef.current.submitForm(); // ✅ Correct: Calls submit function
+      }
+      closeEditModal();
+    } catch (error) {
+      console.error('Error submitting forms:', error);
+    }
   };
 
   return (
@@ -409,6 +486,18 @@ const ContextProvider = ({ children }: any) => {
         offersSent,
         jobConversionPercentage,
         deleteAccount,
+        users,
+        refetchUsers,
+        isUsersLoading,
+        personalInfoRef,
+        professionalInfoRef,
+        documentUploadRef,
+        handleSavePersonalInfo,
+        openEditModal,
+        closeEditModal,
+        isOpenEditModal,
+        adminEditData,
+        setAdminEditData,
       }}
     >
       {children}

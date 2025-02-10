@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const bodyData = await req.formData();
     const entries = Object.fromEntries(bodyData.entries());
 
-    const { data, ...certificationFiles } = entries;
+    const { data, id, ...certificationFiles } = entries;
 
     const filesArray: any = Object.values(certificationFiles);
 
@@ -18,14 +18,21 @@ export async function POST(req: Request) {
 
     formData.append('data', data);
 
+    const queryId = id ? `?id=${id}` : '';
+
+    console.log('🚀 ~ POST ~ queryId data:', data, queryId);
+
     const response = await api.patch(
-      `/user/professional-information`,
+      `/user/professional-information${queryId}`,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
-    console.log('🚀 ~ POST ~ response:', response.data);
+    console.log(
+      '🚀 ~ POST ~ response professional-information:',
+      response.data
+    );
 
     if (response.status === 200) {
       const res = NextResponse.json({

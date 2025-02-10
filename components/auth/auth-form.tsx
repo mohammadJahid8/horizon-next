@@ -264,7 +264,7 @@ export default function AuthForm({
           ))}
         </div>
 
-        {type === 'login' && (
+        {type === 'login' && source !== 'admin' && (
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
               <Checkbox id='remember-me' className='rounded-sm' />
@@ -291,7 +291,7 @@ export default function AuthForm({
         >
           {submitButtonText}
         </Button>
-        {(type === 'login' || type === 'signup') && (
+        {(type === 'login' || type === 'signup') && source !== 'admin' && (
           <>
             <div className='flex items-center my-4'>
               <div className='flex-grow border-t border-gray-400'></div>

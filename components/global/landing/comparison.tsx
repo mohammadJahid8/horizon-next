@@ -55,7 +55,7 @@ export default function Comparison({
             Horrizon
           </h2>
           <div className='space-y-'>
-            {Array.from({ length: 6 }).map((_, index) => (
+            {Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
                 className='px-0 md:px-6 py-6 w-full flex items-center justify-center'
@@ -77,9 +77,9 @@ export default function Comparison({
             <Checkmark isFirst={true} height={heights[0]} />
             <Cross height={heights[1]} />
             <Cross height={heights[2]} />
-            <Cross height={heights[3]} />
+            {/* <Cross height={heights[3]} />
             <Cross height={heights[4]} />
-            <Checkmark height={heights[5]} />
+            <Checkmark height={heights[5]} /> */}
           </div>
         </div>
       </div>

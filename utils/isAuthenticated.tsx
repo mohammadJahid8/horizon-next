@@ -13,7 +13,7 @@ export const isAuthenticated = async (token: string) => {
       // console.log('🚀 ~ isAuthenticated ~ decoded:', decoded);
 
       if (decoded.payload?.email) {
-        return true;
+        return decoded.payload;
       } else {
         return false;
       }

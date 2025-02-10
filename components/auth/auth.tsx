@@ -74,31 +74,32 @@ export default function Auth({
             {children}
 
             <div className='text-start'>
-              {(type === 'login' || type === 'signup') && (
-                <>
-                  {type === 'login' ? (
-                    <p className='text-base'>
-                      New to Horizzon?{' '}
-                      <Link
-                        href={`/${source}/signup${querySuffix}`}
-                        className='text-primary font-semibold underline underline-offset-4'
-                      >
-                        Create an account
-                      </Link>
-                    </p>
-                  ) : (
-                    <p className='text-base'>
-                      {alreadyHaveAccount}{' '}
-                      <Link
-                        href={`/${source}/login${querySuffix}`}
-                        className='text-primary font-semibold underline underline-offset-4'
-                      >
-                        Login
-                      </Link>
-                    </p>
-                  )}
-                </>
-              )}
+              {(type === 'login' || type === 'signup') &&
+                source !== 'admin' && (
+                  <>
+                    {type === 'login' ? (
+                      <p className='text-base'>
+                        New to Horizzon?{' '}
+                        <Link
+                          href={`/${source}/signup${querySuffix}`}
+                          className='text-primary font-semibold underline underline-offset-4'
+                        >
+                          Create an account
+                        </Link>
+                      </p>
+                    ) : (
+                      <p className='text-base'>
+                        {alreadyHaveAccount}{' '}
+                        <Link
+                          href={`/${source}/login${querySuffix}`}
+                          className='text-primary font-semibold underline underline-offset-4'
+                        >
+                          Login
+                        </Link>
+                      </p>
+                    )}
+                  </>
+                )}
 
               {type === 'verify-otp' && (
                 <div className='text-base flex items-center'>

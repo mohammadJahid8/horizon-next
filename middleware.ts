@@ -3,16 +3,20 @@ import { isAuthenticated } from './utils/isAuthenticated';
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('accessToken');
-  const isAuthenticatedUser = await isAuthenticated(token?.value as string);
+  const isAuthenticatedUser: any = await isAuthenticated(
+    token?.value as string
+  );
 
   // console.log('🚀 ~ middleware ~ isAuthenticatedUser:', isAuthenticatedUser);
-
   // Define all protected routes with patterns
   const protectedRoutes = [
     /^\/pro\/onboard\/(personal-info|professional-info|document-upload|completed)$/,
     /^\/pro\/(profile|offers|jobs|notifications|settings)$/,
     /^\/partner\/(profile|pros|offers|notifications|settings)$/,
     /^\/partner\/pros\/\d+$/, // Matches /partner/pros/:id (numeric)
+    /^\/admin$/,
+    /^\/admin\/pros$/,
+    /^\/admin\/partners$/,
   ];
 
   // Check if the current path matches any of the protected routes
@@ -20,9 +24,21 @@ export async function middleware(req: NextRequest) {
     route.test(req.nextUrl.pathname)
   );
 
-  // Redirect unauthenticated users trying to access protected routes
-  if (!isAuthenticatedUser && isProtected) {
-    return NextResponse.redirect(new URL('/', req.url));
+  // Check if the current path is an admin route
+  const isAdminRoute =
+    req.nextUrl.pathname.startsWith('/admin') &&
+    !req.nextUrl.pathname.startsWith('/admin/login');
+
+  // Redirect unauthenticated users or non-admin users trying to access protected routes
+  if (
+    (!isAuthenticatedUser.email && isProtected) ||
+    (isAdminRoute && isAuthenticatedUser.role !== 'admin')
+  ) {
+    if (isAdminRoute) {
+      return NextResponse.redirect(new URL('/admin/login', req.url));
+    } else {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
   }
 
   return NextResponse.next();
@@ -30,5 +46,5 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   // Match all routes under `/pro` and `/partner`
-  matcher: ['/pro/:path*', '/partner/:path*'],
+  matcher: ['/pro/:path*', '/partner/:path*', '/admin/:path*'],
 };

@@ -17,20 +17,24 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Controller, useForm } from 'react-hook-form';
 import LoadingOverlay from '@/components/global/loading-overlay';
-import { useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useAppContext } from '@/lib/context';
 
-const OnboardPersonalInfo = ({
-  source,
-  from,
-}: {
-  source?: 'partner' | 'pro';
-  from?: 'admin';
-}) => {
+const OnboardPersonalInfo = forwardRef((props) => {
+  const { source, from, userFromAdmin, onClose } = props;
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
-  const { refetchUser, user, querySuffix, id } = useAppContext();
+  const { refetchUser, user, querySuffix, id, personalInfoRef, refetchUsers } =
+    useAppContext();
+
+  const userData =
+    from && userFromAdmin?.personalInfo
+      ? userFromAdmin?.personalInfo
+      : !from && user?.personalInfo
+        ? user?.personalInfo
+        : {};
+
   const {
     image,
     bio,
@@ -39,10 +43,11 @@ const OnboardPersonalInfo = ({
     dateOfBirth,
     gender,
     address,
+    phone,
     companyName,
     industry,
     dateEstablished,
-  } = user?.personalInfo || {};
+  } = userData;
 
   const proDefaultValues = {
     image: image || '',
@@ -51,6 +56,7 @@ const OnboardPersonalInfo = ({
     lastName: lastName || '',
     dateOfBirth: source === 'pro' ? dateOfBirth?.split('T')[0] : '',
     gender: gender || '',
+    phone: phone || '',
     address: {
       street: address?.street || '',
       city: address?.city || '',
@@ -101,7 +107,7 @@ const OnboardPersonalInfo = ({
           : querySuffix
             ? `/partner/pros/${id}?s=true`
             : '/partner/profile';
-      if (!isDirty && !isEdit) {
+      if (!isDirty && !isEdit && !from) {
         return router.push(path);
       }
       setIsLoading(true);
@@ -117,6 +123,10 @@ const OnboardPersonalInfo = ({
 
       formData.append('data', JSON.stringify(rest));
 
+      if (from === 'admin') {
+        formData.append('id', userFromAdmin?._id);
+      }
+
       const response = await fetch('/api/user/personal-information', {
         method: 'POST',
         body: formData,
@@ -125,16 +135,23 @@ const OnboardPersonalInfo = ({
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        toast.success(
-          isEdit
-            ? 'Personal information updated successfully!'
-            : 'Personal information submitted successfully!'
-        );
+        if (from === 'admin') {
+          refetchUsers();
+          // onClose && onClose();
+        }
         reset();
-        if (isEdit) {
-          router.back();
-        } else {
-          router.push(path);
+
+        if (!from) {
+          toast.success(
+            isEdit
+              ? 'Personal information updated successfully!'
+              : 'Personal information submitted successfully!'
+          );
+          if (isEdit) {
+            router.back();
+          } else {
+            router.push(path);
+          }
         }
       } else {
         toast.error(responseData.message || 'Something went wrong!');
@@ -147,13 +164,16 @@ const OnboardPersonalInfo = ({
     }
   };
 
+  useImperativeHandle(personalInfoRef, () => ({
+    submitForm: () => handleSubmit(onSubmit)(),
+  }));
   const renderError = (message: string) => {
     return <p className='text-red-500 text-sm'>{message}</p>;
   };
 
   const imageFile = watch('image')?.[0];
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={personalInfoRef}>
       {isLoading && <LoadingOverlay />}
       <Title text='Personal Info' />
 
@@ -165,10 +185,13 @@ const OnboardPersonalInfo = ({
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              First name <span className='text-red-500'>*</span>
+              First name{' '}
+              {from !== 'admin' && <span className='text-red-500'>*</span>}
             </label>
             <Input
-              {...register('firstName', { required: 'First name is required' })}
+              {...register('firstName', {
+                required: from !== 'admin' && 'First name is required',
+              })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
               placeholder='Please enter your first name'
               name='firstName'
@@ -179,10 +202,13 @@ const OnboardPersonalInfo = ({
           </div>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Last name <span className='text-red-500'>*</span>
+              Last name{' '}
+              {from !== 'admin' && <span className='text-red-500'>*</span>}
             </label>
             <Input
-              {...register('lastName', { required: 'Last name is required' })}
+              {...register('lastName', {
+                required: from !== 'admin' && 'Last name is required',
+              })}
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
               placeholder='Please enter your last name'
               name='lastName'
@@ -194,11 +220,12 @@ const OnboardPersonalInfo = ({
             <>
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Date of Birth <span className='text-red-500'>*</span>
+                  Date of Birth{' '}
+                  {from !== 'admin' && <span className='text-red-500'>*</span>}
                 </label>
                 <Input
                   {...register('dateOfBirth', {
-                    required: 'Date of birth is required',
+                    required: from !== 'admin' && 'Date of birth is required',
                   })}
                   className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
                   type='date'
@@ -213,12 +240,15 @@ const OnboardPersonalInfo = ({
 
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium'>
-                  Gender <span className='text-red-500'>*</span>
+                  Gender{' '}
+                  {from !== 'admin' && <span className='text-red-500'>*</span>}
                 </label>
                 <Controller
                   name='gender'
                   control={control}
-                  rules={{ required: 'Gender is required.' }}
+                  rules={{
+                    required: from !== 'admin' && 'Gender is required.',
+                  }}
                   render={({ field }) => (
                     <Select
                       onValueChange={field.onChange}
@@ -246,11 +276,12 @@ const OnboardPersonalInfo = ({
             <>
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                  Company Name <span className='text-red-500'>*</span>
+                  Company Name{' '}
+                  {from !== 'admin' && <span className='text-red-500'>*</span>}
                 </label>
                 <Input
                   {...register('companyName', {
-                    required: 'Company name is required',
+                    required: from !== 'admin' && 'Company name is required',
                   })}
                   className='rounded-[12px] h-14 bg-[#f9f9f9]'
                   placeholder='Please enter your company name'
@@ -263,12 +294,15 @@ const OnboardPersonalInfo = ({
 
               <div className='flex flex-col gap-3'>
                 <label className='text-base font-medium'>
-                  Company Industry <span className='text-red-500'>*</span>
+                  Company Industry{' '}
+                  {from !== 'admin' && <span className='text-red-500'>*</span>}
                 </label>
                 <Controller
                   name='industry'
                   control={control}
-                  rules={{ required: 'Industry is required.' }}
+                  rules={{
+                    required: from !== 'admin' && 'Industry is required.',
+                  }}
                   render={({ field }) => (
                     <Select
                       onValueChange={field.onChange}
@@ -308,11 +342,13 @@ const OnboardPersonalInfo = ({
         {source === 'partner' && (
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Date of Establishment <span className='text-red-500'>*</span>
+              Date of Establishment{' '}
+              {from !== 'admin' && <span className='text-red-500'>*</span>}
             </label>
             <Input
               {...register('dateEstablished', {
-                required: 'Date of establishment is required',
+                required:
+                  from !== 'admin' && 'Date of establishment is required',
               })}
               className='rounded-[12px] h-14 bg-[#f9f9f9] uppercase'
               type='date'
@@ -327,11 +363,12 @@ const OnboardPersonalInfo = ({
         )}
         <div className='flex flex-col gap-3'>
           <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-            Phone Number <span className='text-red-500'>*</span>
+            Phone Number{' '}
+            {from !== 'admin' && <span className='text-red-500'>*</span>}
           </label>
           <Input
             {...register('phone', {
-              required: 'Phone number is required',
+              required: from !== 'admin' && 'Phone number is required',
             })}
             className='rounded-[12px] h-14 bg-[#f9f9f9]'
             type='number'
@@ -360,13 +397,14 @@ const OnboardPersonalInfo = ({
           </h2>
           <div className='flex flex-col gap-3'>
             <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-              Street address <span className='text-red-500'>*</span>
+              Street address{' '}
+              {from !== 'admin' && <span className='text-red-500'>*</span>}
             </label>
             <Input
               className='rounded-[12px] h-14 bg-[#f9f9f9]'
               placeholder='Input Text'
               {...register('address.street', {
-                required: 'Street address is required',
+                required: from !== 'admin' && 'Street address is required',
               })}
               isError={!!errors.address?.street}
             />
@@ -376,13 +414,14 @@ const OnboardPersonalInfo = ({
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                City <span className='text-red-500'>*</span>
+                City{' '}
+                {from !== 'admin' && <span className='text-red-500'>*</span>}
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
                 placeholder='Input Text'
                 {...register('address.city', {
-                  required: 'City is required',
+                  required: from !== 'admin' && 'City is required',
                 })}
                 isError={!!errors.address?.city}
               />
@@ -391,13 +430,14 @@ const OnboardPersonalInfo = ({
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                State/Province <span className='text-red-500'>*</span>
+                State/Province{' '}
+                {from !== 'admin' && <span className='text-red-500'>*</span>}
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
                 placeholder='Input Text'
                 {...register('address.state', {
-                  required: 'State is required',
+                  required: from !== 'admin' && 'State is required',
                 })}
                 isError={!!errors.address?.state}
               />
@@ -406,13 +446,14 @@ const OnboardPersonalInfo = ({
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                Postal/Zip code <span className='text-red-500'>*</span>
+                Postal/Zip code{' '}
+                {from !== 'admin' && <span className='text-red-500'>*</span>}
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
                 placeholder='Input Text'
                 {...register('address.zipCode', {
-                  required: 'Zip code is required',
+                  required: from !== 'admin' && 'Zip code is required',
                 })}
                 isError={!!errors.address?.zipCode}
               />
@@ -421,13 +462,14 @@ const OnboardPersonalInfo = ({
             </div>
             <div className='flex flex-col gap-3'>
               <label className='text-base font-medium leading-[22.4px] text-[#1C1C1C]'>
-                Country <span className='text-red-500'>*</span>
+                Country{' '}
+                {from !== 'admin' && <span className='text-red-500'>*</span>}
               </label>
               <Input
                 className='rounded-[12px] h-14 bg-[#f9f9f9]'
                 placeholder='Input Text'
                 {...register('address.country', {
-                  required: 'Country is required',
+                  required: from !== 'admin' && 'Country is required',
                 })}
                 isError={!!errors.address?.country}
               />
@@ -457,6 +499,8 @@ const OnboardPersonalInfo = ({
       </div>
     </form>
   );
-};
+});
+
+OnboardPersonalInfo.displayName = 'OnboardPersonalInfo';
 
 export default OnboardPersonalInfo;

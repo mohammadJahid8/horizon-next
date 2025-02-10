@@ -9,7 +9,10 @@ import TableDropdown from './table-dropdown';
 import { ReviewApplicationModal } from './review-application-modal';
 import AdminAlertModal from './admin-alert-modal';
 import { MessageModal } from './message-modal';
-import { AdminEditUserModal } from './admin-edit-user-modal';
+
+import moment from 'moment';
+import { adminStatusColors, adminStatusTexts } from '@/utils/status';
+import EditAction from './edit-action';
 
 export const proColumns: ColumnDef<any>[] = [
   {
@@ -26,20 +29,24 @@ export const proColumns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
-      const firstName = row.original.firstName || '';
-      const lastName = row.original.lastName || '';
-      const companyName = row.original.companyName || '';
+      const firstName = row.original.personalInfo?.firstName || '';
+      const lastName = row.original.personalInfo?.lastName || '';
+      const image = row.original.personalInfo?.image || '';
+
       return (
         <div className='flex items-center gap-3'>
           <Image
-            src={'/dummy-profile-pic.jpg'}
+            unoptimized
+            src={image || '/dummy-profile-pic.jpg'}
             alt={`${firstName} ${lastName}`}
-            className='rounded-full'
+            className='rounded-full object-cover size-10'
             width={40}
             height={40}
           />
 
-          <p className='font-medium'>{`${firstName} ${lastName}`.trim()}</p>
+          <p className='font-medium'>
+            {`${firstName} ${lastName}`.trim() || 'N/A'}
+          </p>
         </div>
       );
     },
@@ -70,11 +77,16 @@ export const proColumns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'phone',
+    accessorKey: 'personalInfo.phone',
     header: 'Phone Number',
+    cell: ({ row }) => {
+      const phone = row.original.personalInfo?.phone || '';
+      return <span>{phone || 'N/A'}</span>;
+    },
   },
   {
-    accessorKey: 'joiningDate',
+    accessorKey: 'createdAt',
+
     header: ({ column }) => {
       return (
         <Button
@@ -86,9 +98,14 @@ export const proColumns: ColumnDef<any>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt || '';
+      return <span>{moment(createdAt).format('DD-MM-YYYY')}</span>;
+    },
   },
   {
     accessorKey: 'status',
+
     header: ({ column }) => {
       return (
         <Button
@@ -104,11 +121,11 @@ export const proColumns: ColumnDef<any>[] = [
       const status = row.getValue('status') as string;
       return (
         <span
-          className={
-            status === 'verified' ? 'text-green-500' : 'text-amber-500'
-          }
+          style={{
+            color: adminStatusColors[status as keyof typeof adminStatusColors],
+          }}
         >
-          {status.charAt(0).toUpperCase() + status.slice(1)}
+          {adminStatusTexts[status as keyof typeof adminStatusTexts]}
         </span>
       );
     },
@@ -122,7 +139,7 @@ export const proColumns: ColumnDef<any>[] = [
       if (status === 'pending') {
         return (
           <div className='flex items-center gap-2'>
-            <AdminAlertModal alertType='approve'>
+            <AdminAlertModal alertType='approve' data={row.original}>
               <Button
                 variant='ghost'
                 size='icon'
@@ -131,7 +148,7 @@ export const proColumns: ColumnDef<any>[] = [
                 <Check className='size-5' />
               </Button>
             </AdminAlertModal>
-            <AdminAlertModal alertType='reject'>
+            <AdminAlertModal alertType='reject' data={row.original}>
               <Button
                 variant='ghost'
                 size='icon'
@@ -140,7 +157,7 @@ export const proColumns: ColumnDef<any>[] = [
                 <X className='size-5' />
               </Button>
             </AdminAlertModal>
-            <ReviewApplicationModal status={status}>
+            <ReviewApplicationModal status={status} data={row.original}>
               <Button
                 variant='ghost'
                 size='icon'
@@ -149,22 +166,15 @@ export const proColumns: ColumnDef<any>[] = [
                 <Eye className='size-5' />
               </Button>
             </ReviewApplicationModal>
+            <TableDropdown data={row.original} />
           </div>
         );
       }
 
       return (
         <div className='flex items-center gap-2'>
-          <AdminEditUserModal>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='text-gray-500 hover:text-gray-600 bg-gray-50'
-            >
-              <Pencil className='size-5' />
-            </Button>
-          </AdminEditUserModal>
-          <MessageModal>
+          <EditAction data={row.original} source='pro' />
+          <MessageModal data={row.original}>
             <Button
               variant='ghost'
               size='icon'
@@ -173,7 +183,7 @@ export const proColumns: ColumnDef<any>[] = [
               <Mail className='size-5' />
             </Button>
           </MessageModal>
-          <ReviewApplicationModal status={status}>
+          <ReviewApplicationModal status={status} data={row.original}>
             <Button
               variant='ghost'
               size='icon'
@@ -182,7 +192,7 @@ export const proColumns: ColumnDef<any>[] = [
               <Eye className='size-5' />
             </Button>
           </ReviewApplicationModal>
-          <TableDropdown />
+          <TableDropdown data={row.original} />
         </div>
       );
     },
@@ -203,32 +213,37 @@ export const partnerColumns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
-      const firstName = row.original.firstName || '';
-      const lastName = row.original.lastName || '';
-      const companyName = row.original.companyName || '';
+      const firstName = row.original.personalInfo?.firstName || '';
+      const lastName = row.original.personalInfo?.lastName || '';
+      const companyName = row.original.personalInfo?.companyName || '';
+      const image = row.original.personalInfo?.image || '';
       return (
         <div className='flex items-center gap-3'>
           <Image
-            src={'/dummy-profile-pic.jpg'}
+            unoptimized
+            src={image || '/dummy-profile-pic.jpg'}
             alt={`${firstName} ${lastName}`}
-            className='rounded-full'
+            className='rounded-full object-cover size-10'
             width={40}
             height={40}
           />
+
           <div>
-            <p className='font-medium'>{`${firstName} ${lastName}`.trim()}</p>
-            <p className='text-sm text-gray-500'>{companyName}</p>
+            <p className='font-medium'>
+              {`${firstName} ${lastName}`.trim() || 'N/A'}
+            </p>
+            <p className='text-sm text-gray-500'>{companyName || 'N/A'}</p>
           </div>
         </div>
       );
     },
     sortingFn: (rowA, rowB) => {
       const nameA =
-        `${rowA.original.firstName || ''} ${rowA.original.lastName || ''}`
+        `${rowA.original.personalInfo?.firstName || ''} ${rowA.original.personalInfo?.lastName || ''}`
           .trim()
           .toLowerCase();
       const nameB =
-        `${rowB.original.firstName || ''} ${rowB.original.lastName || ''}`
+        `${rowB.original.personalInfo?.firstName || ''} ${rowB.original.personalInfo?.lastName || ''}`
           .trim()
           .toLowerCase();
       return nameA.localeCompare(nameB);
@@ -249,8 +264,12 @@ export const partnerColumns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'phone',
+    accessorKey: 'personalInfo.phone',
     header: 'Phone Number',
+    cell: ({ row }) => {
+      const phone = row.original.personalInfo?.phone || '';
+      return <span>{phone || 'N/A'}</span>;
+    },
   },
   {
     accessorKey: 'createdAt',
@@ -265,9 +284,13 @@ export const partnerColumns: ColumnDef<any>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt || '';
+      return <span>{moment(createdAt).format('DD-MM-YYYY')}</span>;
+    },
   },
   {
-    accessorKey: 'industry',
+    accessorKey: 'personalInfo.industry',
     header: ({ column }) => {
       return (
         <Button
@@ -280,8 +303,8 @@ export const partnerColumns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
-      const industry = row.getValue('industry') as string;
-      return <span>{industry}</span>;
+      const industry = row.original.personalInfo?.industry || '';
+      return <span>{industry || 'N/A'}</span>;
     },
   },
   {
@@ -290,16 +313,8 @@ export const partnerColumns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return (
         <div className='flex items-center gap-2'>
-          <AdminEditUserModal>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='text-gray-500 hover:text-gray-600 bg-gray-50'
-            >
-              <Pencil className='size-5' />
-            </Button>
-          </AdminEditUserModal>
-          <MessageModal>
+          <EditAction data={row.original} source='partner' />
+          <MessageModal data={row.original}>
             <Button
               variant='ghost'
               size='icon'
@@ -308,7 +323,7 @@ export const partnerColumns: ColumnDef<any>[] = [
               <Mail className='size-5' />
             </Button>
           </MessageModal>
-          <ReviewApplicationModal status='verified'>
+          <ReviewApplicationModal from='partner' data={row.original}>
             <Button
               variant='ghost'
               size='icon'
@@ -317,7 +332,7 @@ export const partnerColumns: ColumnDef<any>[] = [
               <Eye className='size-5' />
             </Button>
           </ReviewApplicationModal>
-          <TableDropdown />
+          <TableDropdown data={row.original} />
         </div>
       );
     },

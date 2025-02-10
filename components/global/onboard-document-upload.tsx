@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import Title from '@/components/global/title';
 import OnboardButton from '@/components/global/onboard-button';
 import { Check, CloudUpload, Trash2, X } from 'lucide-react';
@@ -24,12 +24,24 @@ interface UploadProgressState {
   governmentId: number;
 }
 
-const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
+const OnboardDocumentUpload = forwardRef((props: any) => {
+  const { from, userFromAdmin, onClose } = props;
+
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';
 
-  const { user, refetchUser } = useAppContext();
+  const { user, refetchUser, documentUploadRef, refetchUsers } =
+    useAppContext();
   const router = useRouter();
+
+  const userDocuments =
+    from && userFromAdmin?.documents
+      ? userFromAdmin?.documents
+      : !from && user?.documents
+        ? user?.documents
+        : {};
+
+  console.log({ userFromAdmin });
 
   const [files, setFiles] = useState<FileState>({
     certificate: null,
@@ -58,14 +70,7 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
       });
     }
 
-    const fizeSizeLimit =
-      type === 'certificate'
-        ? 5
-        : type === 'resume'
-          ? 5
-          : type === 'governmentId'
-            ? 2
-            : 0;
+    const fizeSizeLimit = 1;
 
     if (file.size > fizeSizeLimit * 1024 * 1024) {
       toast.error(`File size exceeds the limit of ${fizeSizeLimit} MB.`);
@@ -110,9 +115,9 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
   const isNoFile = !files.certificate && !files.resume && !files.governmentId;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e && e.preventDefault();
 
-    if (isNoFile && !isEdit) {
+    if (isNoFile && !isEdit && !from) {
       return router.push('/pro/onboard/completed');
     }
 
@@ -125,6 +130,10 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
       }
     }
 
+    if (from === 'admin') {
+      formData.append('id', userFromAdmin?._id);
+    }
+
     try {
       const response = await fetch('/api/user/document-upload', {
         method: 'POST',
@@ -134,10 +143,18 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
       const responseData = await response.json();
       if (responseData.status === 200) {
         refetchUser();
-        if (isEdit) {
-          router.back();
-        } else {
-          router.push('/pro/onboard/completed');
+
+        if (from === 'admin') {
+          refetchUsers();
+          // onClose && onClose();
+        }
+
+        if (!from) {
+          if (isEdit) {
+            router.back();
+          } else {
+            router.push('/pro/onboard/completed');
+          }
         }
       } else {
         throw new Error(responseData.message || 'Something went wrong!');
@@ -149,15 +166,23 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
     }
   };
 
+  useImperativeHandle(documentUploadRef, () => ({
+    submitForm: () => handleSubmit(null as any),
+  }));
+
   const isFileUploaded = (type: keyof FileState) => {
-    return user?.documents?.[type] || uploadProgress?.[type] === 100;
+    return userDocuments?.[type] || uploadProgress?.[type] === 100;
   };
 
   return (
     <div>
       <Title text='Documents upload' />
       {isLoading && <LoadingOverlay />}
-      <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
+      <form
+        className='flex flex-col gap-8'
+        onSubmit={handleSubmit}
+        ref={documentUploadRef}
+      >
         <div className='flex flex-col gap-4'>
           {(['certificate', 'resume', 'governmentId'] as const).map(
             (type, index) => (
@@ -228,9 +253,9 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
                   />
                 )}
 
-                {typeof user?.documents?.[type] === 'string' && (
+                {typeof userDocuments?.[type] === 'string' && (
                   <SavedFile
-                    file={user?.documents?.[type]!}
+                    file={userDocuments?.[type]!}
                     type={type}
                     refetch={refetchUser}
                     setIsLoading={setIsLoading}
@@ -259,7 +284,9 @@ const OnboardDocumentUpload = ({ from }: { from?: 'admin' }) => {
       </form>
     </div>
   );
-};
+});
+
+OnboardDocumentUpload.displayName = 'OnboardDocumentUpload';
 
 export default OnboardDocumentUpload;
 

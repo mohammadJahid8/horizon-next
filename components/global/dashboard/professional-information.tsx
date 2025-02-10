@@ -15,24 +15,38 @@ import {
 import moment from 'moment';
 import NoData from '../no-data';
 
-export default function ProfessionalInformation() {
+export default function ProfessionalInformation({
+  proUser,
+  from,
+}: {
+  proUser?: any;
+  from?: string;
+}) {
   const { user } = useAppContext();
-
-  const education = user?.professionalInfo?.education;
-  const experience = user?.professionalInfo?.experience;
-  const certifications = user?.professionalInfo?.certifications;
+  const userData = proUser ? proUser : user;
+  const education = userData?.professionalInfo?.education;
+  const experience = userData?.professionalInfo?.experience;
+  const certifications = userData?.professionalInfo?.certifications;
 
   const noData = !education && !experience && !certifications;
 
   return (
-    <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>
+    <div
+      className={cn(
+        'bg-white md:rounded-[16px]',
+        from === 'admin' ? 'p-0' : 'px-4 p-6 md:p-8 '
+      )}
+    >
       <div className='flex items-center justify-between border-b pb-4 mb-8'>
         <Title
           text='Professional information'
           className='mb-0 !text-lg md:!text-2xl'
         />
-        <EditBtn href={`/pro/edit/professional-information?edit=true`} />
+        {from !== 'admin' && (
+          <EditBtn href={`/pro/edit/professional-information?edit=true`} />
+        )}
       </div>
+
       {!noData ? (
         <div className='space-y-6'>
           {education?.length > 0 && education[0]?.institution && (

@@ -12,6 +12,16 @@ export async function getUser() {
     return null;
   }
 }
+export async function getUsers() {
+  try {
+    const response = await api.get(`/user/all`);
+    // console.log('response', response.data);
+    return response.data.data;
+  } catch (error) {
+    // console.error('Error fetching user profile:', error);
+    return null;
+  }
+}
 
 export async function getUserById(id: string) {
   try {
@@ -34,16 +44,17 @@ export async function getPros() {
     const response = await api.get(`/user/pros`);
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching pros:', error);
+    //  console.error('Error fetching pros:', error);
     return null;
   }
 }
+
 export async function getNotifications() {
   try {
     const response = await api.get(`/user/notification`);
     return response.data.data;
   } catch (error) {
-    console.error('Error fetching notifications:', error);
+    // console.error('Error fetching notifications:', error);
     return null;
   }
 }

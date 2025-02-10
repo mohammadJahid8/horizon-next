@@ -12,21 +12,35 @@ import {
 import { DataTable } from '@/components/global/admin/data-table';
 import { proColumns } from '@/components/global/admin/columns';
 import Title from '@/components/global/title';
-
-const pros = Array.from({ length: 50 }, (_, i) => ({
-  id: `${i + 1}`,
-  avatar: '/placeholder.svg?height=40&width=40',
-  firstName: `Pro Name ${i + 1}`,
-  lastName: `Pro Name ${i + 1}`,
-  email: `example${i + 1}@email.com`,
-  phone: '161616161',
-  joiningDate: '4-12-2024',
-  status: i < 3 ? 'pending' : 'verified',
-}));
+import { useAppContext } from '@/lib/context';
 
 export default function ProsPage() {
+  const { users, isUsersLoading } = useAppContext();
+  const pros = users?.filter((user: any) => user.role === 'pro') || [];
+
   const [globalFilter, setGlobalFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [sortFilter, setSortFilter] = useState('newest');
+
+  const filteredPros = pros.filter(
+    (pro: any) =>
+      (statusFilter === 'all' || pro.status === statusFilter) &&
+      (globalFilter === '' ||
+        (pro?.personalInfo?.firstName
+          ? pro?.personalInfo?.firstName
+              .toLowerCase()
+              .includes(globalFilter.toLowerCase())
+          : false) ||
+        (pro?.personalInfo?.lastName
+          ? pro?.personalInfo?.lastName
+              .toLowerCase()
+              .includes(globalFilter.toLowerCase())
+          : false) ||
+        pro?.email?.toLowerCase().includes(globalFilter.toLowerCase()))
+  );
+
+  const sortedPros =
+    sortFilter === 'newest' ? filteredPros.reverse() : filteredPros;
 
   return (
     <div className='space-y-6'>
@@ -34,7 +48,7 @@ export default function ProsPage() {
 
       <div className='flex flex-col sm:flex-row gap-4'>
         <Input
-          placeholder='Search username or company...'
+          placeholder='Search username...'
           className='w-full sm:max-w-[300px] rounded-[12px] h-12 sm:h-14'
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
@@ -46,37 +60,25 @@ export default function ProsPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='all'>All</SelectItem>
-              <SelectItem value='verified'>Verified</SelectItem>
+              <SelectItem value='approved'>Approved</SelectItem>
               <SelectItem value='pending'>Pending</SelectItem>
               <SelectItem value='blocked'>Blocked</SelectItem>
+              <SelectItem value='rejected'>Rejected</SelectItem>
             </SelectContent>
           </Select>
-          <Select>
+          <Select value={sortFilter} onValueChange={setSortFilter}>
             <SelectTrigger className='w-full sm:w-[180px] rounded-[12px] h-12 sm:h-14'>
               <SelectValue placeholder='Sort by' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='newest'>Newest</SelectItem>
               <SelectItem value='oldest'>Oldest</SelectItem>
-              <SelectItem value='name'>Name</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      <DataTable
-        columns={proColumns}
-        data={pros.filter(
-          (pro) =>
-            (statusFilter === 'all' || pro.status === statusFilter) &&
-            (globalFilter === '' ||
-              pro.firstName
-                .toLowerCase()
-                .includes(globalFilter.toLowerCase()) ||
-              pro.lastName.toLowerCase().includes(globalFilter.toLowerCase()) ||
-              pro.email.toLowerCase().includes(globalFilter.toLowerCase()))
-        )}
-      />
+      <DataTable columns={proColumns} data={sortedPros} />
     </div>
   );
 }
