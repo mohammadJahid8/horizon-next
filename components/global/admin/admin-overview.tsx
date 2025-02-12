@@ -21,6 +21,8 @@ import {
   Legend,
 } from 'recharts';
 import Title from '../title';
+import { useAppContext } from '@/lib/context';
+import Link from 'next/link';
 
 const chartData = [
   { month: 'Jan', '2024': 150, '2025': 220 },
@@ -38,6 +40,9 @@ const chartData = [
 ];
 
 export default function OverviewPage() {
+  const { pros, partners } = useAppContext();
+  const pendingPros =
+    pros?.filter((user: any) => user.status === 'pending') || [];
   return (
     <div className='space-y-6'>
       <Title className='mb-4 sm:mb-6' text='Overview' />
@@ -46,13 +51,13 @@ export default function OverviewPage() {
         {[
           {
             title: "Pro's",
-            count: '2,245',
+            count: pros?.length,
             change: '+460 from last month',
             icon: FileBadge,
           },
           {
             title: "Partner's",
-            count: '181',
+            count: partners?.length,
             change: '+120 from last month',
             icon: Building2,
           },
@@ -82,25 +87,27 @@ export default function OverviewPage() {
           </Card>
         ))}
 
-        <Card className='shadow-none border-none rounded-[12px] sm:rounded-[16px]'>
-          <CardContent className='p-4 sm:p-8'>
-            <div className='flex justify-between items-start'>
-              <div className='space-y-6 sm:space-y-10'>
-                <p className='text-base sm:text-lg font-semibold'>
-                  Pending Applications
-                </p>
+        <Link href='/admin/pros?status=pending'>
+          <Card className='shadow-none border-none rounded-[12px] sm:rounded-[16px]'>
+            <CardContent className='p-4 sm:p-8'>
+              <div className='flex justify-between items-start'>
+                <div className='space-y-6 sm:space-y-10'>
+                  <p className='text-base sm:text-lg font-semibold'>
+                    Pending Applications
+                  </p>
 
-                <span className='inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-[#FAB607] text-white rounded-full text-xs sm:text-sm'>
-                  3
-                </span>
+                  <span className='inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-[#FAB607] text-white rounded-full text-xs sm:text-sm'>
+                    {pendingPros?.length}
+                  </span>
+                </div>
+                <div className='flex flex-col justify-between gap-8 sm:gap-12'>
+                  <Clock className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground' />
+                  <ChevronRight className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground' />
+                </div>
               </div>
-              <div className='flex flex-col justify-between gap-8 sm:gap-12'>
-                <Clock className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground' />
-                <ChevronRight className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground' />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <Card className='shadow-none border-none rounded-[16px]'>

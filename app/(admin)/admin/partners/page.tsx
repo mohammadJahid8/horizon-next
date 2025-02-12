@@ -15,10 +15,7 @@ import Title from '@/components/global/title';
 import { useAppContext } from '@/lib/context';
 
 export default function PartnersPage() {
-  const { users, isUsersLoading } = useAppContext();
-  const partners = users?.filter((user: any) => user.role === 'partner') || [];
-
-  console.log({ partners });
+  const { partners } = useAppContext();
 
   const [globalFilter, setGlobalFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');

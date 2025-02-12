@@ -124,6 +124,8 @@ const ContextProvider = ({ children }: any) => {
   const acceptedOffers = offers?.filter(
     (offer: any) => offer.status === 'accepted'
   );
+  const pros = users?.filter((user: any) => user.role === 'pro') || [];
+  const partners = users?.filter((user: any) => user.role === 'partner') || [];
   const jobOffers = offers?.filter((offer: any) => offer.status !== 'pending');
   const offersSent = offers?.length || 0;
   const jobConversion = (acceptedOffers?.length / offersSent) * 100 || 0;
@@ -498,6 +500,8 @@ const ContextProvider = ({ children }: any) => {
         isOpenEditModal,
         adminEditData,
         setAdminEditData,
+        pros,
+        partners,
       }}
     >
       {children}

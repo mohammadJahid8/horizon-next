@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -13,13 +13,17 @@ import { DataTable } from '@/components/global/admin/data-table';
 import { proColumns } from '@/components/global/admin/columns';
 import Title from '@/components/global/title';
 import { useAppContext } from '@/lib/context';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ProsPage() {
-  const { users, isUsersLoading } = useAppContext();
-  const pros = users?.filter((user: any) => user.role === 'pro') || [];
+  const { pros } = useAppContext();
+
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
+  const router = useRouter();
 
   const [globalFilter, setGlobalFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(status || 'all');
   const [sortFilter, setSortFilter] = useState('newest');
 
   const filteredPros = pros.filter(
@@ -42,6 +46,12 @@ export default function ProsPage() {
   const sortedPros =
     sortFilter === 'newest' ? filteredPros.reverse() : filteredPros;
 
+  const handleStatusFilter = (value: string) => {
+    setStatusFilter(value);
+
+    router.push(`/admin/pros?status=${value}`);
+  };
+
   return (
     <div className='space-y-6'>
       <Title className='mb-4 sm:mb-6' text="Pro's" />
@@ -54,7 +64,7 @@ export default function ProsPage() {
           onChange={(e) => setGlobalFilter(e.target.value)}
         />
         <div className='flex gap-4'>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter} onValueChange={handleStatusFilter}>
             <SelectTrigger className='w-full sm:w-[180px] rounded-[12px] h-12 sm:h-14'>
               <SelectValue placeholder='Status' />
             </SelectTrigger>
