@@ -23,24 +23,51 @@ import {
 import Title from '../title';
 import { useAppContext } from '@/lib/context';
 import Link from 'next/link';
-
+import { useState } from 'react';
+import moment from 'moment';
+import { useEffect } from 'react';
+import Chart from './chart';
 const chartData = [
-  { month: 'Jan', '2024': 150, '2025': 220 },
-  { month: 'Feb', '2024': 140, '2025': 190 },
-  { month: 'Mar', '2024': 90, '2025': 195 },
-  { month: 'Apr', '2024': 120, '2025': 180 },
-  { month: 'May', '2024': 150, '2025': 160 },
-  { month: 'Jun', '2024': 180, '2025': 235 },
-  { month: 'Jul', '2024': 190, '2025': 225 },
-  { month: 'Aug', '2024': 200, '2025': 235 },
-  { month: 'Sep', '2024': 180, '2025': 235 },
-  { month: 'Oct', '2024': 160, '2025': 235 },
-  { month: 'Nov', '2024': 150, '2025': null },
-  { month: 'Dec', '2024': 140, '2025': null },
+  { month: 'Jan', PRO: 150, PARTNER: 220 },
+  { month: 'Feb', PRO: 140, PARTNER: 190 },
+  { month: 'Mar', PRO: 90, PARTNER: 195 },
+  { month: 'Apr', PRO: 120, PARTNER: 180 },
+  { month: 'May', PRO: 150, PARTNER: 160 },
+  { month: 'Jun', PRO: 180, PARTNER: 235 },
+  { month: 'Jul', PRO: 190, PARTNER: 225 },
+  { month: 'Aug', PRO: 200, PARTNER: 235 },
+  { month: 'Sep', PRO: 180, PARTNER: 235 },
+  { month: 'Oct', PRO: 160, PARTNER: 235 },
+  { month: 'Nov', PRO: 150, PARTNER: null },
+  { month: 'Dec', PRO: 140, PARTNER: null },
 ];
 
 export default function OverviewPage() {
   const { pros, partners } = useAppContext();
+
+  const currentMonth = moment().format('YYYY-MM');
+  const lastMonth = moment().subtract(1, 'month').format('YYYY-MM');
+
+  const countUsersByMonth = (users: any) => ({
+    current:
+      users?.filter(
+        (user: any) => moment(user.createdAt).format('YYYY-MM') === currentMonth
+      ).length || 0,
+    lastMonth:
+      users?.filter(
+        (user: any) => moment(user.createdAt).format('YYYY-MM') === lastMonth
+      ).length || 0,
+  });
+
+  const proStats = countUsersByMonth(pros);
+  const partnerStats = countUsersByMonth(partners);
+
+  const formatChange = (change: any) => {
+    return change >= 0
+      ? `+${change} from last month`
+      : `${change} from last month`;
+  };
+
   const pendingPros =
     pros?.filter((user: any) => user.status === 'pending') || [];
   return (
@@ -52,13 +79,13 @@ export default function OverviewPage() {
           {
             title: "Pro's",
             count: pros?.length,
-            change: '+460 from last month',
+            change: formatChange(proStats.current - proStats.lastMonth),
             icon: FileBadge,
           },
           {
             title: "Partner's",
             count: partners?.length,
-            change: '+120 from last month',
+            change: formatChange(partnerStats.current - partnerStats.lastMonth),
             icon: Building2,
           },
         ].map((item, index) => (
@@ -110,82 +137,7 @@ export default function OverviewPage() {
         </Link>
       </div>
 
-      <Card className='shadow-none border-none rounded-[16px]'>
-        <CardContent className='p-4 sm:p-6'>
-          <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4'>
-            <Title
-              className='mb-2 sm:mb-0 text-lg sm:text-xl'
-              text='Registrations'
-            />
-            <Select defaultValue='lastYear'>
-              <SelectTrigger className='w-full sm:w-[150px] py-3 sm:py-4 text-secondary font-medium text-sm sm:text-base px-3 sm:px-4 bg-[#F9F9FA] border-none shadow-none rounded-[12px] sm:rounded-[16px]'>
-                <SelectValue placeholder='Select period' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='lastYear'>Last Year</SelectItem>
-                <SelectItem value='lastMonth'>Last Month</SelectItem>
-                <SelectItem value='last90Days'>Last 90 Days</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Tabs defaultValue='pros' className='mb-4'>
-            <TabsList className='rounded-[8px] bg-[#F9F9FA] p-1 sm:p-2 py-4 sm:py-6'>
-              <TabsTrigger
-                value='pros'
-                className='rounded-[8px] py-1 sm:py-2 px-2 sm:px-4'
-              >
-                Pro's
-              </TabsTrigger>
-              <TabsTrigger
-                value='partners'
-                className='rounded-[8px] py-1 sm:py-2 px-2 sm:px-4'
-              >
-                Partner's
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          <div className='h-[400px] mt-8 bg-[#F9F9FA] rounded-[16px] pl-0 p-6'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray='3 3' vertical={false} />
-
-                <XAxis
-                  dataKey='month'
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12 }}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 12 }}
-                  ticks={[0, 50, 100, 150, 200, 250, 300]}
-                />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type='monotone'
-                  dataKey='2025'
-                  stroke='#008000'
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type='monotone'
-                  dataKey='2024'
-                  stroke='#BBF8DC'
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+      <Chart pros={pros} partners={partners} />
     </div>
   );
 }

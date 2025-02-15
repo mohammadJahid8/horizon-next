@@ -7,10 +7,15 @@ import { proLinkGenerator } from '@/utils/proLinkGenerator';
 
 const ProInfo = ({ user, isProProfileFromPartner, isPublicProPage }: any) => {
   const personalInfo = user?.personalInfo;
+  const status = user?.status;
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
   return (
     <div className='flex flex-col gap-1 sm:gap-3 w-full'>
-      <ProfileName name={name} />
+      <ProfileName
+        name={name}
+        status={status}
+        fromSpecialPage={isProProfileFromPartner || isPublicProPage}
+      />
       <div className='flex justify-between lg:flex-row flex-col sm:gap-6 gap-3'>
         <div className='flex-1 flex flex-col sm:gap-3 gap-1'>
           <p className='text-base sm:text-xl text-[#3A4742] font-medium'>

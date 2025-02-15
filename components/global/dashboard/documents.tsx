@@ -7,7 +7,7 @@ import { useAppContext } from '@/lib/context';
 import NoData from '../no-data';
 import { cn } from '@/lib/utils';
 
-const Documents: React.FC<{ proUser: any; from?: string }> = ({
+const Documents: React.FC<{ proUser?: any; from?: string }> = ({
   proUser,
   from,
 }) => {

@@ -16,6 +16,8 @@ const ProPage = async ({ params }: { params: { id: string } }) => {
     return redirect('/');
   }
 
+  console.log('user?.role', user?.role);
+
   if (user?.role === 'partner') {
     return redirect(`/partner/pros/${id}?s=true`);
   }

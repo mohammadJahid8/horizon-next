@@ -92,7 +92,10 @@ const ContextProvider = ({ children }: any) => {
     isLoading: isUserLoading,
   } = useQuery({
     queryKey: [`user`],
-    queryFn: async () => await getUser(),
+    queryFn: async () => {
+      console.log('refetching user');
+      return await getUser();
+    },
   });
 
   const {
@@ -142,6 +145,16 @@ const ContextProvider = ({ children }: any) => {
     getCookies();
   }, [isRefreshed]);
 
+  // if (user?.status === 'blocked') {
+  //   return router.push('/');
+  // }
+
+  useEffect(() => {
+    if (user?.status === 'blocked') {
+      router.push('/logout');
+    }
+  }, [user?.status, router]);
+
   const logInWithGoogle = async () => {
     let result = null,
       error = null;
@@ -190,10 +203,12 @@ const ContextProvider = ({ children }: any) => {
 
     const responseData: any = await response.json();
     refetchUser();
+    source === 'admin' && refetchUsers();
     if (responseData.status === 200) {
       const completionPercentage = responseData.completionPercentage;
       if (source === 'admin') {
-        router.push('/admin');
+        window.location.href = '/admin';
+        // router.push('/admin');
       } else {
         const proPath =
           completionPercentage > 50
@@ -396,44 +411,27 @@ const ContextProvider = ({ children }: any) => {
     });
   };
 
-  // const handleSavePersonalInfo = async (source: string) => {
-  //   if (personalInfoRef.current) {
-  //     console.log('personalInfoRef.current');
-  //     personalInfoRef.current.dispatchEvent(
-  //       new Event('submit', { bubbles: true, cancelable: true })
-  //     );
-  //   }
-
-  //   if (source === 'pro') {
-  //     if (professionalInfoRef.current) {
-  //       console.log('professionalInfoRef.current');
-  //       setTimeout(() => {
-  //         professionalInfoRef.current?.dispatchEvent(
-  //           new Event('submit', { bubbles: true, cancelable: true })
-  //         );
-  //       }, 0);
-  //     }
-  //   }
-  // };
   const handleSavePersonalInfo = async (source: string) => {
     try {
       if (personalInfoRef.current) {
         console.log('insidee', personalInfoRef.current);
-        await personalInfoRef.current.submitForm(); // ✅ Correct: Calls submit function
+        await personalInfoRef.current.submitForm();
       }
 
       if (source === 'pro' && professionalInfoRef.current) {
-        await professionalInfoRef.current.submitForm(); // ✅ Correct: Calls submit function
+        await professionalInfoRef.current.submitForm();
       }
       if (source === 'pro' && documentUploadRef.current) {
         console.log('documentUploadRef.current', documentUploadRef.current);
-        await documentUploadRef.current.submitForm(); // ✅ Correct: Calls submit function
+        await documentUploadRef.current.submitForm();
       }
       closeEditModal();
     } catch (error) {
       console.error('Error submitting forms:', error);
     }
   };
+
+  console.log({ user });
 
   return (
     <UserContext.Provider
