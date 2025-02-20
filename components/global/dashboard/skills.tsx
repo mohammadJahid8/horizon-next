@@ -6,10 +6,11 @@ import Title from '../title';
 import { useAppContext } from '@/lib/context';
 import NoData from '../no-data';
 
-const Skills: React.FC = () => {
+const Skills: React.FC<{ proUser?: any }> = ({ proUser }) => {
   const { user } = useAppContext();
 
-  const skills = user?.professionalInfo?.skills;
+  const userData = proUser ? proUser : user;
+  const skills = userData?.professionalInfo?.skills;
 
   return (
     <div className='px-4 p-6 md:p-8 bg-white md:rounded-[16px]'>

@@ -11,6 +11,7 @@ const AccountSidebar = () => {
   const { user, isUserLoading, deleteAccount } = useAppContext();
   const name =
     user?.personalInfo?.firstName + ' ' + user?.personalInfo?.lastName;
+  const status = user?.status;
 
   if (isUserLoading) {
     return (
@@ -38,7 +39,7 @@ const AccountSidebar = () => {
         <div className='flex flex-col gap-4'>
           <ProfileImage userProfileImage={user?.personalInfo?.image} />
           <div className='flex flex-col gap-1 sm:gap-3 w-full'>
-            <ProfileName name={name} />
+            <ProfileName name={name} status={status} />
             <div className='flex justify-between flex-col gap-12'>
               {user?.role === 'pro' && <ProAccountInfo />}
               {user?.role === 'partner' && <PartnerAccountInfo />}

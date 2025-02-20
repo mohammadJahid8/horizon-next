@@ -20,7 +20,7 @@ import LoadingOverlay from '@/components/global/loading-overlay';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useAppContext } from '@/lib/context';
 
-const OnboardPersonalInfo = forwardRef((props) => {
+const OnboardPersonalInfo = forwardRef((props: any) => {
   const { source, from, userFromAdmin, onClose } = props;
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('edit') === 'true';

@@ -12,7 +12,7 @@ const Documents: React.FC<{ proUser?: any; from?: string }> = ({
   from,
 }) => {
   const { user } = useAppContext();
-  const userData = from === 'admin' ? proUser : user;
+  const userData = proUser ? proUser : user;
   const documents = userData?.documents;
 
   const noData = !documents;

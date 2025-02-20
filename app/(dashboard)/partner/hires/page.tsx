@@ -297,19 +297,16 @@ const PartnerOffers = () => {
                           Download All
                         </Button>
                       )}
-                      {offer.status !== 'rejected' && (
-                        <Button
-                          onClick={() => handleConfirm(offer)}
-                          className='py-2 px-4 rounded-[12px] w-full h-9'
-                          disabled={isLoading || offer.status === 'accepted'}
-                        >
-                          {isLoading
-                            ? 'Confirming...'
-                            : offer.status === 'accepted'
-                              ? 'Confirmed'
-                              : 'Confirm'}
-                        </Button>
-                      )}
+                      {offer.status !== 'rejected' &&
+                        offer.status !== 'accepted' && (
+                          <Button
+                            onClick={() => handleConfirm(offer)}
+                            className='py-2 px-4 rounded-[12px] w-full h-9'
+                            disabled={isLoading}
+                          >
+                            {isLoading ? 'Confirming...' : 'Confirm'}
+                          </Button>
+                        )}
                     </div>
                   )}
                 </ul>

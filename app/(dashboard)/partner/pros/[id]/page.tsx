@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 const ProFromPartner = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const user = await getUserById(id);
-  // console.log({ user });
+  console.log('useruseruseruser', user);
 
   if (!user) {
     return redirect('/partner/pros');
@@ -17,9 +17,9 @@ const ProFromPartner = async ({ params }: { params: { id: string } }) => {
   return (
     <div className='flex flex-col gap-8'>
       <PersonalInformation proUser={user} />
-      <ProfessionalInformation />
-      <Skills />
-      <Documents />
+      <ProfessionalInformation proUser={user} />
+      <Skills proUser={user} />
+      <Documents proUser={user} />
     </div>
   );
 };

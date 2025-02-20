@@ -20,7 +20,7 @@ import LoadingOverlay from '@/components/global/loading-overlay';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const OnboardProfessionalInfo = forwardRef((props) => {
+const OnboardProfessionalInfo = forwardRef((props: any) => {
   const { from, userFromAdmin, onClose } = props;
 
   const searchParams = useSearchParams();

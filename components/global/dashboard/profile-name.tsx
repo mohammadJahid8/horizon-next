@@ -12,9 +12,9 @@ const ProfileName = ({
   status,
   fromSpecialPage,
 }: {
-  name: string;
-  status: string;
-  fromSpecialPage: boolean;
+  name?: string;
+  status?: string;
+  fromSpecialPage?: boolean;
 }) => {
   return (
     <h1 className='text-xl sm:text-2xl font-semibold flex items-center gap-2'>

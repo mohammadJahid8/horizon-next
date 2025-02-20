@@ -12,8 +12,8 @@ const PartnerPersonalInformation = ({
   from,
   partnerUser,
 }: {
-  from: string;
-  partnerUser: any;
+  from?: string;
+  partnerUser?: any;
 }) => {
   const { user } = useAppContext();
 
