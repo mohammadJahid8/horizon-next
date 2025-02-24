@@ -8,7 +8,7 @@ import Partners from '@/components/global/landing/partners';
 import Testimonial from '@/components/global/landing/testimonial';
 import WhyHorizzon from '@/components/global/landing/why-horizzon';
 import { BriefcaseIcon, FileIcon, IdCardIcon, UserIcon } from 'lucide-react';
-import { getEnvironment, getHomeData } from './actions';
+import { getEnvironment, getHomeData } from '@/app/actions';
 import StayTuned from '@/components/global/landing/stay-tuned';
 import { transformEnvironment } from '@/utils/transformEnvironment';
 
@@ -87,7 +87,9 @@ export default async function Home() {
       <Comparison {...section6} />
       <Grow source='home' {...section7} environmentType={environmentType} />
       <Testimonial source='home' {...section8} />
-      <Faqs {...section9} />
+      <div id='faqs'>
+        <Faqs {...section9} />
+      </div>
       <StayTuned />
     </div>
   );

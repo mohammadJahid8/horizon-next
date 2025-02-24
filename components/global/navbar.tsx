@@ -45,7 +45,6 @@ export default function Navbar({
   const profilePath =
     user?.role === 'partner' ? '/partner/profile' : '/pro/profile';
 
-  console.log({ user });
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 bg-white border-b py-4 ${

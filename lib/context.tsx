@@ -93,7 +93,6 @@ const ContextProvider = ({ children }: any) => {
   } = useQuery({
     queryKey: [`user`],
     queryFn: async () => {
-      console.log('refetching user');
       return await getUser();
     },
   });
@@ -128,12 +127,7 @@ const ContextProvider = ({ children }: any) => {
   const pros = users?.filter((user: any) => user.role === 'pro') || [];
   const partners = users?.filter((user: any) => user.role === 'partner') || [];
   const jobOffers = offers?.filter((offer: any) => offer.status !== 'pending');
-  const offersSent = offers?.length || 0;
-  const acceptedOffers = offers?.filter(
-    (offer: any) => offer.status === 'accepted'
-  );
-  const jobConversion = (acceptedOffers?.length / offersSent) * 100 || 0;
-  const jobConversionPercentage = jobConversion.toFixed(2);
+
   // console.log({ user });
 
   useEffect(() => {
@@ -432,7 +426,7 @@ const ContextProvider = ({ children }: any) => {
     }
   };
 
-  console.log({ user });
+  // console.log({ user });
 
   return (
     <UserContext.Provider
@@ -484,8 +478,6 @@ const ContextProvider = ({ children }: any) => {
         isUserLoading,
         isUndreadNotification,
         sendNotification,
-        offersSent,
-        jobConversionPercentage,
         deleteAccount,
         users,
         refetchUsers,

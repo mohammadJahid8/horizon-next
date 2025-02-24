@@ -61,6 +61,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const isPublicProPage = pathname.includes('pro/') && id ? true : false;
 
+  const isPartnerFromPro =
+    pathname.includes('pro/partner/') && id ? true : false;
+
   const { data: userById, isLoading } = useQuery({
     queryKey: [`userById`, id],
     queryFn: async () => await getUserById(id as string),
@@ -75,10 +78,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     >
       {(isProProfileFromPartner || isPublicProPage) && (
         <div className='flex items-center justify-between px-4 md:px-0'>
-          {!isPublicProPage ? <Back disabled={isPublicProPage} /> : <div />}
+          {!isPublicProPage || isPartnerFromPro ? (
+            <Back disabled={isPublicProPage && !isPartnerFromPro} />
+          ) : (
+            <div />
+          )}
 
           <div className='flex items-center gap-4'>
-            {user?.role !== 'pro' && (
+            {user?.role === 'partner' && (
               <Button
                 className='h-12 md:h-14 rounded-[12px] text-sm md:text-lg px-12'
                 onClick={openPartner}
@@ -92,6 +99,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       )}
 
       <ProfileInfo
+        isPartnerFromPro={isPartnerFromPro}
         isProProfileFromPartner={isProProfileFromPartner}
         isPublicProPage={isPublicProPage}
         userById={userById}

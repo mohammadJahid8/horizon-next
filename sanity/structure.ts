@@ -16,6 +16,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('proLogin').title('Pro Login'),
       S.documentTypeListItem('partnerLogin').title('Partner Login'),
       S.documentTypeListItem('environment').title('Environment'),
+      S.documentTypeListItem('resourcePages').title('Resource Pages'),
       S.divider(),
       ...S.documentTypeListItems().filter(
         (item) =>
@@ -29,6 +30,7 @@ export const structure: StructureResolver = (S) =>
             'proLogin',
             'partnerLogin',
             'environment',
+            'resourcePages',
             'footer',
           ].includes(item.getId()!)
       ),

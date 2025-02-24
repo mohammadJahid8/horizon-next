@@ -1,14 +1,10 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
-import CommonNavbar from '@/components/global/common-navbar';
 import Provider from '@/lib/provider';
 import { Toaster } from 'sonner';
 import Refresh from '@/components/global/refresh';
-import { getEnvironment, getUser } from './actions';
-import CommonFooter from '@/components/global/common-footer';
-import { getFooterData } from './actions';
-import { transformEnvironment } from '@/utils/transformEnvironment';
+
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -33,18 +29,12 @@ export default async function RootLayout({
     locale: string;
   };
 }>) {
-  const footerData = await getFooterData();
-  const environment = await getEnvironment();
-  const environmentType = transformEnvironment(environment?.environmentType);
-
   return (
     <html lang='en'>
       <body className={`${poppins.className}`}>
         <Provider>
           <Refresh />
-          <CommonNavbar environmentType={environmentType} />
           <main>{children}</main>
-          <CommonFooter footerData={footerData} />
           <Toaster />
         </Provider>
       </body>

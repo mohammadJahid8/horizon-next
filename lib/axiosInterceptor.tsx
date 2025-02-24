@@ -5,7 +5,7 @@ const isServer = typeof window === 'undefined';
 // Create an Axios instance with default configuration
 const api: AxiosInstance = axios.create({
   baseURL:
-    process.env.NODE_ENV !== 'development'
+    process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_LOCAL_API_URL
       : process.env.NEXT_PUBLIC_PROD_API_URL,
   // withCredentials: true, // Ensure cookies are sent with requests
@@ -24,6 +24,10 @@ api.interceptors.request.use(
         config.headers = {};
       }
       config.headers.Authorization = `${accessToken}`; // Make sure to include "Bearer"
+    } else {
+      if (typeof window !== 'undefined') {
+        window.location.href = '/logout';
+      }
     }
     return config;
   },

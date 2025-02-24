@@ -104,6 +104,10 @@ export async function getPartnerSignupData() {
   const response = await client.fetch(`*[_type == "partnerRegister"][0]`);
   return response;
 }
+export async function getResourcePagesData() {
+  const response = await client.fetch(`*[_type == "resourcePages"][0]`);
+  return response;
+}
 
 export async function getFooterData() {
   const response = await client.fetch(`*[_type == "footer"][0]`);

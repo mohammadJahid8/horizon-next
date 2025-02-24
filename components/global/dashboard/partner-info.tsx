@@ -3,8 +3,13 @@ import ProfileName from './profile-name';
 import { CircleHelp, Star } from 'lucide-react';
 import { useAppContext } from '@/lib/context';
 
-const PartnerInfo = () => {
-  const { user, offersSent, jobConversionPercentage } = useAppContext();
+const PartnerInfo = ({
+  user,
+  isPartnerFromPro,
+}: {
+  user: any;
+  isPartnerFromPro: boolean;
+}) => {
   const personalInfo = user?.personalInfo;
 
   const name = `${personalInfo?.firstName} ${personalInfo?.lastName}`;
@@ -40,10 +45,12 @@ const PartnerInfo = () => {
             </div>
           )}
         </div>
-        <Tracks
-          offersSent={offersSent}
-          jobConversionPercentage={jobConversionPercentage}
-        />
+        {!isPartnerFromPro && (
+          <Tracks
+            offersSent={user?.offersSent}
+            jobConversionPercentage={user?.jobConversionPercentage}
+          />
+        )}
       </div>
     </div>
   );

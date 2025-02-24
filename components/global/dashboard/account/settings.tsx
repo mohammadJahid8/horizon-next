@@ -5,41 +5,41 @@ import Link from 'next/link';
 import React from 'react';
 
 const links = [
-  {
-    icon: <img src='/info.svg' alt='account' className='size-6' />,
-    name: 'Account Information',
-    path: '#',
-  },
-  {
-    icon: <img src='/docs.svg' alt='account' className='size-6' />,
-    name: 'License & Documents',
-    path: '#',
-    notification: 1,
-  },
-  {
-    icon: <img src='/contact.svg' alt='account' className='size-6' />,
-    name: 'Contact Us',
-    path: '#',
-  },
-  {
-    icon: <img src='/form.svg' alt='account' className='size-6' />,
-    name: 'W-9 Form',
-    path: '#',
-  },
+  // {
+  //   icon: <img src='/info.svg' alt='account' className='size-6' />,
+  //   name: 'Account Information',
+  //   path: '#',
+  // },
+  // {
+  //   icon: <img src='/docs.svg' alt='account' className='size-6' />,
+  //   name: 'License & Documents',
+  //   path: '#',
+  //   notification: 1,
+  // },
+  // {
+  //   icon: <img src='/contact.svg' alt='account' className='size-6' />,
+  //   name: 'Contact Us',
+  //   path: '#',
+  // },
+  // {
+  //   icon: <img src='/form.svg' alt='account' className='size-6' />,
+  //   name: 'W-9 Form',
+  //   path: '#',
+  // },
   {
     icon: <img src='/faq.svg' alt='account' className='size-6' />,
     name: 'FAQ',
-    path: '#',
+    path: '/#faqs',
   },
   {
     icon: <img src='/privacy.svg' alt='account' className='size-6' />,
     name: 'Privacy Policy',
-    path: '#',
+    path: '/privacy',
   },
   {
     icon: <img src='/terms.svg' alt='account' className='size-6' />,
     name: 'Terms and Conditions',
-    path: '#',
+    path: '/terms',
   },
   {
     icon: <img src='/logout.svg' alt='account' className='size-6' />,
@@ -70,11 +70,11 @@ const Settings = () => {
           <div className='flex items-center gap-6'>
             {link.icon}
             <span className='text-[#6C6C6C] text-sm'>{link.name}</span>
-            {link.notification && (
+            {/* {link.notification && (
               <span className='bg-[#fdb603] text-white rounded-full px-2 py-1 text-xs size-6 flex items-center justify-center'>
                 {link.notification}
               </span>
-            )}
+            )} */}
           </div>
           <ChevronRight className='size-5' />
         </Link>

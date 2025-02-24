@@ -7,10 +7,12 @@ import { useAppContext } from '@/lib/context';
 const Cover = ({
   isProProfileFromPartner,
   isPublicProPage,
+  isPartnerFromPro,
   userCoverImage,
 }: {
   isProProfileFromPartner: boolean;
   isPublicProPage: boolean;
+  isPartnerFromPro: boolean;
   userCoverImage: string;
 }) => {
   const { refetchUser } = useAppContext();
@@ -53,7 +55,7 @@ const Cover = ({
 
   return (
     <div className='relative w-full h-[150px] md:h-[250px] lg:h-[319px] '>
-      {!isProProfileFromPartner && !isPublicProPage && (
+      {!isProProfileFromPartner && !isPublicProPage && !isPartnerFromPro && (
         <label className='absolute z-10 top-4 md:top-8 left-4 md:left-8 cursor-pointer flex items-center space-x-2 bg-gray-500/20 backdrop-blur-md p-1.5 md:p-2 rounded-lg md:rounded-[16px] text-white text-xs md:text-sm font-normal'>
           <input
             type='file'

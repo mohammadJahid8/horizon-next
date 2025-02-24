@@ -11,7 +11,7 @@ import {
   RotateCw,
 } from 'lucide-react';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 import { ProRequestModal } from './pro-request-modal';
 import { AlertModal } from './alert-modal';
 import { useAppContext } from '@/lib/context';
@@ -163,22 +163,27 @@ const OfferLists = ({ offers, source }: any) => {
             </div>
 
             <div className='flex items-center gap-3'>
-              <Image
-                unoptimized
-                src={offer?.partner?.personalInfo?.image}
-                alt={offer.partner.personalInfo.companyName}
-                width={58}
-                height={58}
-                className='w-12 h-12 sm:size-[58px] rounded-full object-cover'
-              />
+              <Link href={`/pro/partner/${offer.partner._id}`}>
+                <Image
+                  unoptimized
+                  src={offer?.partner?.personalInfo?.image}
+                  alt={offer.partner.personalInfo.companyName}
+                  width={58}
+                  height={58}
+                  className='w-12 h-12 sm:size-[58px] rounded-full object-cover hover:opacity-80 transition-opacity'
+                />
+              </Link>
               <div>
-                <h2 className='text-base sm:text-lg text-[#1C1C1C] inline-flex items-center gap-2 sm:pb-1'>
+                <Link
+                  href={`/pro/partner/${offer.partner._id}`}
+                  className='text-base sm:text-lg text-[#1C1C1C] inline-flex items-center gap-2 sm:pb-1 hover:underline'
+                >
                   {offer.partner.personalInfo.firstName}{' '}
                   {offer.partner.personalInfo.lastName}{' '}
                   <span className='text-[8px] sm:text-sm bg-[#BBF8DC] px-2 font-semibold rounded-full'>
                     New
                   </span>
-                </h2>
+                </Link>
                 <p className='text-[#6C6C6C] text-xs sm:text-sm'>
                   {offer.partner.personalInfo.companyName}
                 </p>

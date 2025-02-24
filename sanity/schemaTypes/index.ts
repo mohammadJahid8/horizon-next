@@ -9,6 +9,7 @@ import { partnerLoginType } from './partnerLoginType';
 import { proRegisterType } from './proRegisterType';
 import { partnerRegisterType } from './partnerRegisterType';
 import { environmentType } from './environmentType';
+import { resourcePagesType } from './resourcePagesType';
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     homeType,
@@ -20,5 +21,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     proRegisterType,
     partnerRegisterType,
     environmentType,
+    resourcePagesType,
   ],
 };
