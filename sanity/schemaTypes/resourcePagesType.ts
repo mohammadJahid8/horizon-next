@@ -42,6 +42,19 @@ export const resourcePagesType = defineType({
       ],
     }),
     defineField({
+      name: 'termsOfUse',
+      title: 'Terms of Use',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+        },
+        {
+          type: 'image',
+        },
+      ],
+    }),
+    defineField({
       name: 'aboutUs',
       title: 'About Us',
       type: 'array',

@@ -179,9 +179,12 @@ const PartnerOffers = () => {
             </div>
 
             {offer.pro.personalInfo.bio && (
-              <p className='text-sm md:text-base text-[#6C6C6C] truncate'>
-                {offer.pro.personalInfo.bio}
-              </p>
+              <p
+                className='text-sm md:text-base text-[#6C6C6C] truncate'
+                dangerouslySetInnerHTML={{
+                  __html: offer.pro.personalInfo.bio,
+                }}
+              />
             )}
 
             <div className='flex flex-wrap gap-3 items-center'>

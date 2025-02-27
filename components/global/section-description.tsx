@@ -10,15 +10,28 @@ const SectionDescription = ({
   from?: string;
 }) => {
   return (
-    <p
-      className={cn(
-        'text-[#1C1C1C] font-medium',
-        from === 'admin' ? 'text-sm md:text-base' : 'text-sm md:text-xl',
-        className
+    <>
+      {/<[a-z][\s\S]*>/i.test(text) ? (
+        <p
+          className={cn(
+            'text-[#1C1C1C] font-medium *:break-words',
+            from === 'admin' ? 'text-sm md:text-base' : 'text-sm md:text-xl',
+            className
+          )}
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      ) : (
+        <p
+          className={cn(
+            'text-[#1C1C1C] font-medium',
+            from === 'admin' ? 'text-sm md:text-base' : 'text-sm md:text-xl',
+            className
+          )}
+        >
+          {text}
+        </p>
       )}
-    >
-      {text}
-    </p>
+    </>
   );
 };
 

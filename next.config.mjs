@@ -1,8 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images:
-  {
-    domains: ['wp1.themevibrant.com', 'res.cloudinary.com', 'med.gov.bz'],
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'wp1.themevibrant.com',
+      },
+      {
+        hostname: 'res.cloudinary.com',
+      },
+      { hostname: 'med.gov.bz' },
+    ],
   },
 };
 

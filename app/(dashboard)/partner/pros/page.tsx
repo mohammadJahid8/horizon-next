@@ -57,9 +57,12 @@ const PartnerPros = async () => {
               </div>
             </div>
 
-            <p className='text-sm md:text-base text-[#6C6C6C]'>
-              {pro?.personalInfo?.bio}
-            </p>
+            <p
+              className='text-sm md:text-base text-[#6C6C6C]'
+              dangerouslySetInnerHTML={{
+                __html: pro?.personalInfo?.bio,
+              }}
+            />
 
             <div className='flex flex-wrap gap-3 items-center'>
               {pro?.professionalInfo?.skills

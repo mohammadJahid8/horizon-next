@@ -88,8 +88,9 @@ export default function Footer({
         </div>
 
         <div className='mt-12 grid gap-8 text-center md:text-left md:grid-cols-4'>
+          {/* <div></div> */}
           <div></div>
-          {/* <div className='space-y-4'>
+          <div className='space-y-4'>
             <h3 className='text-lg font-semibold'>{socialLabel}</h3>
             <div className='flex gap-4 justify-center md:justify-start'>
               {socialLinks.map((social: any, index: number) => (
@@ -104,7 +105,7 @@ export default function Footer({
                 </Link>
               ))}
             </div>
-          </div> */}
+          </div>
 
           <div className='space-y-4'>
             <h3 className='text-lg font-semibold'>{downloadAppLabel}</h3>

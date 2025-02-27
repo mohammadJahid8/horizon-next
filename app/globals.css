@@ -199,3 +199,22 @@
     background-position: center 16rem;
   }
 }
+
+.custom-quill .ql-toolbar {
+  @apply bg-gray-100 border border-input rounded-t-[12px]; /* Customize border color */
+}
+
+.ql-snow {
+  @apply !border !border-input;
+}
+.custom-quill .ql-container {
+  @apply bg-[#f9f9f9] border border-input rounded-b-[12px] min-h-[200px];
+}
+
+.custom-quill .ql-editor {
+  @apply text-[#5E6864] p-4 min-h-[150px] text-[16px]; /* Set font size */
+}
+
+.custom-quill .ql-editor::before {
+  @apply text-gray-400 text-[16px]; /* Set placeholder font size */
+}

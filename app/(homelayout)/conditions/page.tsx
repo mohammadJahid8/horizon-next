@@ -4,14 +4,14 @@ import { urlFor } from '@/sanity/lib/client';
 import { PortableText } from '@portabletext/react';
 import React from 'react';
 
-const TermsPage = async () => {
+const ConditionsPage = async () => {
   const data = await getResourcePagesData();
 
   return (
     <div>
       <Container className='my-32'>
         <PortableText
-          value={data.termsOfUse}
+          value={data.termsAndConditions}
           components={{
             types: {
               image: ({ value }) => (
@@ -31,4 +31,4 @@ const TermsPage = async () => {
   );
 };
 
-export default TermsPage;
+export default ConditionsPage;

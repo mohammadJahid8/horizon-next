@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import LoadingOverlay from '@/components/global/loading-overlay';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useAppContext } from '@/lib/context';
+import Editor from '../ui/editor';
 
 const OnboardPersonalInfo = forwardRef((props: any) => {
   const { source, from, userFromAdmin, onClose } = props;
@@ -383,12 +384,19 @@ const OnboardPersonalInfo = forwardRef((props: any) => {
           <h2 className='text-lg font-medium leading-[25.2px] text-gray-800'>
             About/Bio
           </h2>
-          <Textarea
-            {...register('bio')}
-            placeholder='Write about yourself; include key areas responsibility, skills, experiences and specific qualification etc.'
-            className='resize-none bg-[#f9f9f9] h-[280px] text-[#5E6864] rounded-[12px]'
+          <Controller
+            name='bio'
+            control={control}
+            render={({ field }) => (
+              <Editor
+                value={field.value}
+                onChange={(content) =>
+                  setValue('bio', content, { shouldDirty: true })
+                }
+                placeholder='Write about yourself...'
+              />
+            )}
           />
-          {/* {errors.bio && renderError(errors.bio.message as string)} */}
         </div>
 
         <div className='flex flex-col gap-5'>
