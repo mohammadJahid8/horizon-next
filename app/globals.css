@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  ul,
+  ol {
+    list-style: revert;
+    padding-left: 20px;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -81,22 +87,6 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-.marquee-content {
-  display: flex;
-  animation: marquee 25s linear infinite;
-  width: max-content; /* Ensures the content takes up only the necessary width */
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(
-      -50%
-    ); /* Adjust to half the width because content is duplicated */
   }
 }
 

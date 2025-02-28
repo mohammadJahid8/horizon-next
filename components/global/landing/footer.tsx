@@ -76,9 +76,9 @@ export default function Footer({
               <h3 className='text-lg md:text-xl font-semibold'>
                 {section.title}
               </h3>
-              <ul className='space-y-4 font-medium text-sm md:text-base'>
+              <ul className='list-none space-y-4 font-medium text-sm md:text-base pl-0'>
                 {section?.links?.map((link: any, linkIndex: number) => (
-                  <li key={linkIndex}>
+                  <li key={linkIndex} className='list-none '>
                     <Link href={link.link}>{link.label}</Link>
                   </li>
                 ))}

@@ -13,12 +13,13 @@ import { CloudUploadIcon, LinkIcon } from 'lucide-react';
 import AddMore from '@/components/global/professional-info/add-more';
 import Remove from '@/components/global/professional-info/remove';
 import SkillsSelector from '@/components/global/professional-info/skills-selector';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useAppContext } from '@/lib/context';
 import { toast } from 'sonner';
 import LoadingOverlay from '@/components/global/loading-overlay';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Editor from '../ui/editor';
 
 const OnboardProfessionalInfo = forwardRef((props: any) => {
   const { from, userFromAdmin, onClose } = props;
@@ -271,12 +272,19 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.degree`)}
+                    {...register(`education.${index}.degree`, {
+                      required:
+                        !!watch(`education.${index}.institution`) ||
+                        !!watch(`education.${index}.yearOfGraduation`) ||
+                        !!watch(`education.${index}.fieldOfStudy`) ||
+                        !!watch(`education.${index}.grade`),
+                    })}
+                    isError={!!errors.education?.[index]?.degree}
                   />
-                  {/* {errors?.education &&
-                    errors?.education[index] &&
-                    errors?.education[index]?.degree &&
-                    renderError(errors?.education[index]?.degree?.message!)} */}
+                  {errors.education &&
+                    errors.education[index] &&
+                    errors.education[index].degree &&
+                    renderError(errors.education[index].degree.message!)}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -285,12 +293,19 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`education.${index}.institution`)}
+                    {...register(`education.${index}.institution`, {
+                      required:
+                        !!watch(`education.${index}.degree`) ||
+                        !!watch(`education.${index}.yearOfGraduation`) ||
+                        !!watch(`education.${index}.fieldOfStudy`) ||
+                        !!watch(`education.${index}.grade`),
+                    })}
+                    isError={!!errors.education?.[index]?.institution}
                   />
-                  {/* {errors.education &&
+                  {errors.education &&
                     errors.education[index] &&
                     errors.education[index].institution &&
-                    renderError(errors.education[index].institution.message!)} */}
+                    renderError(errors.education[index].institution.message!)}
                 </div>
               </div>
               <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
@@ -304,12 +319,6 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                     type='number'
                     {...register(`education.${index}.yearOfGraduation`)}
                   />
-                  {/* {errors.education &&
-                      errors.education[index] &&
-                      errors.education[index].yearOfGraduation &&
-                      renderError(
-                        errors.education[index].yearOfGraduation.message!
-                      )} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -320,10 +329,6 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                     placeholder='Input Text'
                     {...register(`education.${index}.fieldOfStudy`)}
                   />
-                  {/* {errors.education &&
-                    errors.education[index] &&
-                    errors.education[index].fieldOfStudy &&
-                    renderError(errors.education[index].fieldOfStudy.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -334,10 +339,6 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                     placeholder='Input Text'
                     {...register(`education.${index}.grade`)}
                   />
-                  {/* {errors.education &&
-                    errors.education[index] &&
-                    errors.education[index].grade &&
-                    renderError(errors.education[index].grade.message!)} */}
                 </div>
               </div>
               {index > 0 && (
@@ -377,12 +378,18 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                   <Input
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
-                    {...register(`experience.${index}.jobTitle`)}
+                    {...register(`experience.${index}.jobTitle`, {
+                      required:
+                        !!watch(`experience.${index}.companyName`) ||
+                        !!watch(`experience.${index}.duration`) ||
+                        !!watch(`experience.${index}.responsibilities`),
+                    })}
+                    isError={!!errors.experience?.[index]?.jobTitle}
                   />
-                  {/* {errors.experience &&
+                  {errors.experience &&
                     errors.experience[index] &&
                     errors.experience[index].jobTitle &&
-                    renderError(errors.experience[index].jobTitle.message!)} */}
+                    renderError(errors.experience[index].jobTitle.message!)}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -394,10 +401,6 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                     {...register(`experience.${index}.companyName`)}
                     isError={!!errors.experience?.[index]?.companyName}
                   />
-                  {/* {errors.experience &&
-                    errors.experience[index] &&
-                    errors.experience[index].companyName &&
-                    renderError(errors.experience[index].companyName.message!)} */}
                 </div>
                 <div className='flex flex-col gap-3'>
                   <label className='text-base font-medium text-[#1C1C1C]'>
@@ -407,11 +410,8 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                     className='rounded-[12px] h-14 bg-[#f9f9f9]'
                     placeholder='Input Text'
                     {...register(`experience.${index}.duration`)}
+                    isError={!!errors.experience?.[index]?.duration}
                   />
-                  {/* {errors.experience &&
-                    errors.experience[index] &&
-                    errors.experience[index].duration &&
-                    renderError(errors.experience[index].duration.message!)} */}
                 </div>
               </div>
 
@@ -419,17 +419,17 @@ const OnboardProfessionalInfo = forwardRef((props: any) => {
                 <label className='text-base font-medium text-[#1C1C1C]'>
                   Responsibilities
                 </label>
-                <Input
-                  className='rounded-[12px] h-14 bg-[#f9f9f9]'
-                  placeholder='Input Text'
-                  {...register(`experience.${index}.responsibilities`)}
+                <Controller
+                  name={`experience.${index}.responsibilities`}
+                  control={control}
+                  render={({ field }) => (
+                    <Editor
+                      value={field.value}
+                      onChange={(content) => field.onChange(content)}
+                      placeholder='Write about your responsibilities...'
+                    />
+                  )}
                 />
-                {/* {errors.experience &&
-                  errors.experience[index] &&
-                  errors.experience[index].responsibilities &&
-                  renderError(
-                    errors.experience[index].responsibilities.message!
-                  )} */}
               </div>
 
               {index > 0 && (

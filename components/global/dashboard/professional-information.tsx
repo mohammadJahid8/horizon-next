@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import moment from 'moment';
 import NoData from '../no-data';
+import SectionDescription from '../section-description';
 
 export default function ProfessionalInformation({
   proUser,
@@ -170,7 +171,7 @@ const CertificationItem = ({
 }: any) => {
   return (
     <div className='flex items-start gap-4 md:gap-6'>
-      <IdCard className='w-12 h-12 md:w-14 md:h-14 text-gray-700' />
+      <IdCard className='w-12 h-12 md:w-14 md:h-14 text-gray-700 shrink-0' />
 
       <div className='flex flex-col gap-1 md:gap-2'>
         <div className='flex items-center gap-2'>
@@ -238,21 +239,21 @@ const SectionTitle = ({
   );
 };
 
-const SectionDescription = ({
-  text,
-  className,
-}: {
-  text: string;
-  className?: string;
-}) => {
-  return (
-    <p
-      className={cn('text-sm md:text-xl text-[#1C1C1C] font-medium', className)}
-    >
-      {text}
-    </p>
-  );
-};
+// const SectionDescription = ({
+//   text,
+//   className,
+// }: {
+//   text: string;
+//   className?: string;
+// }) => {
+//   return (
+//     <p
+//       className={cn('text-sm md:text-xl text-[#1C1C1C] font-medium', className)}
+//     >
+//       {text}
+//     </p>
+//   );
+// };
 const ExperienceItem = ({
   jobTitle,
   companyName,
@@ -261,8 +262,8 @@ const ExperienceItem = ({
   image,
 }: any) => {
   return (
-    <div className='flex items-start gap-4 md:gap-6'>
-      <BriefcaseBusiness className='w-10 h-10 md:w-12 md:h-12 text-gray-700' />
+    <div className='flex items-start gap-4 md:gap-6 '>
+      <BriefcaseBusiness className='w-10 h-10 md:w-14 md:h-14 text-gray-700 shrink-0' />
       {/* <img src={image} alt={jobTitle} className='size-16 md:size-20' /> */}
       <div className='flex flex-col gap-1 md:gap-2'>
         {jobTitle && (
@@ -283,6 +284,7 @@ const ExperienceItem = ({
             className='!text-sm md:!text-base text-[#595959] font-normal'
           />
         )}
+
         {responsibilities && (
           <SectionDescription text={responsibilities} className='mt-4' />
         )}

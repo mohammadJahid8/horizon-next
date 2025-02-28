@@ -84,7 +84,7 @@ const Steps = ({
         : 'Personal Information';
 
   return (
-    <ul className='space-y-6'>
+    <ul className='space-y-6 list-none pl-0'>
       {isEdit ? (
         <>
           <li className='flex items-center'>

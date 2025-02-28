@@ -12,7 +12,7 @@ const SectionDescription = ({
   return (
     <>
       {/<[a-z][\s\S]*>/i.test(text) ? (
-        <p
+        <div
           className={cn(
             'text-[#1C1C1C] font-medium *:break-words',
             from === 'admin' ? 'text-sm md:text-base' : 'text-sm md:text-xl',
