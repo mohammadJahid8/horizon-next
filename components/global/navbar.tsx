@@ -105,32 +105,32 @@ export default function Navbar({
                       </Link>
                     ))}
                   </div>
-                  {/* {environmentType === 'waitlist' ? (
+                  {environmentType === "waitlist" ? (
                     <Button
                       onClick={() => {
                         setIsOpen(false);
-                        scrollToSection('joinwaitlist');
+                        scrollToSection("joinwaitlist");
                       }}
-                      className='text-white h-10 px-5 rounded-lg font-medium'
+                      className="text-white h-10 px-5 rounded-lg font-medium"
                     >
                       Join the waitlist
                     </Button>
                   ) : (
                     <>
                       {!user?.email && (
-                        <div className='flex flex-col gap-12 w-full'>
-                          {pathname !== '/' ? (
+                        <div className="flex flex-col gap-12 w-full">
+                          {pathname !== "/" ? (
                             <>
                               <Button
                                 href={loginPath}
-                                className='text-white w-full'
+                                className="text-white w-full"
                                 onClick={() => setIsOpen(false)}
                               >
                                 Login
                               </Button>
                               <Link
                                 href={registerPath}
-                                className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                                className="text-[#6C6C6C] hover:text-primary text-base font-medium"
                                 onClick={() => setIsOpen(false)}
                               >
                                 Register
@@ -138,18 +138,18 @@ export default function Navbar({
                             </>
                           ) : (
                             <>
-                              <SelectAuthPath type='Login'>
+                              <SelectAuthPath type="Login">
                                 <Button
-                                  className='text-white w-full'
+                                  className="text-white w-full"
                                   // onClick={() => setIsOpen(false)}
                                 >
                                   Login
                                 </Button>
                               </SelectAuthPath>
-                              <SelectAuthPath type='Register'>
+                              <SelectAuthPath type="Register">
                                 <Button
-                                  variant='link'
-                                  className='text-[#6C6C6C] hover:text-primary text-base font-medium'
+                                  variant="link"
+                                  className="text-[#6C6C6C] hover:text-primary text-base font-medium"
                                   // onClick={() => setIsOpen(false)}
                                 >
                                   Register
@@ -160,7 +160,7 @@ export default function Navbar({
                         </div>
                       )}
                     </>
-                  )} */}
+                  )}
 
                   {user?.email && (
                     <div className="flex flex-col gap-12 w-full">
@@ -201,7 +201,7 @@ export default function Navbar({
             </div>
           </div>
 
-          {environmentType === "waitlist" ? (
+          {/* {environmentType === "waitlist" ? (
             <div className="hidden md:flex items-center space-x-6">
               <Button
                 onClick={() => scrollToSection("joinwaitlist")}
@@ -250,7 +250,7 @@ export default function Navbar({
                 </div>
               )}
             </>
-          )}
+          )} */}
           {user?.email && (
             <div className="hidden md:flex items-center space-x-6">
               <Link
